@@ -3,25 +3,25 @@ import {
   Facebook,
   Instagram,
   Music,
-  ShoppingCart,
+  ShoppingBag,
 } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 
 export default function App() {
   return (
-    <div className="h-screen relative flex items-center justify-center overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center overflow-y-auto">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <ImageWithFallback
           src="https://images.unsplash.com/photo-1760890633340-9c8cf3a292e0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxqYXp6JTIwY2x1YiUyMGF0bW9zcGhlcmV8ZW58MXx8fHwxNzYzNDY3OTAzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
           alt="Jazz atmosphere"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover fixed"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/95 via-emerald-900/90 to-green-950/95"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/95 via-emerald-900/90 to-green-950/95 fixed"></div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 py-8 text-center flex flex-col justify-center h-full">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 py-12 text-center">
         {/* Logo/Title */}
         <div className="mb-6">
           <h1
@@ -33,7 +33,7 @@ export default function App() {
           <div className="flex items-center justify-center gap-2 text-yellow-700/80">
             <div className="h-px bg-yellow-600/50 w-12"></div>
             <span className="text-xs uppercase tracking-widest">
-              Café & Jazz Lounge
+              Brunch & Jazz
             </span>
             <div className="h-px bg-yellow-600/50 w-12"></div>
           </div>
@@ -60,34 +60,17 @@ export default function App() {
           </p>
         </div>
 
-        {/* Duality Section - Brunch by Day, Jazz by Night */}
-        <div className="mb-6 grid md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-          {/* Brunch by Day */}
-          <div className="bg-gradient-to-br from-emerald-800/30 to-emerald-900/30 border border-yellow-600/20 rounded-lg p-5 backdrop-blur-sm">
-            <div
-              className="text-yellow-600 mb-2"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              ☀️ Brunch by Day
-            </div>
-            <p className="text-emerald-50/70 text-sm mb-2">
-              Start your morning right
+        {/* Hours Section */}
+        <div className="mb-6 max-w-2xl mx-auto">
+          <div className="text-emerald-50/90 text-lg md:text-xl space-y-2">
+            <p>
+              <span className="text-yellow-500">Brunch:</span>{" "}
+              7:00am – 4:00pm
             </p>
-            <p className="text-yellow-500">7:00am – 4:00pm</p>
-          </div>
-
-          {/* Dinner by Night */}
-          <div className="bg-gradient-to-br from-emerald-900/50 to-emerald-950/50 border border-yellow-600/30 rounded-lg p-5 backdrop-blur-sm">
-            <div
-              className="text-yellow-600 mb-2"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              🌙 Dinner by Night
-            </div>
-            <p className="text-emerald-50/70 text-sm mb-2">
-              Exceptional cuisine every evening
+            <p>
+              <span className="text-yellow-500">Dinner:</span>{" "}
+              4:00pm – 10:00pm
             </p>
-            <p className="text-yellow-500">4:00pm – 10:00pm</p>
           </div>
         </div>
 
@@ -114,34 +97,27 @@ export default function App() {
 
         {/* Call to Action */}
         <div className="mb-6">
-          <div className="flex flex-row items-center justify-center gap-4">
-            <div>
-              <a
-                href="tel:+1234567890"
-                className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-emerald-950 px-6 py-3 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-yellow-600/50 text-base"
-              >
-                <Phone className="w-4 h-4" />
-                <span>Reserve: (647) 368-3877</span>
-              </a>
-              <p className="text-emerald-100/60 text-xs mt-2">
-                Call to reserve your table for dinner
-              </p>
-            </div>
-            <div>
-              <a
-                href="https://orders.foodme.mobi/dt/johnnyg/cafebychef/main"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-emerald-950 px-6 py-3 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-yellow-600/50 text-base"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                <span>Order Now</span>
-              </a>
-              <p className="text-emerald-100/60 text-xs mt-2">
-                Order your favorite dishes online
-              </p>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="tel:+16473683877"
+              className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-emerald-950 px-6 py-3 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-yellow-600/50 text-base"
+            >
+              <Phone className="w-4 h-4" />
+              <span>Reserve: (647) 368-3877</span>
+            </a>
+            <a
+              href="https://orders.foodme.mobi/dt/johnnyg/cafebychef/main"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-emerald-950 px-6 py-3 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-yellow-600/50 text-base"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>Order Now</span>
+            </a>
           </div>
+          <p className="text-emerald-100/60 text-xs mt-3">
+            Call to reserve your table for dinner
+          </p>
         </div>
 
         {/* Social Media */}
