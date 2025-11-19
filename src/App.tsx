@@ -129,7 +129,9 @@ export default function App() {
             </div>
             <div>
               <a
-                href="#"
+                href="https://orders.foodme.mobi/dt/johnnyg/cafebychef/main"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-emerald-950 px-6 py-3 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-yellow-600/50 text-base"
               >
                 <ShoppingCart className="w-4 h-4" />
