@@ -1,0 +1,57 @@
+{
+  "restaurant": {
+    "name": "Johnny G's",
+    "established": "1975"
+  },
+  "opening": {
+    "heading": "We are Open!",
+    "description": "We’re fully open and ready to welcome you—just like our restaurant, our website is getting a little tune-up to bring its full personality to life."
+  },
+  "hours": {
+    "breakfast": {
+      "title": "Breakfast",
+      "time": "7:00 AM – 16:00 PM"
+    },
+    "dinner": {
+      "title": "Dinner and Jazz",
+      "time": "7:00 PM – 12:00 AM"
+    }
+  },
+  "reservations": {
+    "text": "Reserve Your Table",
+    "phone": {
+      "display": "(647) 368-3877",
+      "tel": "+16473683877"
+    }
+  },
+  "social": {
+    "heading": "Stay Updated on Events",
+    "email": "mailto:johnnygs478@gmail.com",
+    "links": [
+      {
+        "platform": "Email",
+        "url": "mailto:johnnygs478@gmail.com",
+        "ariaLabel": "Send us an email"
+      },
+      {
+        "platform": "Instagram",
+        "url": "https://www.instagram.com/johnnygscafe?igsh=OXRmNTR3c3hmZTc5",
+        "ariaLabel": "Follow us on Instagram"
+      },
+      {
+        "platform": "Facebook",
+        "url": "https://www.facebook.com/johnny.g.s.823880/?rdid=PUUSh9StKwqlYzpJ",
+        "ariaLabel": "Follow us on Facebook"
+      },
+      {
+        "platform": "TikTok",
+        "url": "https://www.tiktok.com/@johnnygscafetoronto?_t=ZM-8uL5pxkTXF7&_r=1",
+        "ariaLabel": "Follow us on TikTok"
+      }
+    ]
+  },
+  "footer": {
+    "tagline": "\"Where every meal tells a story\""
+  }
+}
+
