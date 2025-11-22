@@ -1,0 +1,27 @@
+/* [project]/src/app/fjallaone_abe870c.module.css [app-client] (css) */
+@font-face {
+  font-family: fjallaOne;
+  src: url("../media/FjallaOne_Regular-s.p.e87b26d1.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: fjallaOne Fallback;
+  src: local(Arial);
+  ascent-override: 115.64%;
+  descent-override: 28.43%;
+  line-gap-override: 0%;
+  size-adjust: 87.24%;
+}
+
+.fjallaone_abe870c-module__MKz2wa__className {
+  font-family:
+    fjallaOne,
+    fjallaOne Fallback;
+}
+
+.fjallaone_abe870c-module__MKz2wa__variable {
+  --font-fjalla-one: "fjallaOne", "fjallaOne Fallback";
+}
+
+/*# sourceMappingURL=src_app_fjallaone_abe870c_module_css_bad6b30c._.single.css.map*/

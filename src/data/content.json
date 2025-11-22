@@ -4,13 +4,14 @@
     "established": "1975"
   },
   "opening": {
-    "heading": "We are Open!",
+    "heading": "We are",
+    "highlight": "Open!",
     "description": "We’re fully open and ready to welcome you—just like our restaurant, our website is getting a little tune-up to bring its full personality to life."
   },
   "hours": {
     "breakfast": {
       "title": "Breakfast",
-      "time": "7:00 AM – 16:00 PM"
+      "time": "7:00 AM – 4:00 PM"
     },
     "dinner": {
       "title": "Dinner and Jazz",
@@ -18,9 +19,8 @@
     }
   },
   "reservations": {
-    "text": "Reserve Your Table",
     "phone": {
-      "display": "(647) 368-3877",
+      "display": "Reserve a Table",
       "tel": "+16473683877"
     }
   },
@@ -42,11 +42,6 @@
         "platform": "Facebook",
         "url": "https://www.facebook.com/johnny.g.s.823880/?rdid=PUUSh9StKwqlYzpJ",
         "ariaLabel": "Follow us on Facebook"
-      },
-      {
-        "platform": "TikTok",
-        "url": "https://www.tiktok.com/@johnnygscafetoronto?_t=ZM-8uL5pxkTXF7&_r=1",
-        "ariaLabel": "Follow us on TikTok"
       }
     ]
   },
@@ -54,4 +49,3 @@
     "tagline": "\"Where every meal tells a story\""
   }
 }
-
