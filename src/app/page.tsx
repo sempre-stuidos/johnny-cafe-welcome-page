@@ -74,14 +74,14 @@ export default function Home() {
               <p className="font-serif text-xl md:text-2xl italic tracking-wide text-[#B29738]/80">
                 Est. {restaurant.established}
               </p>
-              <DecorativeLine className="absolute top-30 md:top-40 w-full h-auto" />
+              <DecorativeLine className="absolute top-23 md:top-40 w-full h-auto" />
             </div>
 
             {/* Coming Soon */}
             <div className="relative">
               <h2
                 className={cn(
-                  "font-fjalla-one text-3xl md:text-4xl text-center mb-4 text-balance"
+                  "font-fjalla-one text-3xl md:text-4xl text-center md:mb-4 text-balance"
                 )}
               >
                 {opening.heading}
@@ -94,12 +94,7 @@ export default function Home() {
 
             {/* Hours & Info */}
             <div className="w-full relative">
-              <div className="absolute w-full bottom-[180px] md:bottom-30 left-0 flex items-center justify-center gap-4">
-                <div className="h-px w-full bg-linear-to-r from-transparent to-[#B29738]"></div>
-                <Music className="w-20 h-20 text-[#B29738]" />
-                <div className="h-px w-full bg-linear-to-l from-transparent to-[#B29738]"></div>
-              </div>
-              <div className="flex flex-col md:flex-row gap-4 justify-between font-fjalla-one">
+              <div className="flex flex-col md:flex-row gap-1 md:gap-4 justify-between font-fjalla-one">
                 {/* Breakfast Hours */}
                 <div className="text-center">
                   <h3 className="text-2xl text-[#B29738] tracking-wide">
@@ -122,11 +117,23 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+              
+              {/* Live Jazz Info */}
+              <div className="realtive text-center">
+                <div className="flex items-center justify-center gap-4">
+                  <div className="h-px w-full bg-linear-to-r from-transparent to-[#B29738]"></div>
+                  <Music className="w-20 h-20 text-[#B29738]" />
+                  <div className="h-px w-full bg-linear-to-l from-transparent to-[#B29738]"></div>
+                </div>
+                <p className="text-md md:text-lg text-[#B29738] font-fjalla-one tracking-wide">
+                  Live Jazz Thursday – Saturday  9:00 PM till late
+                </p>
+              </div>
             </div>
 
             {/* Footer with Phone and Social Icons */}
-            <footer className="relative w-full pb-2 md:pb-4">
-              <DecorativeLine className="absolute -top-12 md:-top-20 w-full h-auto rotate-180" />
+            <footer className="relative w-full">
+              <DecorativeLine className="absolute -top-10 md:-top-20 w-full h-auto rotate-180" />
               <div className="flex justify-between items-center gap-4">
                 {/* Phone and Social Icons Row */}
                 <div className="flex gap-10">

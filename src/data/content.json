@@ -14,8 +14,8 @@
       "time": "7:00 AM – 4:00 PM"
     },
     "dinner": {
-      "title": "Dinner and Jazz",
-      "time": "7:00 PM – 12:00 AM"
+      "title": "Dinner",
+      "time": "4:30 PM – 10:00 PM"
     }
   },
   "reservations": {
@@ -43,9 +43,11 @@
         "url": "https://www.facebook.com/johnny.g.s.823880/?rdid=PUUSh9StKwqlYzpJ",
         "ariaLabel": "Follow us on Facebook"
       }
+
     ]
   },
   "footer": {
     "tagline": "\"Where every meal tells a story\""
   }
 }
+

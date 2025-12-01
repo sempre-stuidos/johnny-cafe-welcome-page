@@ -10,14 +10,12 @@
   src: local(Arial);
   ascent-override: 115.64%;
   descent-override: 28.43%;
-  line-gap-override: 0%;
+  line-gap-override: 0.0%;
   size-adjust: 87.24%;
 }
 
 .fjallaone_abe870c-module__MKz2wa__className {
-  font-family:
-    fjallaOne,
-    fjallaOne Fallback;
+  font-family: fjallaOne, fjallaOne Fallback;
 }
 
 .fjallaone_abe870c-module__MKz2wa__variable {
