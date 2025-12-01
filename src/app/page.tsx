@@ -133,7 +133,7 @@ export default function Home() {
 
             {/* Footer with Phone and Social Icons */}
             <footer className="relative w-full">
-              <DecorativeLine className="absolute -top-10 md:-top-20 w-full h-auto rotate-180" />
+              <DecorativeLine className="absolute -top-10 w-full h-auto rotate-180" />
               <div className="flex justify-between items-center gap-4">
                 {/* Phone and Social Icons Row */}
                 <div className="flex gap-10">
