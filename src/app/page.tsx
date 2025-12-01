@@ -126,7 +126,7 @@ export default function Home() {
                   <div className="h-px w-full bg-linear-to-l from-transparent to-[#B29738]"></div>
                 </div>
                 <p className="text-md md:text-lg text-[#B29738] font-fjalla-one tracking-wide">
-                  Live Jazz Thursday – Saturday  9:00 PM till late
+                  Live Jazz Thu – Sat  9:00 PM till late
                 </p>
               </div>
             </div>
