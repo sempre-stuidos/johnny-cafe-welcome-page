@@ -9,6 +9,11 @@
   --theme-text-primary: #FFFFFF;
   --theme-text-body: #171717;
   --theme-accent: #B29738;
+  
+  /* New Color Variables */
+  --theme-text-light-cream: #FAF2DD;
+  --theme-bg-light-cream: #FAF2DD;
+  --theme-text-dark-green: #334D2D;
 }
 
 [data-theme="night"] {
@@ -35,6 +40,10 @@
   --font-mono: var(--font-geist-mono);
   --font-decorative: var(--font-yellowtail);
   --font-heading: var(--font-fjalla-one);
+  --font-hornbill-trial: var(--font-hornbill-trial);
+  --font-pinyon-script: var(--font-pinyon-script);
+  --font-amoret-sans: var(--font-amoret-sans);
+  --font-gayathri: var(--font-gayathri);
 
   /* Typography Scale */
   --font-size-xs: 0.75rem;      /* 12px */

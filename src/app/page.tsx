@@ -11,26 +11,161 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="space-y-6" style={{ color: 'var(--theme-text-body)' }}>
-          <h2>Typography System Demo</h2>
-          <h3>Heading 3 - FjallaOne Font</h3>
-          <h4>Heading 4 - FjallaOne Font</h4>
-          <h5>Heading 5 - FjallaOne Font</h5>
-          <h6>Heading 6 - FjallaOne Font</h6>
+        <div className="space-y-0">
+          <h2 className="mb-8">Typography System Demo</h2>
           
-          <p>
-            This is body text using Geist Sans. The theme toggle in the navigation allows you to 
-            switch between day and night themes. Notice how the background and text colors change 
-            smoothly with transitions.
-          </p>
-          
-          <p className="text-decorative text-3xl" style={{ color: 'var(--theme-accent)' }}>
-            Yellowtail font for decorative elements
-          </p>
-          
-          <div className="font-mono p-4 rounded" style={{ backgroundColor: 'var(--theme-bg-secondary)' }}>
-            <code>This is monospace text using Geist Mono</code>
-          </div>
+          {/* Section 1: Dark Green Background (#334D2D) */}
+          <section 
+            className="p-8 transition-colors duration-300"
+            style={{ backgroundColor: 'var(--theme-bg-nav)' }}
+          >
+            <div className="flex flex-col gap-6">
+              {/* Element 1: Header 1 - Hornbill Trial Black Italic */}
+              <h1
+                style={{
+                  fontFamily: 'var(--font-hornbill-trial)',
+                  fontWeight: 900,
+                  fontStyle: 'italic',
+                  fontSize: '83px',
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-light-cream)',
+                  width: '489px',
+                  height: '56px',
+                }}
+              >
+                JOHNNY G
+              </h1>
+
+              {/* Element 2: Header 2 - Pinyon Script */}
+              <h2
+                style={{
+                  fontFamily: 'var(--font-pinyon-script)',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '82.48px',
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-light-cream)',
+                  width: '236px',
+                  height: '56px',
+                }}
+              >
+                Brunch
+              </h2>
+
+              {/* Element 7: Uppercase Text - Gayathri */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-gayathri)',
+                  fontWeight: 700,
+                  fontStyle: 'normal',
+                  fontSize: '17.31px',
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  textTransform: 'uppercase',
+                  color: 'var(--theme-text-light-cream)',
+                  width: '154px',
+                  height: '21px',
+                }}
+              >
+                478 PARLIAMENT ST
+              </p>
+
+              {/* Element 3: Paragraph - Hornbill Trial Regular */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-hornbill-trial)',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '42px',
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-light-cream)',
+                  width: '380px',
+                  height: '154px',
+                }}
+              >
+                Have brunch at one of the oldest Restaurants in Cabbagetown
+              </p>
+
+              {/* Element 4: Small Text - Amoret Sans */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-amoret-sans)',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '18.9px',
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-light-cream)',
+                  width: '107px',
+                  height: '25px',
+                }}
+              >
+                MONDAY - SUNDAY
+              </p>
+            </div>
+          </section>
+
+          {/* Section 2: Light Cream Background (#FAF2DD) */}
+          <section 
+            className="p-8 transition-colors duration-300"
+            style={{ backgroundColor: 'var(--theme-bg-light-cream)' }}
+          >
+            <div className="flex flex-col gap-6">
+              {/* Element 5: Heading - Hornbill Trial Bold */}
+              <h2
+                style={{
+                  fontFamily: 'var(--font-hornbill-trial)',
+                  fontWeight: 700,
+                  fontStyle: 'normal',
+                  fontSize: '48px',
+                  lineHeight: '110%',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-dark-green)',
+                  width: '599px',
+                  height: '106px',
+                }}
+              >
+                Meet 30 Years of Culinary Mastery
+              </h2>
+
+              {/* Element 6: Small Text - Amoret Sans */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-amoret-sans)',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '16px',
+                  lineHeight: '100%',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-dark-green)',
+                  width: '149px',
+                  height: '13px',
+                }}
+              >
+                Welcome to Johnny G&apos;s!
+              </p>
+
+              {/* Element 8: Paragraph - Gayathri */}
+              <p
+                style={{
+                  fontFamily: 'var(--font-gayathri)',
+                  fontWeight: 700,
+                  fontStyle: 'normal',
+                  fontSize: '16px',
+                  lineHeight: '150%',
+                  letterSpacing: '0.02em',
+                  color: 'var(--theme-text-dark-green)',
+                  width: '542px',
+                  height: '312px',
+                }}
+              >
+                Welcome to Johnny G&apos;s! This iconic Cabbagetown spot, established in 1975, has been serving the community for over four decades. Experience our delicious brunch offerings, featuring classic breakfast favorites and innovative dishes that celebrate the rich culinary heritage of the neighborhood.
+              </p>
+            </div>
+          </section>
         </div>
       </div>
     </main>

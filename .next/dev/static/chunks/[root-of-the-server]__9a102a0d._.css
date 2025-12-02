@@ -142,6 +142,14 @@
 @layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
       --tw-space-y-reverse: 0;
       --tw-space-x-reverse: 0;
       --tw-border-style: solid;
@@ -201,12 +209,17 @@
 @layer theme {
   :root, :host {
     --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --color-yellow-600: #cd8900;
+    --color-gray-900: #101828;
+    --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
     --container-4xl: 56rem;
     --container-7xl: 80rem;
     --text-sm: .875rem;
     --text-sm--line-height: calc(1.25 / .875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
     --text-xl: 1.25rem;
@@ -227,8 +240,10 @@
     --text-8xl--line-height: 1;
     --font-weight-light: 300;
     --font-weight-medium: 500;
+    --font-weight-bold: 700;
     --tracking-wide: .025em;
     --tracking-wider: .05em;
+    --radius-lg: .5rem;
     --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
     --blur-sm: 8px;
     --blur-lg: 16px;
@@ -236,17 +251,32 @@
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-geist-sans);
     --default-mono-font-family: var(--font-geist-mono);
+    --font-size-xs: .75rem;
+    --font-size-base: 1rem;
     --font-size-lg: 1.125rem;
     --font-size-xl: 1.25rem;
     --font-size-2xl: 1.5rem;
     --font-size-3xl: 1.875rem;
     --font-size-4xl: 2.25rem;
     --font-size-5xl: 3rem;
+    --font-size-6xl: 3.75rem;
+    --font-size-7xl: 4.5rem;
+    --font-size-8xl: 6rem;
     --line-height-tight: 1.25;
     --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+    --letter-spacing-tighter: -.05em;
     --letter-spacing-tight: -.025em;
     --letter-spacing-normal: 0em;
     --letter-spacing-wide: .025em;
+    --letter-spacing-widest: .1em;
+  }
+
+  @supports (color: lab(0% 0 0)) {
+    :root, :host {
+      --color-yellow-600: lab(62.7799% 22.4197 86.1544);
+      --color-gray-900: lab(8.11897% .811279 -12.254);
+    }
   }
 }
 
@@ -539,6 +569,44 @@
     z-index: 50;
   }
 
+  .container {
+    width: 100%;
+  }
+
+  @media (min-width: 40rem) {
+    .container {
+      max-width: 40rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .container {
+      max-width: 48rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .container {
+      max-width: 64rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .container {
+      max-width: 80rem;
+    }
+  }
+
+  @media (min-width: 96rem) {
+    .container {
+      max-width: 96rem;
+    }
+  }
+
+  .m-6 {
+    margin: calc(var(--spacing) * 6);
+  }
+
   .mx-4 {
     margin-inline: calc(var(--spacing) * 4);
   }
@@ -563,12 +631,28 @@
     margin-bottom: calc(var(--spacing) * 4);
   }
 
+  .block {
+    display: block;
+  }
+
   .flex {
     display: flex;
   }
 
+  .grid {
+    display: grid;
+  }
+
   .hidden {
     display: none;
+  }
+
+  .inline {
+    display: inline;
+  }
+
+  .inline-block {
+    display: inline-block;
   }
 
   .inline-flex {
@@ -663,8 +747,22 @@
     max-width: 1000px;
   }
 
+  .translate-y-0 {
+    --tw-translate-y: calc(var(--spacing) * 0);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+
+  .translate-y-4 {
+    --tw-translate-y: calc(var(--spacing) * 4);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+
   .rotate-180 {
     rotate: 180deg;
+  }
+
+  .transform {
+    transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
   }
 
   .flex-col {
@@ -699,6 +797,10 @@
     gap: calc(var(--spacing) * 4);
   }
 
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+
   .gap-10 {
     gap: calc(var(--spacing) * 10);
   }
@@ -727,6 +829,12 @@
     margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
   }
 
+  :where(.space-x-4 > :not(:last-child)) {
+    --tw-space-x-reverse: 0;
+    margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
+    margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
+  }
+
   :where(.space-x-6 > :not(:last-child)) {
     --tw-space-x-reverse: 0;
     margin-inline-start: calc(calc(var(--spacing) * 6) * var(--tw-space-x-reverse));
@@ -751,6 +859,10 @@
     border-radius: 3.40282e38px;
   }
 
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+
   .rounded-br-full {
     border-bottom-right-radius: 3.40282e38px;
   }
@@ -758,6 +870,11 @@
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+
+  .border-2 {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
   }
 
   .border-4 {
@@ -809,6 +926,10 @@
     }
   }
 
+  .bg-\[\#011A0C\] {
+    background-color: #011a0c;
+  }
+
   .bg-\[\#011A0C\]\/10 {
     background-color: #011a0c1a;
     background-color: lab(6.95151% -11.241 5.12902 / .1);
@@ -822,6 +943,10 @@
   .bg-\[\#B29738\]\/30 {
     background-color: #b297384d;
     background-color: lab(63.6152% 2.63083 51.7594 / .3);
+  }
+
+  .bg-white {
+    background-color: var(--color-white);
   }
 
   .bg-white\/10 {
@@ -909,6 +1034,10 @@
     padding: calc(var(--spacing) * 4);
   }
 
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+
   .p-8 {
     padding: calc(var(--spacing) * 8);
   }
@@ -977,6 +1106,11 @@
     line-height: var(--tw-leading, var(--text-6xl--line-height));
   }
 
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+
   .text-lg {
     font-size: var(--text-lg);
     line-height: var(--tw-leading, var(--text-lg--line-height));
@@ -990,6 +1124,11 @@
   .text-xl {
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
   }
 
   .font-light {
@@ -1029,8 +1168,20 @@
     color: lab(63.6152% 2.63083 51.7594 / .8);
   }
 
+  .text-black {
+    color: var(--color-black);
+  }
+
+  .text-gray-900 {
+    color: var(--color-gray-900);
+  }
+
   .text-white {
     color: var(--color-white);
+  }
+
+  .text-yellow-600 {
+    color: var(--color-yellow-600);
   }
 
   .italic {
@@ -1042,8 +1193,16 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  .opacity-0 {
+    opacity: 0;
+  }
+
   .opacity-5 {
     opacity: .05;
+  }
+
+  .opacity-100 {
+    opacity: 1;
   }
 
   .mix-blend-overlay {
@@ -1052,6 +1211,16 @@
 
   .shadow-\[0_0_20px_rgba\(178\,151\,56\,0\.5\)\,0_0_40px_rgba\(178\,151\,56\,0\.3\)\] {
     --tw-shadow: 0 0 20px var(--tw-shadow-color, #b2973880), 0 0 40px var(--tw-shadow-color, #b297384d);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .shadow-lg {
+    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, #0000001a), 0 4px 6px -4px var(--tw-shadow-color, #0000001a);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .shadow-xl {
+    --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, #0000001a), 0 8px 10px -6px var(--tw-shadow-color, #0000001a);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
@@ -1099,6 +1268,11 @@
   .duration-300 {
     --tw-duration: .3s;
     transition-duration: .3s;
+  }
+
+  .duration-500 {
+    --tw-duration: .5s;
+    transition-duration: .5s;
   }
 
   @media (hover: hover) {
@@ -1278,6 +1452,13 @@
     }
   }
 
+  @media (min-width: 40rem) {
+    .sm\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+    }
+  }
+
   @media (min-width: 48rem) {
     .md\:-top-20 {
       top: calc(var(--spacing) * -20);
@@ -1353,6 +1534,12 @@
   }
 
   @media (min-width: 48rem) {
+    .md\:p-6 {
+      padding: calc(var(--spacing) * 6);
+    }
+  }
+
+  @media (min-width: 48rem) {
     .md\:px-6 {
       padding-inline: calc(var(--spacing) * 6);
     }
@@ -1418,10 +1605,76 @@
   }
 
   @media (min-width: 64rem) {
+    .lg\:grid {
+      display: grid;
+    }
+  }
+
+  @media (min-width: 64rem) {
     .lg\:px-8 {
       padding-inline: calc(var(--spacing) * 8);
     }
   }
+
+  @media (prefers-color-scheme: dark) {
+    .dark\:bg-gray-900 {
+      background-color: var(--color-gray-900);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .dark\:text-white {
+      color: var(--color-white);
+    }
+  }
+}
+
+@font-face {
+  font-family: Hornbill Trial;
+  src: url("/fonts/HornbillTrial-BlackItalic.woff2") format("woff2"), url("/fonts/HornbillTrial-BlackItalic.woff") format("woff");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Hornbill Trial;
+  src: url("/fonts/HornbillTrial-Regular.woff2") format("woff2"), url("/fonts/HornbillTrial-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Hornbill Trial;
+  src: url("/fonts/HornbillTrial-Bold.woff2") format("woff2"), url("/fonts/HornbillTrial-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Pinyon Script;
+  src: url("/fonts/PinyonScript-Regular.woff2") format("woff2"), url("/fonts/PinyonScript-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Amoret Sans;
+  src: url("/fonts/AmoretSans-Regular.woff2") format("woff2"), url("/fonts/AmoretSans-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Gayathri;
+  src: url("/fonts/Gayathri-Bold.woff2") format("woff2"), url("/fonts/Gayathri-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -1523,6 +1776,49 @@ code, pre {
 
 .border-theme-accent {
   border-color: var(--theme-accent);
+}
+
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false
 }
 
 @property --tw-space-y-reverse {

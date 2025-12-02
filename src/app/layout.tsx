@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Pinyon_Script, Gayathri } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -25,6 +25,30 @@ const fjallaOne = localFont({
   src: "../../public/fonts/FjallaOne-Regular.ttf",
   variable: "--font-fjalla-one",
   display: "swap",
+});
+
+const hornbillTrial = localFont({
+  src: "../../public/fonts/Hornbill-Trial-Black.ttf",
+  variable: "--font-hornbill-trial",
+  display: "swap",
+});
+
+const amoretSans = localFont({
+  src: "../../public/fonts/Amoret-Collection-Sans.ttf",
+  variable: "--font-amoret-sans",
+  display: "swap",
+});
+
+const pinyonScript = Pinyon_Script({
+  variable: "--font-pinyon-script",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const gayathri = Gayathri({
+  variable: "--font-gayathri",
+  subsets: ["latin"],
+  weight: ["100", "400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -98,7 +122,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} antialiased`}
       >
         <ThemeProvider>
           <Nav />

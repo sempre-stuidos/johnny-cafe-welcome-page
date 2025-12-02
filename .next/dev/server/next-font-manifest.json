@@ -1,10 +1,22 @@
 {
   "app": {
-    "[project]/src/app/page": [
+    "[project]/src/app/_not-found/page": [
       "static/media/caa3a2e1cccd8315-s.p.853070df.woff2",
       "static/media/797e433ab948586e-s.p.dbea232f.woff2",
       "static/media/Yellowtail_Regular-s.p.2477a154.ttf",
       "static/media/FjallaOne_Regular-s.p.e87b26d1.ttf"
+    ],
+    "[project]/src/app/page": [
+      "static/media/caa3a2e1cccd8315-s.p.853070df.woff2",
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/Yellowtail_Regular-s.p.2477a154.ttf",
+      "static/media/FjallaOne_Regular-s.p.e87b26d1.ttf",
+      "static/media/Hornbill_Trial_Black-s.p.fccd534d.ttf",
+      "static/media/Amoret_Collection_Sans-s.p.04e77d4b.ttf",
+      "static/media/db3f01ae0719bbb0-s.p.b64eeed7.woff2",
+      "static/media/56d5d787aa4a9eef-s.p.c9407a6c.woff2",
+      "static/media/f88a0abc44452aaf-s.p.e0c82d50.woff2",
+      "static/media/d32c72d141f04d65-s.p.5e15f396.woff2"
     ]
   },
   "appUsingSizeAdjust": true,
