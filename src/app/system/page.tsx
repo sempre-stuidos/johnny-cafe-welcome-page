@@ -35,47 +35,27 @@ export default function System() {
               >
                 <div className="flex flex-col gap-6">
                   {/* Element 1: Header 1 - Hornbill Trial Black Italic */}
-                  <h1
-                    className="typography-element"
-                    data-element="h1"
-                    onDoubleClick={() => copyElementName("h1")}
-                  >
+                  <h1 onDoubleClick={() => copyElementName("h1")}>
                     JOHNNY G
                   </h1>
 
                   {/* Element 2: Header 2 - Pinyon Script */}
-                  <h2
-                    className="typography-element"
-                    data-element="h2"
-                    onDoubleClick={() => copyElementName("h2")}
-                  >
+                  <h2 onDoubleClick={() => copyElementName("h2")}>
                     Brunch
                   </h2>
 
                   {/* Element 7: Uppercase Text - Gayathri */}
-                  <h3
-                    className="typography-element"
-                    data-element="h3"
-                    onDoubleClick={() => copyElementName("h3")}
-                  >
+                  <h3 onDoubleClick={() => copyElementName("h3")}>
                     478 PARLIAMENT ST
                   </h3>
 
                   {/* Element 3: Paragraph - Hornbill Trial Regular */}
-                  <h4
-                    className="typography-element"
-                    data-element="h4"
-                    onDoubleClick={() => copyElementName("h4")}
-                  >
+                  <h4 onDoubleClick={() => copyElementName("h4")}>
                     Have brunch at one of the oldest Restaurants in Cabbagetown
                   </h4>
 
                   {/* Element 4: Small Text - Amoret Sans */}
-                  <h5
-                    className="typography-element"
-                    data-element="h5"
-                    onDoubleClick={() => copyElementName("h5")}
-                  >
+                  <h5 onDoubleClick={() => copyElementName("h5")}>
                     MONDAY - SUNDAY
                   </h5>
                 </div>
@@ -89,40 +69,24 @@ export default function System() {
               >
                 <div className="flex flex-col gap-6">
                   {/* Element 5: Heading - Hornbill Trial Bold */}
-                  <h3
-                    className="typography-element"
-                    data-element="h3"
-                    onDoubleClick={() => copyElementName("h3")}
-                  >
+                  <h3 onDoubleClick={() => copyElementName("h3")}>
                     Meet 30 Years of Culinary Mastery
                   </h3>
 
                   {/* Element 6: Small Text - Amoret Sans */}
                   <span>
-                    <p
-                      className="typography-element"
-                      data-element="p"
-                      onDoubleClick={() => copyElementName("p")}
-                    >
+                    <p onDoubleClick={() => copyElementName("p")}>
                       Welcome to Johnny G&apos;s!
                     </p>
                   </span>
 
                   {/* Reservation - Amoret Sans */}
-                  <span
-                    className="typography-element"
-                    data-element="span"
-                    onDoubleClick={() => copyElementName("span")}
-                  >
+                  <span onDoubleClick={() => copyElementName("span")}>
                     Reservation
                   </span>
 
                   {/* Element 8: Paragraph - Gayathri */}
-                  <p
-                    className="typography-element"
-                    data-element="p"
-                    onDoubleClick={() => copyElementName("p")}
-                  >
+                  <p onDoubleClick={() => copyElementName("p")}>
                     Welcome to Johnny G&apos;s! This iconic Cabbagetown spot, established in 1975, has been serving the community for over four decades. Experience our delicious brunch offerings, featuring classic breakfast favorites and innovative dishes that celebrate the rich culinary heritage of the neighborhood.
                   </p>
                 </div>
