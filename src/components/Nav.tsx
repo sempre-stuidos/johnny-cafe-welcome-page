@@ -43,12 +43,20 @@ export default function Nav() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-white font-heading text-lg tracking-wide",
-                  "hover:text-[#B29738] transition-colors duration-200",
-                  "relative after:absolute after:bottom-0 after:left-0 after:h-[2px]",
+                  "relative transition-colors duration-200",
+                  "after:absolute after:bottom-0 after:left-0 after:h-[2px]",
                   "after:w-0 after:bg-[#B29738] after:transition-all after:duration-300",
-                  "hover:after:w-full"
+                  "hover:after:w-full hover:text-[#B29738]"
                 )}
+                style={{
+                  fontFamily: 'var(--font-amoret-sans)',
+                  fontWeight: 400,
+                  fontStyle: 'normal',
+                  fontSize: '16px',
+                  letterSpacing: '0%',
+                  color: 'var(--theme-text-light-cream)',
+                  height: '25px'
+                }}
               >
                 {link.label}
               </Link>
@@ -58,26 +66,33 @@ export default function Nav() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-full",
-              "bg-white/10 hover:bg-white/20 transition-all duration-300",
-              "border border-white/20 hover:border-white/40",
-              "text-white font-heading text-sm tracking-wide"
-            )}
+            className="flex items-end gap-3"
             aria-label={`Switch to ${theme === "day" ? "night" : "day"} theme`}
           >
-            {theme === "day" ? (
-              <>
-                <Moon className="w-5 h-5" />
-                <span className="hidden sm:inline">Night</span>
-              </>
-            ) : (
-              <>
-                <Sun className="w-5 h-5" />
-                <span className="hidden sm:inline">Day</span>
-              </>
-            )}
+            <div className="relative" style={{
+              width: '60px',
+              height: '32px',
+              borderRadius: '16px',
+              border: '2px solid #2a3f24',
+              backgroundColor: '#FAF2DD',
+              padding: '2px',
+              transition: 'all 0.3s ease'
+            }}>
+              <div className="absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out" style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                backgroundColor: '#334D2D',
+                border: '1px solid #FAF2DD',
+                left: theme === "day" ? '2px' : '32px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+              }} />
+            </div>
+            <h5 className="pt-1">
+              {theme === "day" ? "Brunch" : "Jazz Night"}
+            </h5>
           </button>
+
         </div>
 
         {/* Mobile Navigation */}

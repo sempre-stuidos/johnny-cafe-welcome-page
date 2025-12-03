@@ -10,7 +10,7 @@ export default function Home() {
         <div className="flex flex-row h-full gap-8 w-full">
           {/* Left Side - 40% */}
           <div className="flex flex-col justify-between py-8" style={{ width: '40%' }}>
-            <div>
+            <div className="mt-12">
               <h3>
                 478 PARLIAMENT ST
               </h3>
@@ -22,6 +22,7 @@ export default function Home() {
                 <h2 style={{ 
                   position: 'absolute',
                   WebkitTextStroke: '2px #334D2D',
+                  zIndex: 10
                 }}>
                   Brunch
                 </h2>
@@ -44,7 +45,15 @@ export default function Home() {
 
             </div>
 
-            <div className="flex flex-col justify-between" style={{ height: '260px' }}>
+            <Image
+              src="/comet-vector.svg"
+              alt="Comet vector"
+              width={200}
+              height={200}
+              className="w-auto h-auto"
+            />
+
+            <div className="flex flex-col justify-between relative" style={{ height: '250px' }}>
               <h4>
                 Have brunch at one of the oldest Restaurants in Cabbagetown
               </h4>
@@ -59,18 +68,35 @@ export default function Home() {
                 </h5>
               </div>
 
-
+              <Image
+                src="/star-vector.svg"
+                alt="Star vector"
+                width={50}
+                height={50}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2"
+                style={{
+                  right: '-100px'
+                }}
+              />
             </div>
-            <button className="btn-reservation">
+            <button className="btn-reservation mt-4 flex items-center gap-2">
               Reservation
+              <Image
+                src="/right-arrow-vector.svg"
+                alt="Right arrow"
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
             </button>
           </div>
 
           {/* Right Side - 60% */}
           <div className="flex items-end justify-end" style={{ width: '60%' }}>
-            <div className="frame w-full relative overflow-hidden" style={{
+
+            <div className="frame w-full relative overflow-hidden " style={{
               backgroundColor: 'transparent',
-              border: '1px solid #B29738',
+              border: '2px solid #B29738',
               height: '650px',
               width:'650px',
               borderTopLeftRadius: '999px',
@@ -87,6 +113,7 @@ export default function Home() {
                 }}
                 unoptimized
               />
+
             </div>
           </div>
         </div>
