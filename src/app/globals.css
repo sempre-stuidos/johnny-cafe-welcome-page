@@ -438,6 +438,10 @@ code, pre {
   color: #FAF2DD;
 }
 
+[data-theme="night"] .btn-reservation-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
 [data-theme="night"] .theme-toggle-knob {
   background-color: #B29738;
 }

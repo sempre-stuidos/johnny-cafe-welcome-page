@@ -1,6 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Home() {
+  const { theme } = useTheme();
   return (
     <main className="min-h-screen transition-colors duration-300" style={{ backgroundColor: 'var(--theme-bg-primary)' }}>
       <section 
@@ -39,7 +43,7 @@ export default function Home() {
 
             <div className="hero-content-section flex flex-col justify-between relative">
               <h4>
-                Have brunch at one of the oldest Restaurants in Cabbagetown
+                {theme === "day" ? "Have brunch at one of the oldest Restaurants in Cabbagetown" : "Have dinner at one of the oldest Restaurants in Cabbagetown"}
               </h4>
 
               <div className="hero-hours-section flex flex-col justify-between">
@@ -48,7 +52,7 @@ export default function Home() {
                 </h5>
 
                 <h5>
-                  7AM - 4PM
+                  {theme === "day" ? "7AM - 4PM" : "7PM - 12AM"}
                 </h5>
               </div>
 
@@ -60,14 +64,14 @@ export default function Home() {
                 className="hero-star-decoration"
               />
             </div>
-            <button className="btn-reservation mt-4 flex items-center gap-2">
+            <button className="btn-reservation mt-8 mb-4 flex items-center gap-2">
               Reservation
               <Image
                 src="/right-arrow-vector.svg"
                 alt="Right arrow"
                 width={20}
                 height={20}
-                className="w-5 h-5"
+                className="w-5 h-5 btn-reservation-arrow"
               />
             </button>
           </div>
@@ -77,8 +81,8 @@ export default function Home() {
 
             <div className="hero-frame w-full">
               <Image
-                src="/home/brunch-frame-bg.jpg"
-                alt="Brunch dish"
+                src={theme === "day" ? "/home/brunch-frame-bg.jpg" : "/home/jazz-frame.jpg"}
+                alt={theme === "day" ? "Brunch dish" : "Jazz night"}
                 fill
                 sizes="550px"
                 className="object-cover"
