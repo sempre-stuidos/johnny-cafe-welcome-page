@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
     <main className="min-h-screen transition-colors duration-300" style={{ backgroundColor: 'var(--theme-bg-primary)' }}>
@@ -66,14 +68,25 @@ export default function Home() {
 
           {/* Right Side - 60% */}
           <div className="flex items-end justify-end" style={{ width: '60%' }}>
-            <div className="frame w-full" style={{
+            <div className="frame w-full relative overflow-hidden" style={{
               backgroundColor: 'transparent',
               border: '1px solid #B29738',
-              height: '600px',
-              width:'550px',
+              height: '650px',
+              width:'650px',
               borderTopLeftRadius: '999px',
               borderTopRightRadius: '999px'
             }}>
+              <Image
+                src="/home/brunch-frame-bg.jpg"
+                alt="Brunch dish"
+                fill
+                sizes="550px"
+                className="object-cover"
+                style={{
+                  borderRadius: '999px 999px 0 0'
+                }}
+                unoptimized
+              />
             </div>
           </div>
         </div>
