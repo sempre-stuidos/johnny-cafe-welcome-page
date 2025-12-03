@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,14 +20,20 @@ export default function Nav() {
         backgroundColor: theme === "day" ? "#334D2D" : "#011A0C",
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <Link
             href="/"
-            className="text-decorative text-3xl sm:text-4xl text-white hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
           >
-            Johnny G&apos;s
+            <Image
+              src="/cafe-logo.png"
+              alt="Johnny G's"
+              width={40}
+              height={20}
+              className="h-5 sm:h-10 w-auto"
+            />
           </Link>
 
           {/* Navigation Links */}
