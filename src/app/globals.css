@@ -322,6 +322,10 @@ code, pre {
   -webkit-text-stroke: 2px #334D2D;
 }
 
+[data-theme="night"] .text-stroke-dark-green {
+  -webkit-text-stroke: unset;
+}
+
 /* Hero Frame - Frame container for image */
 .hero-frame {
   background-color: transparent;
