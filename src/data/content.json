@@ -65,5 +65,19 @@
       "/home/brunch-frame-bg.jpg",
       "/home/jazz-frame.jpg"
     ]
+  },
+  "events": {
+    "title": "Dinner and Jazz",
+    "description": "Join us every [day of the week] for an evening that feeds both your appetite and your soul. As the sun sets, Johnny G's transforms into an intimate jazz venue where talented local musicians set the perfect backdrop for an unforgettable dining experience.",
+    "upcomingEvents": [
+      {
+        "image": "/home/jazz-frame.jpg",
+        "date": "Dec 15, 2024"
+      },
+      {
+        "image": "/home/brunch-frame-bg.jpg",
+        "date": "Dec 22, 2024"
+      }
+    ]
   }
 }

@@ -59,7 +59,7 @@ export default function HomeHero() {
           className={cn(
             "flex flex-col md:flex-row",
             "h-full w-full max-w-[1440px]",
-            "mx-auto gap-4 md:gap-2"
+            "mx-auto gap-4 md:gap-8"
           )}
         >
           {/* Text Content - Top on mobile, Left on desktop */}

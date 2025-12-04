@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import HomeHero from "@/components/HomeHero";
 import HomeAbout from "@/components/HomeAbout";
 import HomeMenu from "@/components/HomeMenu";
+import HomeEvents from "@/components/HomeEvents";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <HomeHero />
       <HomeAbout />
       <HomeMenu />
+      <HomeEvents />
     </main>
   );
 }
