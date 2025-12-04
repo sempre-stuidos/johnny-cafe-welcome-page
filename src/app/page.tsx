@@ -1,12 +1,28 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import HomeHero from "@/components/HomeHero";
 import HomeAbout from "@/components/HomeAbout";
 import HomeMenu from "@/components/HomeMenu";
 import HomeEvents from "@/components/HomeEvents";
+import { getLiveEventsForBusiness, formatEventDate } from "@/lib/events";
+import { resolveBusinessSlug } from "@/lib/business-utils";
 
-export default function Home() {
+export default async function Home() {
+  // Get business slug from environment or use default
+  const businessSlug = resolveBusinessSlug(
+    undefined,
+    process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+    'johnny-gs-brunch'
+  );
+  
+  // Fetch live events from database (limit to 2 for homepage)
+  const dbEvents = await getLiveEventsForBusiness(businessSlug);
+  
+  // Map database events to HomeEvents format (only first 2, formatted for display)
+  const homeEvents = dbEvents.slice(0, 2).map(event => ({
+    date: formatEventDate(event.starts_at),
+    image: event.image_url,
+  }));
+
   return (
     <main
       className={cn(
@@ -18,7 +34,7 @@ export default function Home() {
       <HomeHero />
       <HomeAbout />
       <HomeMenu />
-      <HomeEvents />
+      <HomeEvents events={homeEvents} />
     </main>
   )
 }

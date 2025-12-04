@@ -5,9 +5,22 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import content from "@/data/content.json";
 import { StarIcon } from "@/components/icons";
+import Link from "next/link";
 
-export default function HomeEvents() {
+interface HomeEventsProps {
+  events?: Array<{
+    date: string;
+    image?: string;
+  }>;
+}
+
+export default function HomeEvents({ events }: HomeEventsProps) {
   const { theme } = useTheme();
+
+  // Use events from props if provided, otherwise fall back to content.json
+  const displayEvents = events && events.length > 0 
+    ? events 
+    : content.events.upcomingEvents;
 
   return (
     <section
@@ -93,40 +106,49 @@ export default function HomeEvents() {
             </p>
 
             {/* Event Posters */}
-            <div className="flex flex-row gap-4 md:gap-6 mt-4">
-              {content.events.upcomingEvents.map((event, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-3"
-                >
-                  {/* Event Image - 284x324px on desktop */}
-                  <div className="relative w-full md:w-[284px] aspect-[284/324] overflow-hidden rounded-lg border-2 border-[#B29738]">
-                    <Image
-                      src={event.image}
-                      alt={`Event on ${event.date}`}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
+            {displayEvents.length > 0 && (
+              <div className="flex flex-row gap-4 md:gap-6 mt-4">
+                {displayEvents.slice(0, 2).map((event, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col gap-3"
+                  >
+                    {/* Event Image - 284x324px on desktop */}
+                    <div className="relative w-full md:w-[284px] aspect-[284/324] overflow-hidden rounded-lg border-2 border-[#B29738]">
+                      {event.image ? (
+                        <Image
+                          src={event.image}
+                          alt={`Event on ${event.date}`}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-muted flex items-center justify-center">
+                          <span className="text-muted-foreground text-sm">No image</span>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Date with Star */}
-                  <div className="flex items-center gap-3">
-                    <StarIcon />
-                    <span
-                      className="transition-colors duration-300"
-                      style={{ color: "var(--about-text)" }}
-                    >
-                      {event.date}
-                    </span>
+                    {/* Date with Star */}
+                    <div className="flex items-center gap-3">
+                      <StarIcon />
+                      <span
+                        className="transition-colors duration-300"
+                        style={{ color: "var(--about-text)" }}
+                      >
+                        {event.date}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* See All Events Button */}
             <div className="flex justify-start mt-4">
-              <button
+              <Link
+                href="/events"
                 className={cn(
                   "btn-reservation",
                   "flex items-center gap-2"
@@ -140,7 +162,7 @@ export default function HomeEvents() {
                   height={20}
                   className={cn("btn-reservation-arrow", "w-5 h-5")}
                 />
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -169,4 +191,3 @@ export default function HomeEvents() {
     </section>
   );
 }
-

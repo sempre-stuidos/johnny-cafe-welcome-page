@@ -83,20 +83,20 @@
       "upcomingEvents": [
         {
           "date": "DECEMBER 5, 2025",
-          "name": "[EVENT NAME]",
-          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "name": "Smooth Jazz Fridays: The Aria Collective",
+          "description": "Experience an intimate night of live jazz featuring The Aria Collective, known for their soulful sax and warm lounge-style rhythms. Enjoy Chef Dinesh’s seasonal menu as the band sets the perfect mood for a cozy Friday evening. Reservations are strongly recommended.",
           "image": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&h=400&fit=crop"
         },
         {
           "date": "DECEMBER 12, 2025",
-          "name": "[EVENT NAME]",
-          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "name": "Golden Hour Jazz with The Blue Ember Trio",
+          "description": "Join us for a night of elegance and smooth melodies as The Blue Ember Trio brings their signature blend of piano, upright bass, and soft percussion. Perfect for dinner dates and holiday gatherings—pair it with one of our chef’s winter specials for the full experience.",
           "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
         },
         {
           "date": "DECEMBER 19, 2025",
-          "name": "[EVENT NAME]",
-          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "name": "Holiday Jazz Night Featuring Luna & The Velvet Keys",
+          "description": "Celebrate the season with Luna & The Velvet Keys as they perform classic jazz standards and festive holiday renditions. Expect warm vocals, timeless melodies, and an atmosphere that feels straight out of a vintage jazz lounge. Book early—our holiday events fill up fast!",
           "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop"
         }
       ]
