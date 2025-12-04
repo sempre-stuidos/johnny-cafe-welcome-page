@@ -21,9 +21,12 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 
 // Server-side Supabase client with service role key (bypasses RLS)
 // For public landing pages, we need to bypass RLS to read pages and businesses
+// Falls back to anon key if service role key is not provided (for development)
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey
+
 export const supabaseAdmin = createClient(
   supabaseUrl,
-  process.env.SUPABASE_SERVICE_ROLE_KEY as string,
+  supabaseServiceRoleKey,
   {
     auth: {
       autoRefreshToken: false,
