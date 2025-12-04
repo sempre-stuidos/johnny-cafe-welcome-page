@@ -48,7 +48,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
             >
               <path
                 d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
-                fill={theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)"}
+                fill={theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)"}
                 />
             </svg>
           </div>
@@ -57,7 +57,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               style={{
                 fontFamily: "var(--font-pinyon-script)",
                 fontSize: "var(--font-size-5xl)",
-                  color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
+                  color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
                 lineHeight: "var(--line-height-normal)",
                 fontWeight: activeMenu === "brunch" ? 600 : 400,
                 fontStyle: "normal",
@@ -71,7 +71,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               style={{
                 fontFamily: "var(--font-pinyon-script)",
                 fontSize: "var(--font-size-5xl)",
-                  color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
+                  color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
                   lineHeight: "var(--line-height-normal)",
                 fontWeight: activeMenu === "dinner" ? 600 : 400,
                 fontStyle: "normal",

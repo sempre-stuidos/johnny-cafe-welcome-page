@@ -19,7 +19,7 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
           style={{
             fontFamily: "var(--font-hornbill-trial)",
             fontSize: "var(--font-size-lg)",
-              color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
+              color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
 
               fontWeight: 400,
             lineHeight: "var(--line-height-tight)",
@@ -32,7 +32,7 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
           style={{
             fontFamily: "var(--font-geist-sans)",
             fontSize: "var(--font-size-lg)",
-              color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
+              color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
             fontWeight: 700,
             lineHeight: "var(--line-height-tight)",
           }}
