@@ -71,3 +71,19 @@ export const TikTok = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// Star with Line Divider Component
+export const StarDivider = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
+  <svg
+    width="553"
+    height="143"
+    viewBox="0 0 553 143"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    {...props}
+  >
+    <path d="M0 71.5C64.4085 75.1667 67.359 78.145 71 143C74.641 78.1379 77.5985 75.1667 142 71.5C77.5915 67.8333 74.641 64.855 71 0C67.359 64.8621 64.4015 67.8333 0 71.5Z" fill="#B29738"/>
+    <path d="M563 71L118 70V73L563 72V71Z" fill="#B29738"/>
+  </svg>
+);
+
