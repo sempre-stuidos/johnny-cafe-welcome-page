@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
-import { StarIcon } from "@/components/icons";
 
 export default function HomeReservation() {
   const { theme } = useTheme();
@@ -103,7 +102,7 @@ export default function HomeReservation() {
                           fontSize: "var(--font-size-7xl)",
                           color: "#334D2D",
                           lineHeight: "var(--line-height-tight)",
-                          fontFamily: "var(--font-pinyon-script"
+                          fontFamily: "var(--font-pinyon-script)"
                       }}
                   >
                       Reserve Now
@@ -147,7 +146,252 @@ export default function HomeReservation() {
                 backgroundColor: "transparent",
               }}
             >
+              {/* Form */}
+              <form
+                className="flex flex-col gap-4 w-full absolute"
+                style={{
+                  backgroundColor: "transparent",
+                  top: "180px",
+                  left: "0",
+                  right: "0",
+                  padding: "0px 80px",
+                }}
+              >
+                {/* Row 1: Party Size + Star Vector */}
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex flex-col gap-2 relative">
+                    <label
+                      htmlFor="party-size"
+                      className="uppercase transition-colors duration-300"
+                      style={{
+                        fontFamily: "var(--font-gayathri)",
+                        fontWeight: 700,
+                        fontSize: "17.31px",
+                        lineHeight: "100%",
+                        letterSpacing: "2%",
+                        color:
+                          theme === "day"
+                            ? "#334D2D"
+                            : "var(--theme-text-light-cream)",
+                      }}
+                    >
+                      PARTY SIZE
+                    </label>
+                    <input
+                      type="number"
+                      id="party-size"
+                      name="party-size"
+                      min="1"
+                      className="transition-colors duration-300 focus:outline-none"
+                      style={{
+                        width: "173px",
+                        height: "40px",
+                        border: "1px solid #B29738",
+                        borderWidth: "1px",
+                        backgroundColor: "transparent",
+                        color:
+                          theme === "day"
+                            ? "#334D2D"
+                            : "var(--theme-text-light-cream)",
+                        padding: "0 12px",
+                        fontFamily: "var(--font-amoret-sans)",
+                        fontSize: "var(--font-size-base)",
+                      }}
+                    />
+                    <Image
+                      src="/star-vector.svg"
+                      alt="Star vector"
+                      width={200}
+                      height={200}
+                      className={cn(
+                        "absolute",
+                        "bottom-10 left-60",
+                        "w-auto h-[70px]",
+                        "hidden md:block"
+                      )}
+                    />
+                  </div>
+                </div>
 
+                {/* Row 2: Date and Time */}
+                <div className="flex gap-3">
+                  <div className="flex flex-col gap-2 flex-1">
+                    <label
+                      htmlFor="date"
+                      className="uppercase transition-colors duration-300"
+                      style={{
+                        fontFamily: "var(--font-gayathri)",
+                        fontWeight: 700,
+                        fontSize: "17.31px",
+                        lineHeight: "100%",
+                        letterSpacing: "2%",
+                        color:
+                          theme === "day"
+                            ? "#334D2D"
+                            : "var(--theme-text-light-cream)",
+                      }}
+                    >
+                      DATE
+                    </label>
+                    <input
+                      type="date"
+                      id="date"
+                      name="date"
+                      className="w-full transition-colors duration-300 focus:outline-none"
+                      style={{
+                        height: "40px",
+                        border: "1px solid #B29738",
+                        borderWidth: "1px",
+                        backgroundColor: "transparent",
+                        color:
+                          theme === "day"
+                            ? "#334D2D"
+                            : "var(--theme-text-light-cream)",
+                        padding: "0 12px",
+                        fontFamily: "var(--font-amoret-sans)",
+                        fontSize: "var(--font-size-base)",
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 flex-1">
+                    <label
+                      htmlFor="time"
+                      className="uppercase transition-colors duration-300"
+                      style={{
+                        fontFamily: "var(--font-gayathri)",
+                        fontWeight: 700,
+                        fontSize: "17.31px",
+                        lineHeight: "100%",
+                        letterSpacing: "2%",
+                        color:
+                          theme === "day"
+                            ? "#334D2D"
+                            : "var(--theme-text-light-cream)",
+                      }}
+                    >
+                      TIME
+                    </label>
+                    <input
+                      type="time"
+                      id="time"
+                      name="time"
+                      className="w-full transition-colors duration-300 focus:outline-none"
+                      style={{
+                        height: "40px",
+                        border: "1px solid #B29738",
+                        borderWidth: "1px",
+                        backgroundColor: "transparent",
+                        color:
+                          theme === "day"
+                            ? "#334D2D"
+                            : "var(--theme-text-light-cream)",
+                        padding: "0 12px",
+                        fontFamily: "var(--font-amoret-sans)",
+                        fontSize: "var(--font-size-base)",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Row 3: Email */}
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="email"
+                    className="uppercase transition-colors duration-300"
+                    style={{
+                      fontFamily: "var(--font-gayathri)",
+                      fontWeight: 700,
+                      fontSize: "17.31px",
+                      lineHeight: "100%",
+                      letterSpacing: "2%",
+                      color:
+                        theme === "day"
+                          ? "#334D2D"
+                          : "var(--theme-text-light-cream)",
+                    }}
+                  >
+                    EMAIL
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className="w-full transition-colors duration-300 focus:outline-none"
+                    style={{
+                      height: "40px",
+                      border: "1px solid #B29738",
+                      borderWidth: "1px",
+                      backgroundColor: "transparent",
+                      color:
+                        theme === "day"
+                          ? "#334D2D"
+                          : "var(--theme-text-light-cream)",
+                      padding: "0 12px",
+                      fontFamily: "var(--font-amoret-sans)",
+                      fontSize: "var(--font-size-base)",
+                    }}
+                  />
+                </div>
+
+                {/* Row 4: Phone */}
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="phone"
+                    className="uppercase transition-colors duration-300"
+                    style={{
+                      fontFamily: "var(--font-gayathri)",
+                      fontWeight: 700,
+                      fontSize: "17.31px",
+                      lineHeight: "100%",
+                      letterSpacing: "2%",
+                      color:
+                        theme === "day"
+                          ? "#334D2D"
+                          : "var(--theme-text-light-cream)",
+                    }}
+                  >
+                    PHONE
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    className="w-full transition-colors duration-300 focus:outline-none"
+                    style={{
+                      height: "40px",
+                      border: "1px solid #B29738",
+                      borderWidth: "1px",
+                      backgroundColor: "transparent",
+                      color:
+                        theme === "day"
+                          ? "#334D2D"
+                          : "var(--theme-text-light-cream)",
+                      padding: "0 12px",
+                      fontFamily: "var(--font-amoret-sans)",
+                      fontSize: "var(--font-size-base)",
+                    }}
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex justify-center mt-4 ">
+                  <button
+                    type="submit"
+                    className={cn(
+                      "btn-reservation",
+                      "flex items-center gap-2",
+                      "w-full"
+                    )}
+                    style={{
+                      fontSize: "clamp(var(--font-size-xs), 2.5vw, var(--font-size-sm))",
+                      height: "44px",
+                      padding: "12px 24px",
+                    }}
+                  >
+                    SUBMIT
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
