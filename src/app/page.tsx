@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils";
 import DynamicSection from "@/components/dynamic-section";
 import { getPageBySlug, getPageSections } from "@/lib/pages";
-import { validatePreviewToken } from "@/lib/preview";
+import { resolveBusinessSlug, logBusinessSlugResolution } from "@/lib/business-utils";
+import { validateAndResolvePreviewMode, logContentModeResolution } from "@/lib/preview-utils";
+import { selectSectionContent } from "@/lib/content-utils";
 import HomeHero from "@/components/HomeHero";
 import { CanvasEditorHandler } from "@/components/canvas-editor-handler";
 
@@ -14,17 +16,20 @@ export default async function Home({ searchParams }: HomeProps) {
   const previewToken = params.token
   const pageSlug = params.page || 'home'
   
-  // Get business slug from query parameter (for iframe previews) or environment variable
-  // Query parameter takes precedence to support multi-tenant previews
-  const businessSlug = params.business || process.env.NEXT_PUBLIC_ORG_SLUG || 'johnny-gs-brunch'
+  // Resolve business slug from query parameter or environment variable
+  const businessSlug = resolveBusinessSlug(
+    params.business,
+    process.env.NEXT_PUBLIC_ORG_SLUG,
+    'johnny-gs-brunch'
+  )
   
-  // Log business slug source for debugging
-  console.log('[page.tsx] Business slug resolved:', {
-    fromQueryParam: params.business,
-    fromEnv: process.env.NEXT_PUBLIC_ORG_SLUG,
-    finalBusinessSlug: businessSlug,
-    pageSlug,
-  })
+  // Log business slug resolution for debugging
+  logBusinessSlugResolution(
+    params.business,
+    process.env.NEXT_PUBLIC_ORG_SLUG,
+    businessSlug,
+    pageSlug
+  )
   
   // Get the page
   const page = await getPageBySlug(businessSlug, pageSlug)
@@ -44,20 +49,8 @@ export default async function Home({ searchParams }: HomeProps) {
     )
   }
 
-  // Validate preview token if provided
-  let useDraft = false
-  let tokenValid = false
-  if (previewToken) {
-    const validation = await validatePreviewToken(previewToken, undefined, page.id)
-    useDraft = validation.valid
-    tokenValid = validation.valid
-    console.log('[page.tsx] Preview token validation:', {
-      token: previewToken.substring(0, 8) + '...',
-      valid: validation.valid,
-      error: validation.error,
-      useDraft,
-    })
-  }
+  // Validate preview token and determine draft mode
+  const { useDraft, tokenValid } = await validateAndResolvePreviewMode(previewToken, page.id)
 
   // Get sections for this page
   const { sections, useDraft: resolvedUseDraft } = await getPageSections(
@@ -66,31 +59,14 @@ export default async function Home({ searchParams }: HomeProps) {
     previewToken
   )
 
-  console.log('[page.tsx] Content mode resolved:', {
-    previewToken: previewToken ? previewToken.substring(0, 8) + '...' : null,
+  // Log content mode resolution for debugging
+  logContentModeResolution(
+    previewToken,
     tokenValid,
     useDraft,
     resolvedUseDraft,
-    sectionsCount: sections.length,
-  })
-
-  // Helper function to check if content has meaningful data
-  const hasContent = (content: unknown): boolean => {
-    if (!content) return false
-    if (typeof content !== 'object') return false
-    if (Array.isArray(content)) return content.length > 0
-    const contentObj = content as Record<string, unknown>
-    const keys = Object.keys(contentObj)
-    if (keys.length === 0) return false
-    // Check if at least one key has a non-empty value
-    return keys.some(key => {
-      const value = contentObj[key]
-      if (value === null || value === undefined) return false
-      if (typeof value === 'string' && value.trim() === '') return false
-      if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) return false
-      return true
-    })
-  }
+    sections.length
+  )
 
   // If no sections, fallback to static content
   if (sections.length === 0) {
@@ -116,31 +92,7 @@ export default async function Home({ searchParams }: HomeProps) {
       style={{ backgroundColor: "var(--theme-bg-primary)" }}
     >
       {sections.map((section) => {
-        // Content selection: Simple and consistent logic
-        // When in draft mode (preview token valid), use draft_content
-        // When in published mode (no token or invalid token), use published_content
-        let content: Record<string, unknown>
-        const isDraftMode = resolvedUseDraft
-        
-        if (isDraftMode) {
-          // Draft mode: Use draft_content if it exists and has content, otherwise fall back to published_content
-          if (hasContent(section.draft_content)) {
-            content = section.draft_content as Record<string, unknown>
-          } else if (hasContent(section.published_content)) {
-            content = section.published_content as Record<string, unknown>
-          } else {
-            content = {}
-          }
-        } else {
-          // Published mode: Use published_content if it exists and has content, otherwise fall back to draft_content
-          if (hasContent(section.published_content)) {
-            content = section.published_content as Record<string, unknown>
-          } else if (hasContent(section.draft_content)) {
-            content = section.draft_content as Record<string, unknown>
-          } else {
-            content = {}
-          }
-        }
+        const content = selectSectionContent(section, resolvedUseDraft)
 
         return (
           <section
