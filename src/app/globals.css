@@ -564,3 +564,62 @@ code, pre {
 [data-theme="night"] .btn-menu-arrow {
   filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
 }
+
+/* Footer Styles */
+.footer-bg {
+  background-color: #334D2D;
+}
+
+[data-theme="night"] .footer-bg {
+  background-color: #011A0C;
+}
+
+.footer-overlay {
+  background-color: rgba(51, 77, 45, 0.85);
+}
+
+[data-theme="night"] .footer-overlay {
+  background-color: rgba(1, 26, 12, 0.90);
+}
+
+.footer-text-cream {
+  color: #FAF2DD;
+}
+
+.footer-days {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FAF2DD;
+}
+
+.footer-meal-label {
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 100%;
+  color: #FAF2DD;
+}
+
+.footer-meal-time {
+  font-family: var(--font-amoret-sans);
+  font-size: 14px;
+  color: #FAF2DD;
+}
+
+.footer-contact {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FAF2DD;
+}
+
+.footer-social-icon {
+  color: #B29738;
+}
+
+.footer-star-fill {
+  fill: #B29738;
+}

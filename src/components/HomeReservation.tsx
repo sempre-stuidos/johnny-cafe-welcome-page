@@ -180,7 +180,7 @@ export default function HomeReservation() {
               className={cn(
                 "hero-frame",
                 "w-full h-auto",
-                "min-h-[750px] md:min-h-[668px] max-w-full md:max-w-[597px]",
+                "min-h-[600px] md:min-h-[668px] max-w-full md:max-w-[597px]",
                 "relative",
                 "p-4 md:p-8 pb-8",
                 "overflow-visible"
