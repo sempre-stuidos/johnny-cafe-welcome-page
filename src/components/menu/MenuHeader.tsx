@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
 interface MenuHeaderProps {
@@ -8,6 +9,8 @@ interface MenuHeaderProps {
 }
 
 export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps) {
+  const { theme } = useTheme();
+
   return (
     <div className="flex flex-col gap-4 md:gap-6">
       {/* MENU Heading */}
@@ -15,7 +18,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
       <h4
         style={{
           fontSize: "var(--font-size-6xl)",
-          color: "var(--theme-text-dark-green)",
+          color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--color-theme-accent)",
           fontWeight: 700,
           lineHeight: "var(--line-height-tight)",
         }}
@@ -45,8 +48,8 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
             >
               <path
                 d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
-                fill="var(--theme-text-dark-green)"
-              />
+                fill={theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)"}
+                />
             </svg>
           </div>
           <div className="flex items-center gap-12 md:gap-24">
@@ -54,7 +57,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               style={{
                 fontFamily: "var(--font-pinyon-script)",
                 fontSize: "var(--font-size-5xl)",
-                color: "var(--theme-text-dark-green)",
+                  color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
                 lineHeight: "var(--line-height-normal)",
                 fontWeight: activeMenu === "brunch" ? 600 : 400,
                 fontStyle: "normal",
@@ -68,8 +71,8 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               style={{
                 fontFamily: "var(--font-pinyon-script)",
                 fontSize: "var(--font-size-5xl)",
-                color: "var(--theme-text-dark-green)",
-                lineHeight: "var(--line-height-normal)",
+                  color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
+                  lineHeight: "var(--line-height-normal)",
                 fontWeight: activeMenu === "dinner" ? 600 : 400,
                 fontStyle: "normal",
               }}

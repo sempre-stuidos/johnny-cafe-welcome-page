@@ -1,5 +1,7 @@
 "use client";
 
+import { useTheme } from "@/contexts/ThemeContext";
+
 interface MenuItemProps {
   name: string;
   price: number;
@@ -7,6 +9,8 @@ interface MenuItemProps {
 }
 
 export default function MenuItem({ name, price, description }: MenuItemProps) {
+  const { theme } = useTheme();
+
   return (
     <div className="flex flex-col gap-1">
       {/* Title and Price Row */}
@@ -15,8 +19,9 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
           style={{
             fontFamily: "var(--font-hornbill-trial)",
             fontSize: "var(--font-size-lg)",
-            color: "var(--theme-text-dark-green)",
-            fontWeight: 400,
+              color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
+
+              fontWeight: 400,
             lineHeight: "var(--line-height-tight)",
           }}
           className="flex-1"
@@ -27,7 +32,7 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
           style={{
             fontFamily: "var(--font-geist-sans)",
             fontSize: "var(--font-size-lg)",
-            color: "var(--theme-text-dark-green)",
+              color: theme === "day" ? "var(--theme-accent)" : "var(--theme-text-light-cream)",
             fontWeight: 700,
             lineHeight: "var(--line-height-tight)",
           }}
@@ -42,7 +47,7 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
         style={{
           fontFamily: "var(--font-geist-sans)",
           fontSize: "var(--font-size-sm)",
-          color: "var(--theme-text-dark-green)",
+          color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--color-theme-accent)",
           fontWeight: 400,
           lineHeight: "var(--line-height-relaxed)",
           maxWidth: "438px",
