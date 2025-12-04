@@ -1,17 +1,17 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import content from "@/data/content.json";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
 
 export default function HomeMenu() {
   const { theme } = useTheme();
@@ -81,23 +81,24 @@ export default function HomeMenu() {
           )}
         >
           {/* Title */}
-          <h3
-            className="text-left max-w-[600px]"
+          <h2
+            className="text-left max-w-[600px] transition-colors duration-300"
             style={{
               fontFamily: "var(--font-hornbill-trial)",
-              fontWeight: 900,
-              fontSize: "36px",
+              fontWeight: 700,
+              fontSize: "48px",
               lineHeight: "110%",
-              color: theme === "day" ? "#334D2D" : "#FAF2DD",
+              letterSpacing: "0%",
+              color: "var(--about-title)",
             }}
           >
             {content.menu.title}
-          </h3>
+          </h2>
 
           {/* Swiper Slider */}
           <div className="relative w-full">
             <Swiper
-              modules={[Autoplay, Pagination]}
+              modules={[Autoplay]}
               spaceBetween={16}
               slidesPerView={1.2}
               loop={true}
@@ -105,9 +106,6 @@ export default function HomeMenu() {
                 delay: 3000,
                 disableOnInteraction: false,
                 pauseOnMouseEnter: true,
-              }}
-              pagination={{
-                clickable: true,
               }}
               onSwiper={(swiper) => {
                 swiperRef.current = swiper;
@@ -153,7 +151,8 @@ export default function HomeMenu() {
 
           {/* Menu Button */}
           <div className="flex justify-start">
-            <button
+            <Link
+              href="/menu"
               className={cn(
                 "btn-menu",
                 "flex items-center gap-2",
@@ -168,7 +167,7 @@ export default function HomeMenu() {
                 height={20}
                 className={cn("btn-menu-arrow", "w-5 h-5")}
               />
-            </button>
+            </Link>
           </div>
         </div>
       </div>

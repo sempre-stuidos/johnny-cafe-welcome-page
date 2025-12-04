@@ -74,7 +74,7 @@ export default function Nav() {
                   />
                 </div>
                 <h5 className="nav-link pt-1 whitespace-nowrap">
-                  {theme === "day" ? "Brunch" : "Jazz Night"}
+                  {theme === "day" ? "Brunch" : "Dinner"}
                 </h5>
               </button>
 
@@ -160,7 +160,7 @@ export default function Nav() {
                 />
               </div>
               <span className="text-[#FAF2DD] text-lg">
-                {theme === "day" ? "Brunch Mode" : "Jazz Night Mode"}
+                {theme === "day" ? "Brunch Mode" : "Dinner Mode"}
               </span>
             </button>
           </div>

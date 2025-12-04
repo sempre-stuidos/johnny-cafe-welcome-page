@@ -102,7 +102,7 @@ export default function HomeReservation() {
           backgroundColor:
             theme === "day"
               ? "rgba(194, 202, 168, 0.85)"
-              : "rgba(1, 26, 12, 0.90)",
+              : "rgba(1, 26, 12, 0.70)",
         }}
       />
 
@@ -147,20 +147,14 @@ export default function HomeReservation() {
 
                   {/* Decorative "Reserve Now" text */}
                   <h2
-                      className="text-decorative transition-colors duration-300"
-                      style={{
-                          fontSize: "var(--font-size-7xl)",
-                          color: "#334D2D",
-                          lineHeight: "var(--line-height-tight)",
-                          fontFamily: "var(--font-pinyon-script)"
-                      }}
+                      className="hero-brunch-title transition-colors duration-300"
                   >
                       Reserve Now
                   </h2>
               </div>
 
-              {/* Trumpet Player SVG */}
-              <div className="relative w-full max-w-[600px] mt-4">
+              {/* Trumpet Player SVG - Hidden on mobile */}
+              <div className="hidden md:block relative w-full max-w-[600px] mt-4">
                   <Image
                       src="/home/trumpet-player.svg"
                       alt="Trumpet player"
@@ -172,24 +166,23 @@ export default function HomeReservation() {
             </div>
           </div>
 
-          {/* Right Side Form - Bottom on mobile, Right on desktop */}
+          {/* Right Side Form - Full width on mobile, Right on desktop */}
           <div
             className={cn(
-              "flex items-end justify-center md:justify-end",
+              "flex items-center justify-center md:justify-end",
               "w-full md:w-[40%]",
-              "flex-1 md:flex-none",
               "order-2",
-              "pb-4 md:mt-8 md:pb-0",
+              "py-8 md:py-0 md:mt-8",
               "relative"
             )}
           >
             <div
               className={cn(
                 "hero-frame",
-                "w-full h-full",
-                "min-h-[300px] max-w-[597px] max-h-[668px]",
+                "w-full h-auto",
+                "min-h-[750px] md:min-h-[668px] max-w-full md:max-w-[597px]",
                 "relative",
-                "p-6 md:p-8",
+                "p-4 md:p-8 pb-8",
                 "overflow-visible"
               )}
               style={{
@@ -244,13 +237,12 @@ export default function HomeReservation() {
                 /* Form */
                 <form
                   onSubmit={handleSubmit}
-                  className="flex flex-col gap-4 w-full absolute"
+                  className="flex flex-col gap-3 md:gap-4 w-full absolute px-2 md:px-20"
                   style={{
                     backgroundColor: "transparent",
-                    top: "180px",
+                    bottom: "20px",
                     left: "0",
                     right: "0",
-                    padding: "0px 80px",
                   }}
                 >
                 {/* Row 1: Party Size + Star Vector */}

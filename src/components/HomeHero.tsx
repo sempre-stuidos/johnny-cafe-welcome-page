@@ -75,16 +75,21 @@ export default function HomeHero() {
             <div className="hero-title-section mt-2 md:mt-6">
               <h3>478 PARLIAMENT ST</h3>
 
-              {/* H1 with Brunch & EST overlapping */}
+              {/* Hero Title Image - Day/Night */}
               <div className="relative mt-1 pb-8 md:pb-12">
-                {/* Brunch & EST - in front with higher z-index (DOM first) */}
-                <div className="flex flex-row items-start absolute left-0 top-[40%] md:top-[45%] z-10">
-                  <h2 className="hero-brunch-title">Brunch</h2>
-                  <p className="est-1975-text ml-6 md:ml-10 mt-6 md:mt-10">EST 1975</p>
-                </div>
-                
-                {/* JOHNNY G's - behind with lower z-index */}
-                <h1 className="text-stroke-dark-green relative z-0">JOHNNY G's</h1>
+                <Image
+                  src={
+                    theme === "day"
+                      ? "/assets/imgs/hero-day.png"
+                      : "/assets/imgs/hero-night.png"
+                  }
+                  alt={theme === "day" ? "Johnny G's Brunch" : "Johnny G's Dinner"}
+                  width={600}
+                  height={200}
+                  className="w-full h-auto max-w-[500px] md:max-w-[600px]"
+                  unoptimized
+                  priority
+                />
               </div>
             </div>
 

@@ -80,7 +80,14 @@ export default function HomeAbout() {
           >
             <h2
               className="transition-colors duration-300"
-              style={{ color: "var(--about-title)" }}
+              style={{ 
+                color: "var(--about-title)",
+                fontFamily: "var(--font-hornbill-trial)",
+                fontWeight: 700,
+                fontSize: "48px",
+                lineHeight: "110%",
+                letterSpacing: "0%"
+              }}
             >
               {content.about.title}
             </h2>
