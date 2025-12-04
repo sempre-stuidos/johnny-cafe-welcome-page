@@ -3,6 +3,7 @@ import DynamicSection from "@/components/dynamic-section";
 import { getPageBySlug, getPageSections } from "@/lib/pages";
 import { validatePreviewToken } from "@/lib/preview";
 import HomeHero from "@/components/HomeHero";
+import { CanvasEditorHandler } from "@/components/canvas-editor-handler";
 
 interface HomeProps {
   searchParams: Promise<{ token?: string; page?: string; business?: string }>
@@ -151,6 +152,7 @@ export default async function Home({ searchParams }: HomeProps) {
           </section>
         )
       })}
+      <CanvasEditorHandler sections={sections.map(s => ({ id: s.id, key: s.key }))} />
     </main>
   )
 }

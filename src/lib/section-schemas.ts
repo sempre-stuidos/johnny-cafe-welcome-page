@@ -22,6 +22,7 @@ export const HomeHeroSectionSchema = z.object({
   title: z.string(),
   subtitle: z.string(),
   established: z.string(),
+  daysLabel: z.string(),
   day: z.object({
     description: z.string(),
     hours: z.string(),

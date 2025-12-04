@@ -10,6 +10,7 @@ interface HomeHeroSectionProps {
     title?: string;
     subtitle?: string;
     established?: string;
+    daysLabel?: string;
     day?: {
       description?: string;
       hours?: string;
@@ -33,6 +34,7 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
   const title = content?.title || "JOHNNY G's";
   const subtitle = content?.subtitle || "Brunch";
   const established = content?.established || "EST 1975";
+  const daysLabel = content?.daysLabel || "MONDAY - SUNDAY";
   
   // Theme-dependent content
   const dayData = content?.day || {
@@ -122,18 +124,26 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
             )}
           >
             <div className="hero-title-section mt-2 md:mt-6">
-              <h3>{address}</h3>
+              <div data-section-component-key="address">
+                <h3>{address}</h3>
+              </div>
 
               {/* H1 with Brunch & EST overlapping */}
               <div className="relative mt-1 pb-8 md:pb-12">
                 {/* Brunch & EST - in front with higher z-index (DOM first) */}
                 <div className="flex flex-row items-start absolute left-0 top-[40%] md:top-[45%] z-10">
-                  <h2 className="hero-brunch-title">{subtitle}</h2>
-                  <p className="est-1975-text ml-6 md:ml-10 mt-6 md:mt-10">{established}</p>
+                  <div data-section-component-key="subtitle">
+                    <h2 className="hero-brunch-title">{subtitle}</h2>
+                  </div>
+                  <div data-section-component-key="established">
+                    <p className="est-1975-text ml-6 md:ml-10 mt-6 md:mt-10">{established}</p>
+                  </div>
                 </div>
                 
                 {/* JOHNNY G's - behind with lower z-index */}
-                <h1 className="text-stroke-dark-green relative z-0">{title}</h1>
+                <div data-section-component-key="title">
+                  <h1 className="text-stroke-dark-green relative z-0">{title}</h1>
+                </div>
               </div>
             </div>
 
@@ -156,9 +166,11 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
                 "relative"
               )}
             >
-              <h4 className="max-w-[380px] mb-[33px]">
-                {description}
-              </h4>
+              <div data-section-component-key={theme === "day" ? "day.description" : "night.description"}>
+                <h4 className="max-w-[380px] mb-[33px]">
+                  {description}
+                </h4>
+              </div>
 
               <div
                 className={cn(
@@ -166,9 +178,13 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
                   "flex flex-col gap-1 mt-2 md:mt-0"
                 )}
               >
-                <h5>MONDAY - SUNDAY</h5>
+                <div data-section-component-key="daysLabel">
+                  <h5>{daysLabel}</h5>
+                </div>
 
-                <h5>{hours}</h5>
+                <div data-section-component-key={theme === "day" ? "day.hours" : "night.hours"}>
+                  <h5>{hours}</h5>
+                </div>
               </div>
 
               <Image
@@ -180,26 +196,28 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
               />
             </div>
 
-            <a
-              href={`tel:${reservationPhone}`}
-              className={cn(
-                "btn-reservation",
-                "flex items-center gap-2",
-                "mt-4 md:mt-8 mb-4"
-              )}
-            >
-              {reservationLabel}
-              <Image
-                src="/right-arrow-vector.svg"
-                alt="Right arrow"
-                width={20}
-                height={20}
+            <div className="mt-4 md:mt-8 mb-4">
+              <a
+                href={`tel:${reservationPhone}`}
                 className={cn(
-                  "btn-reservation-arrow",
-                  "w-5 h-5"
+                  "btn-reservation",
+                  "flex items-center gap-2"
                 )}
-              />
-            </a>
+              >
+                <span data-section-component-key="reservationLabel">{reservationLabel}</span>
+                <Image
+                  src="/right-arrow-vector.svg"
+                  alt="Right arrow"
+                  width={20}
+                  height={20}
+                  className={cn(
+                    "btn-reservation-arrow",
+                    "w-5 h-5"
+                  )}
+                />
+              </a>
+              <div data-section-component-key="reservationPhone" className="sr-only">{reservationPhone}</div>
+            </div>
           </div>
 
           {/* Image - Bottom on mobile, Right on desktop */}
@@ -219,13 +237,15 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
                 "max-w-[597px] max-h-[668px]"
               )}
             >
-              <Image
-                src={heroImage}
-                alt={theme === "day" ? "Brunch dish" : "Jazz night"}
-                fill
-                className="object-cover"
-                unoptimized
-              />
+              <div data-section-component-key={theme === "day" ? "day.heroImage" : "night.heroImage"}>
+                <Image
+                  src={heroImage}
+                  alt={theme === "day" ? "Brunch dish" : "Jazz night"}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
             </div>
           </div>
         </div>

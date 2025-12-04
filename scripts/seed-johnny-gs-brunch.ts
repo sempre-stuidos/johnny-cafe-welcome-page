@@ -137,6 +137,7 @@ async function createHomePageWithSections(businessId: string): Promise<void> {
     title: "JOHNNY G's",
     subtitle: "Brunch",
     established: `EST ${contentData.restaurant.established}`,
+    daysLabel: "MONDAY - SUNDAY",
     day: {
       description: "Have brunch at one of the oldest Restaurants in Cabbagetown",
       hours: contentData.hours.breakfast.time,
