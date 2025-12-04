@@ -130,25 +130,9 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
     // Get Brevo API key from environment variables
     const apiKey = process.env.BREVO_API_KEY
     
-    // If Brevo is not configured, log in development mode
+    // If Brevo is not configured, return success in development mode
     if (!apiKey) {
       if (process.env.NODE_ENV === 'development') {
-        console.log('='.repeat(60))
-        console.log('RESERVATION EMAIL (Development Mode - Brevo not configured)')
-        console.log('='.repeat(60))
-        console.log('To: jacacanada@gmail.com')
-        console.log('Subject: New Reservation Request')
-        console.log('Reservation Details:')
-        console.log('  Party Size:', partySize)
-        console.log('  Date:', date)
-        console.log('  Time:', time)
-        console.log('  Email:', email)
-        console.log('  Phone:', phone)
-        console.log('HTML Email:')
-        console.log(generateReservationEmailHTML(params))
-        console.log('='.repeat(60))
-        console.log('To enable email sending, set BREVO_API_KEY in your environment variables')
-        console.log('='.repeat(60))
         return { success: true } // Return success in dev mode even without Brevo
       } else {
         return {
@@ -163,9 +147,8 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
     try {
       apiInstance = new TransactionalEmailsApi()
       // Set API key using the authentications property
-      ;(apiInstance as any).authentications.apiKey.apiKey = apiKey
+      ;(apiInstance as unknown as { authentications: { apiKey: { apiKey: string } } }).authentications.apiKey.apiKey = apiKey
     } catch (initError) {
-      console.error('Error initializing Brevo client:', initError)
       return {
         success: false,
         error: `Failed to initialize email service: ${initError instanceof Error ? initError.message : 'Unknown error'}`
@@ -197,7 +180,6 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
       htmlContent = generateReservationEmailHTML(params)
       textContent = generateReservationEmailText(params)
     } catch (templateError) {
-      console.error('Error generating email templates:', templateError)
       return {
         success: false,
         error: `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
@@ -206,51 +188,25 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
     sendSmtpEmail.htmlContent = htmlContent
     sendSmtpEmail.textContent = textContent
     
-    console.log('Sending reservation email with Brevo:', {
-      from: `${senderName} <${senderEmail}>`,
-      to: 'jacacanada@gmail.com',
-      subject: sendSmtpEmail.subject,
-    })
-    
     // Send email via Brevo
     try {
-      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
-      
-      console.log('Reservation email sent via Brevo successfully:', {
-        messageId: response.body?.messageId,
-        statusCode: response.response?.statusCode,
-        statusMessage: response.response?.statusMessage,
-      })
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Full Brevo response:', {
-          messageId: response.body?.messageId,
-          response: response.response,
-        })
-      }
+      await apiInstance.sendTransacEmail(sendSmtpEmail)
       
       return { success: true }
-    } catch (brevoError: any) {
-      // Log detailed error information
-      console.error('Brevo send error - Full details:', {
-        message: brevoError?.message,
-        status: brevoError?.response?.status,
-        statusCode: brevoError?.response?.statusCode,
-        statusText: brevoError?.response?.statusText,
-        body: brevoError?.response?.body,
-        text: brevoError?.response?.text,
-        data: brevoError?.response?.data,
-        fullError: JSON.stringify(brevoError, null, 2),
-      })
-      
+    } catch (brevoError: unknown) {
       // Provide more specific error messages
       let errorMessage = 'Failed to send email'
-      if (brevoError?.response?.status || brevoError?.response?.statusCode) {
-        const status = brevoError.response.status || brevoError.response.statusCode
-        const body = brevoError.response.body || brevoError.response.data || {}
-        const bodyMessage = body.message || body.error || brevoError.message
-        errorMessage = `Brevo error (status ${status}): ${bodyMessage || 'Unknown error'}`
-      } else if (brevoError?.message) {
+      if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
+        const error = brevoError as { response?: { status?: number; statusCode?: number; body?: { message?: string; error?: string }; data?: { message?: string; error?: string } }; message?: string }
+        if (error.response?.status || error.response?.statusCode) {
+          const status = error.response.status || error.response.statusCode
+          const body = error.response.body || error.response.data || {}
+          const bodyMessage = body.message || body.error || error.message
+          errorMessage = `Brevo error (status ${status}): ${bodyMessage || 'Unknown error'}`
+        } else if (error.message) {
+          errorMessage = `Brevo error: ${error.message}`
+        }
+      } else if (brevoError instanceof Error) {
         errorMessage = `Brevo error: ${brevoError.message}`
       }
       
@@ -260,7 +216,6 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
       }
     }
   } catch (error) {
-    console.error('Error in sendReservationEmail:', error)
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to send email'

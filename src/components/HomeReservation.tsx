@@ -52,7 +52,6 @@ export default function HomeReservation() {
         setIsSubmitting(false);
       }
     } catch (err) {
-      console.error("Error submitting reservation:", err);
       setError("Failed to submit reservation. Please try again.");
       setIsSubmitting(false);
     }

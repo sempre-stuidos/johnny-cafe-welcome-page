@@ -44,15 +44,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email via Brevo
-    console.log('Sending reservation email:', {
-      partySize,
-      date,
-      time,
-      email,
-      phone,
-      hasApiKey: !!process.env.BREVO_API_KEY,
-    })
-    
     const emailResult = await sendReservationEmail({
       partySize,
       date,
@@ -62,7 +53,6 @@ export async function POST(request: NextRequest) {
     })
 
     if (!emailResult.success) {
-      console.error('Failed to send reservation email:', emailResult.error)
       return NextResponse.json(
         { 
           success: false, 
@@ -72,14 +62,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('Reservation email sent successfully')
-
     return NextResponse.json({
       success: true,
       message: 'Reservation request submitted successfully'
     })
   } catch (error) {
-    console.error('Error in POST /api/reservation:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to process reservation request' },
       { status: 500 }
