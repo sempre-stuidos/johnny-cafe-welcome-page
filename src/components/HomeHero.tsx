@@ -59,7 +59,7 @@ export default function HomeHero() {
           className={cn(
             "flex flex-col md:flex-row",
             "h-full w-full max-w-[1440px]",
-            "mx-auto gap-4 md:gap-2"
+            "mx-auto gap-4 md:gap-8"
           )}
         >
           {/* Text Content - Top on mobile, Left on desktop */}
@@ -67,7 +67,7 @@ export default function HomeHero() {
             className={cn(
               "flex flex-col",
               "gap-4 md:gap-0 md:justify-between",
-              "w-full md:w-[40%]",
+              "w-full md:w-[60%]",
               "py-4 md:py-6",
               "order-1"
             )}
@@ -158,7 +158,7 @@ export default function HomeHero() {
           <div
             className={cn(
               "flex items-end justify-center md:justify-end",
-              "w-full md:w-[60%]",
+              "w-full md:w-[40%]",
               "flex-1 md:flex-none",
               "order-2",
               "pb-4 md:mt-8 md:pb-0"
@@ -168,7 +168,7 @@ export default function HomeHero() {
               className={cn(
                 "hero-frame",
                 "w-full h-full",
-                "max-w-[597px] max-h-[668px]"
+                "min-h-[300px] max-w-[597px] max-h-[668px]"
               )}
             >
               <Image

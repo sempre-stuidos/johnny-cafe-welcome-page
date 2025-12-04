@@ -2,6 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import HomeHero from "@/components/HomeHero";
+import HomeAbout from "@/components/HomeAbout";
+import HomeMenu from "@/components/HomeMenu";
+import HomeEvents from "@/components/HomeEvents";
 
 export default function Home() {
   return (
@@ -13,6 +16,9 @@ export default function Home() {
       style={{ backgroundColor: "var(--theme-bg-primary)" }}
     >
       <HomeHero />
+      <HomeAbout />
+      <HomeMenu />
+      <HomeEvents />
     </main>
   );
 }
