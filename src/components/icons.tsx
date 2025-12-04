@@ -71,3 +71,37 @@ export const TikTok = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+// Star with Line Divider Component
+export const StarDivider = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
+  <svg
+    width="553"
+    height="143"
+    viewBox="0 0 553 143"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    {...props}
+  >
+    <path d="M0 71.5C64.4085 75.1667 67.359 78.145 71 143C74.641 78.1379 77.5985 75.1667 142 71.5C77.5915 67.8333 74.641 64.855 71 0C67.359 64.8621 64.4015 67.8333 0 71.5Z" fill="#B29738"/>
+    <path d="M563 71L118 70V73L563 72V71Z" fill="#B29738"/>
+  </svg>
+);
+
+// Star Icon Component
+export const StarIcon = ({ className, fill, ...props }: SVGProps<SVGSVGElement> & { fill?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="38"
+    height="38"
+    viewBox="0 0 38 38"
+    fill="none"
+    className={className}
+    {...props}
+  >
+    <path
+      d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
+      fill={fill || "#5C4127"}
+    />
+  </svg>
+);
+

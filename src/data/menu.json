@@ -1,0 +1,258 @@
+{
+  "brunch": {
+    "breakfast": [
+      {
+        "name": "English Breakfast",
+        "price": 15,
+        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+      },
+      {
+        "name": "Five Star Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+      },
+      {
+        "name": "Grand Slam Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Continental Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Big Breakfast",
+        "price": 12,
+        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Steak in Breakfast",
+        "price": 20,
+        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      }
+    ],
+    "breakfastAndFries": [
+      {
+        "name": "English Breakfast",
+        "price": 15,
+        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+      },
+      {
+        "name": "Five Star Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+      },
+      {
+        "name": "Grand Slam Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Continental Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Big Breakfast",
+        "price": 12,
+        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Steak in Breakfast",
+        "price": 20,
+        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      }
+    ],
+    "eggsBenedict": [
+      {
+        "name": "English Breakfast",
+        "price": 15,
+        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+      },
+      {
+        "name": "Five Star Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+      },
+      {
+        "name": "Grand Slam Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Continental Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Big Breakfast",
+        "price": 12,
+        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Steak in Breakfast",
+        "price": 20,
+        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      }
+    ]
+  },
+  "dinner": {
+    "soup": [
+      {
+        "name": "English Breakfast",
+        "price": 15,
+        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+      },
+      {
+        "name": "Five Star Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+      },
+      {
+        "name": "Grand Slam Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Continental Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Big Breakfast",
+        "price": 12,
+        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Steak in Breakfast",
+        "price": 20,
+        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      }
+    ],
+    "appetizers": [
+      {
+        "name": "English Breakfast",
+        "price": 15,
+        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+      },
+      {
+        "name": "Five Star Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+      },
+      {
+        "name": "Grand Slam Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Continental Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Big Breakfast",
+        "price": 12,
+        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Steak in Breakfast",
+        "price": 20,
+        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      }
+    ],
+    "mains": [
+      {
+        "name": "English Breakfast",
+        "price": 15,
+        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+      },
+      {
+        "name": "Five Star Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+      },
+      {
+        "name": "Grand Slam Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Continental Breakfast",
+        "price": 15,
+        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+      },
+      {
+        "name": "Big Breakfast",
+        "price": 12,
+        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Steak in Breakfast",
+        "price": 20,
+        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      },
+      {
+        "name": "No Meat Breakfast",
+        "price": 11,
+        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+      }
+    ]
+  }
+}

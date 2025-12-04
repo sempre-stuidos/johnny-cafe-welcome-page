@@ -44,15 +44,17 @@ export default function Nav() {
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-8 pt-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="nav-link"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks
+                .filter((link) => !["/about", "/gallery", "/contact"].includes(link.href))
+                .map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="nav-link"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
             </div>
 
             {/* Right side - Theme Toggle + Mobile Menu Button */}
@@ -124,20 +126,22 @@ export default function Nav() {
         >
           {/* Navigation Links */}
           <div className="flex flex-col gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={closeMenu}
-                className={cn(
-                  "text-[#FAF2DD] text-2xl font-heading tracking-wide",
-                  "hover:text-[#B29738] transition-colors duration-200",
-                  "border-b border-white/10 pb-4"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks
+              .filter((link) => !["/about", "/gallery", "/contact"].includes(link.href))
+              .map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeMenu}
+                  className={cn(
+                    "text-[#FAF2DD] text-2xl font-heading tracking-wide",
+                    "hover:text-[#B29738] transition-colors duration-200",
+                    "border-b border-white/10 pb-4"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
           </div>
 
           {/* Theme Toggle - Mobile */}

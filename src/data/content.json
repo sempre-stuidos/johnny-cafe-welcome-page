@@ -47,5 +47,59 @@
   },
   "footer": {
     "tagline": "\"Where every meal tells a story\""
+  },
+  "about": {
+    "title": "Meet 30 Years of Culinary Mastery",
+    "paragraphs": [
+      "Welcome to Johnny G's! This iconic Cabbagetown spot, established in 1975, was revitalized in November 2022 by owner and Head Chef Dinesh Sharma, who brings over 30 years of restaurant experience and a lifelong passion for vibrant cuisine.",
+      "Drawing on his expertise from opening over 20 restaurants across Canada since arriving from India in 2001, Chef Sharma ensures that every dish reflects his commitment to excellence, whether you're enjoying our classic breakfast and lunch staples or exploring the flavourful Indian, Hakka, and Momo dinner menu.",
+      "Come in and experience a blend of beloved tradition and culinary mastery that promises to make your next meal truly special."
+    ]
+  },
+  "menu": {
+    "title": "Taste Why Cabbagetown Has Loved Us for 50 Years",
+    "description": "Explore our carefully crafted dishes",
+    "images": [
+      "/home/brunch-frame-bg.jpg",
+      "/home/jazz-frame.jpg",
+      "/home/brunch-frame-bg.jpg",
+      "/home/jazz-frame.jpg"
+    ]
+  },
+  "events": {
+    "title": "Dinner and Jazz",
+    "description": "Join us every [day of the week] for an evening that feeds both your appetite and your soul. As the sun sets, Johnny G's transforms into an intimate jazz venue where talented local musicians set the perfect backdrop for an unforgettable dining experience.",
+    "upcomingEvents": [
+      {
+        "image": "/home/jazz-frame.jpg",
+        "date": "Dec 15, 2024"
+      },
+      {
+        "image": "/home/brunch-frame-bg.jpg",
+        "date": "Dec 22, 2024"
+      }
+    ],
+    "eventsPage": {
+      "upcomingEvents": [
+        {
+          "date": "DECEMBER 5, 2025",
+          "name": "[EVENT NAME]",
+          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "image": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&h=400&fit=crop"
+        },
+        {
+          "date": "DECEMBER 12, 2025",
+          "name": "[EVENT NAME]",
+          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
+        },
+        {
+          "date": "DECEMBER 19, 2025",
+          "name": "[EVENT NAME]",
+          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop"
+        }
+      ]
+    }
   }
 }
