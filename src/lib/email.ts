@@ -28,6 +28,21 @@ function getSenderName(): string {
 }
 
 /**
+ * Get the Brevo template ID for reservation emails
+ */
+function getReservationEmailTemplateId(): number | null {
+  const templateId = process.env.BREVO_RESERVATION_EMAIL_TEMPLATE_ID
+  if (!templateId) {
+    return null
+  }
+  const parsedId = parseInt(templateId, 10)
+  if (isNaN(parsedId)) {
+    return null
+  }
+  return parsedId
+}
+
+/**
  * Generate HTML email template for reservation
  */
 function generateReservationEmailHTML(params: ReservationEmailParams): string {
@@ -159,6 +174,17 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
     const senderEmail = getSenderEmail()
     const senderName = getSenderName()
     
+    // Get the template ID
+    const templateId = getReservationEmailTemplateId()
+    
+    // Format date for template
+    const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }) : date
+    
     // Create email object
     const sendSmtpEmail = new SendSmtpEmail()
     sendSmtpEmail.subject = 'New Reservation Request - Johnny Cafe'
@@ -173,20 +199,35 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
       },
     ]
     
-    // Generate email content
-    let htmlContent: string
-    let textContent: string
-    try {
-      htmlContent = generateReservationEmailHTML(params)
-      textContent = generateReservationEmailText(params)
-    } catch (templateError) {
-      return {
-        success: false,
-        error: `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
+    // Use Brevo template if template ID is configured
+    if (templateId) {
+      sendSmtpEmail.templateId = templateId
+      
+      // Set template parameters for reservation email
+      sendSmtpEmail.params = {
+        partySize: partySize,
+        date: formattedDate,
+        time: time,
+        email: email,
+        phone: phone,
+        rawDate: date,
       }
+    } else {
+      // Fall back to hard-coded templates if template ID is not set
+      let htmlContent: string
+      let textContent: string
+      try {
+        htmlContent = generateReservationEmailHTML(params)
+        textContent = generateReservationEmailText(params)
+      } catch (templateError) {
+        return {
+          success: false,
+          error: `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
+        }
+      }
+      sendSmtpEmail.htmlContent = htmlContent
+      sendSmtpEmail.textContent = textContent
     }
-    sendSmtpEmail.htmlContent = htmlContent
-    sendSmtpEmail.textContent = textContent
     
     // Send email via Brevo
     try {
