@@ -1,15 +1,110 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import EventItem, { EventItemData } from "@/components/events/EventItem";
+import { supabase } from "@/lib/supabase-client";
+import { resolveBusinessSlug } from "@/lib/business-utils";
 
 interface EventsClientProps {
   events: EventItemData[];
 }
 
-export default function EventsClient({ events }: EventsClientProps) {
+export default function EventsClient({ events: initialEvents }: EventsClientProps) {
   const { theme } = useTheme();
+  const [events, setEvents] = useState<EventItemData[]>(initialEvents);
+  const [businessId, setBusinessId] = useState<string | null>(null);
+
+  // Get business slug and fetch business ID
+  useEffect(() => {
+    const fetchBusinessId = async () => {
+      const businessSlug = resolveBusinessSlug(
+        undefined,
+        process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+        'johnny-gs-brunch'
+      );
+
+      const { data: businesses, error } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('slug', businessSlug)
+        .limit(1)
+        .single();
+
+      if (!error && businesses) {
+        setBusinessId(businesses.id);
+      }
+    };
+
+    fetchBusinessId();
+  }, []);
+
+  // Fetch events initially and set up real-time subscription
+  useEffect(() => {
+    if (!businessId) return;
+
+    const fetchEvents = async () => {
+      try {
+        const businessSlug = resolveBusinessSlug(
+          undefined,
+          process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+          'johnny-gs-brunch'
+        );
+        
+        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        
+        const data = await response.json();
+        setEvents(data.events || []);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('events-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'events',
+          filter: `org_id=eq.${businessId}`,
+        },
+        async (payload) => {
+          console.log('Event change detected:', payload.eventType, payload);
+          
+          // Refetch events to get the latest state
+          // This ensures we get the correct computed status and filtering
+          const businessSlug = resolveBusinessSlug(
+            undefined,
+            process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+            'johnny-gs-brunch'
+          );
+          
+          try {
+            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}`);
+            if (response.ok) {
+              const data = await response.json();
+              setEvents(data.events || []);
+            }
+          } catch (error) {
+            console.error('Error refetching events after change:', error);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [businessId]);
 
   return (
     <section
