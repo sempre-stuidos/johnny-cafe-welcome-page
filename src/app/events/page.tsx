@@ -16,7 +16,7 @@ export default function EventsPage() {
     <section
       className={cn(
         "relative",
-        "w-full h-[100vh] md:h-auto md:min-h-[668px]",
+        "w-full min-h-screen md:min-h-[668px]",
         "overflow-hidden",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
       )}
@@ -57,14 +57,14 @@ export default function EventsPage() {
         className={cn(
           "relative z-20",
           "flex flex-col",
-          "w-full max-w-[1440px] gap-8 md:gap-12",
+          "w-full max-w-[1440px] gap-6 md:gap-12",
           "mx-auto",
           "px-4 md:px-8",
-          "py-8 md:py-12"
+          "py-6 md:py-12"
         )}
       >
         {/* Header Section */}
-        <div className="flex flex-col gap-4 md:gap-6">
+        <div className="flex flex-col gap-3 md:gap-6">
           {/* Main Title - "Upcoming Events" */}
           <h1
             className={cn(
@@ -73,7 +73,7 @@ export default function EventsPage() {
             )}
             style={{
               fontFamily: "var(--font-pinyon-script)",
-              fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
+              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-5xl))",
               color: "var(--theme-text-primary)",
               lineHeight: "var(--line-height-tight)",
               fontWeight: 400,
@@ -94,35 +94,40 @@ export default function EventsPage() {
         </div>
 
         {/* Events List */}
-        <div className="flex flex-col gap-8 md:gap-12 items-center">
+        <div className="flex flex-col gap-6 md:gap-12 items-center">
           {events.map((event, index) => (
-            <div key={index} className="flex flex-col gap-8 md:gap-12 max-w-7xl">
+            <div key={index} className="flex flex-col gap-6 md:gap-12 max-w-7xl w-full">
               <EventItem event={event} />
 
               {/* Divider between events */}
-              <div className="flex justify-center">
-                <div
-                  className="max-w-7xl w-full h-[1px]"
-                  style={{
-                    backgroundColor: "var(--theme-accent)",
-                  }}
-                />
-              </div>
+              {index < events.length - 1 && (
+                <div className="flex justify-center">
+                  <div
+                    className="max-w-7xl w-full h-[1px]"
+                    style={{
+                      backgroundColor: "var(--theme-accent)",
+                    }}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
 
         {/* VIEW PAST EVENTS Button */}
-        <div className="flex justify-center mt-8 md:mt-12">
+        <div className="flex justify-center mt-6 md:mt-12 pb-6 md:pb-0">
           <button
               className={cn(
                   "btn-reservation",
                   "flex items-center gap-2",
-                  "mt-4 md:mt-8 mb-4"
+                  "w-full max-w-[280px] md:w-auto md:max-w-none",
+                  "text-sm md:text-base"
               )}
+              style={{
+                fontSize: "clamp(var(--font-size-sm), 3vw, var(--font-size-base))",
+              }}
           >
             VIEW PAST EVENTS
-
           </button>
         </div>
       </div>

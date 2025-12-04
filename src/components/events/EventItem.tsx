@@ -20,15 +20,15 @@ export default function EventItem({ event }: EventItemProps) {
   const { theme } = useTheme();
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8">
+    <div className="flex flex-col gap-4 md:gap-8">
       {/* Event Content - Two Column Layout */}
-      <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-8">
         {/* Left Column - Event Details */}
-        <div className="flex flex-col gap-4 md:gap-6 flex-1">
+        <div className="flex flex-col gap-3 md:gap-6 flex-1">
 
             <div className="flex flex-col gap-2 md:gap-4">
                 {/* Date with Star Icon */}
-                <div className="flex flex-col items-start gap-3">
+                <div className="flex flex-col items-start gap-2 md:gap-3">
                     <StarIcon
                         fill= "#B29738"
                     />
@@ -51,7 +51,7 @@ export default function EventItem({ event }: EventItemProps) {
                 <h3
                     style={{
                         fontFamily: "var(--font-hornbill-trial)",
-                        fontSize: "var(--font-size-3xl)",
+                        fontSize: "clamp(var(--font-size-lg), 4vw, var(--font-size-3xl))",
                         color: "var(--theme-text-light-cream)",
                         fontWeight: 700,
                         lineHeight: "var(--line-height-tight)",
@@ -69,7 +69,7 @@ export default function EventItem({ event }: EventItemProps) {
           <p
             style={{
               fontFamily: "var(--font-geist-sans)",
-              fontSize: "var(--font-size-base)",
+              fontSize: "var(--font-size-sm)",
               color: "var(--theme-text-light-cream)",
               fontWeight: 400,
               lineHeight: "var(--line-height-relaxed)",
