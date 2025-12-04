@@ -55,5 +55,15 @@
       "Drawing on his expertise from opening over 20 restaurants across Canada since arriving from India in 2001, Chef Sharma ensures that every dish reflects his commitment to excellence, whether you're enjoying our classic breakfast and lunch staples or exploring the flavourful Indian, Hakka, and Momo dinner menu.",
       "Come in and experience a blend of beloved tradition and culinary mastery that promises to make your next meal truly special."
     ]
+  },
+  "menu": {
+    "title": "Taste Why Cabbagetown Has Loved Us for 50 Years",
+    "description": "Explore our carefully crafted dishes",
+    "images": [
+      "/home/brunch-frame-bg.jpg",
+      "/home/jazz-frame.jpg",
+      "/home/brunch-frame-bg.jpg",
+      "/home/jazz-frame.jpg"
+    ]
   }
 }
