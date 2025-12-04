@@ -144,3 +144,4 @@ export default function EventsClient({ events }: EventsClientProps) {
     </section>
   );
 }
+

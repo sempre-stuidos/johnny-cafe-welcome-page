@@ -207,3 +207,4 @@ export function formatEventDateTime(startsAt: string, endsAt: string): string {
   const endDate = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   return `${startDate} · ${startTime} → ${endDate} · ${endTime}`
 }
+

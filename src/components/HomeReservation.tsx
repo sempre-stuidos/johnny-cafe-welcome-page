@@ -1,11 +1,62 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
 export default function HomeReservation() {
   const { theme } = useTheme();
+  const [partySize, setPartySize] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    // Basic validation
+    if (!partySize || !date || !time || !email || !phone) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/reservation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          partySize,
+          date,
+          time,
+          email,
+          phone,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsSubmitted(true);
+      } else {
+        setError(data.error || "Failed to submit reservation. Please try again.");
+        setIsSubmitting(false);
+      }
+    } catch (err) {
+      console.error("Error submitting reservation:", err);
+      setError("Failed to submit reservation. Please try again.");
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section
@@ -146,17 +197,63 @@ export default function HomeReservation() {
                 backgroundColor: "transparent",
               }}
             >
-              {/* Form */}
-              <form
-                className="flex flex-col gap-4 w-full absolute"
-                style={{
-                  backgroundColor: "transparent",
-                  top: "180px",
-                  left: "0",
-                  right: "0",
-                  padding: "0px 80px",
-                }}
-              >
+              {/* Confirmation Message */}
+              {isSubmitted ? (
+                <div
+                  className="flex flex-col items-center justify-center gap-4 w-full absolute"
+                  style={{
+                    backgroundColor: "transparent",
+                    top: "180px",
+                    left: "0",
+                    right: "0",
+                    padding: "0px 80px",
+                  }}
+                >
+                  <h3
+                    className="uppercase text-center transition-colors duration-300"
+                    style={{
+                      fontFamily: "var(--font-gayathri)",
+                      fontWeight: 700,
+                      fontSize: "24px",
+                      lineHeight: "120%",
+                      letterSpacing: "2%",
+                      color:
+                        theme === "day"
+                          ? "#334D2D"
+                          : "var(--theme-text-light-cream)",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Thank You!
+                  </h3>
+                  <p
+                    className="text-center transition-colors duration-300"
+                    style={{
+                      fontFamily: "var(--font-amoret-sans)",
+                      fontSize: "var(--font-size-base)",
+                      lineHeight: "150%",
+                      color:
+                        theme === "day"
+                          ? "#334D2D"
+                          : "var(--theme-text-light-cream)",
+                    }}
+                  >
+                    Your reservation request has been submitted successfully. We will contact you soon to confirm your reservation.
+                  </p>
+                </div>
+              ) : (
+                /* Form */
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col gap-4 w-full absolute"
+                  style={{
+                    backgroundColor: "transparent",
+                    top: "180px",
+                    left: "0",
+                    right: "0",
+                    padding: "0px 80px",
+                  }}
+                >
                 {/* Row 1: Party Size + Star Vector */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-col gap-2 relative">
@@ -182,6 +279,9 @@ export default function HomeReservation() {
                       id="party-size"
                       name="party-size"
                       min="1"
+                      value={partySize}
+                      onChange={(e) => setPartySize(e.target.value)}
+                      required
                       className="transition-colors duration-300 focus:outline-none"
                       style={{
                         width: "173px",
@@ -237,6 +337,9 @@ export default function HomeReservation() {
                       type="date"
                       id="date"
                       name="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      required
                       className="w-full transition-colors duration-300 focus:outline-none"
                       style={{
                         height: "40px",
@@ -275,6 +378,9 @@ export default function HomeReservation() {
                       type="time"
                       id="time"
                       name="time"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      required
                       className="w-full transition-colors duration-300 focus:outline-none"
                       style={{
                         height: "40px",
@@ -316,6 +422,9 @@ export default function HomeReservation() {
                     type="email"
                     id="email"
                     name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                     className="w-full transition-colors duration-300 focus:outline-none"
                     style={{
                       height: "40px",
@@ -356,6 +465,9 @@ export default function HomeReservation() {
                     type="tel"
                     id="phone"
                     name="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
                     className="w-full transition-colors duration-300 focus:outline-none"
                     style={{
                       height: "40px",
@@ -373,14 +485,31 @@ export default function HomeReservation() {
                   />
                 </div>
 
+                {/* Error Message */}
+                {error && (
+                  <div
+                    className="text-center transition-colors duration-300"
+                    style={{
+                      fontFamily: "var(--font-amoret-sans)",
+                      fontSize: "var(--font-size-sm)",
+                      color: "#dc2626",
+                      padding: "8px 0",
+                    }}
+                  >
+                    {error}
+                  </div>
+                )}
+
                 {/* Submit Button */}
                 <div className="flex justify-center mt-4 ">
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className={cn(
                       "btn-reservation",
                       "flex items-center gap-2",
-                      "w-full"
+                      "w-full",
+                      isSubmitting && "opacity-50 cursor-not-allowed"
                     )}
                     style={{
                       fontSize: "clamp(var(--font-size-xs), 2.5vw, var(--font-size-sm))",
@@ -388,10 +517,11 @@ export default function HomeReservation() {
                       padding: "12px 24px",
                     }}
                   >
-                    SUBMIT
+                    {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
                   </button>
                 </div>
               </form>
+              )}
             </div>
           </div>
         </div>
