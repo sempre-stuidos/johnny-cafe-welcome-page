@@ -78,6 +78,28 @@
         "image": "/home/brunch-frame-bg.jpg",
         "date": "Dec 22, 2024"
       }
-    ]
+    ],
+    "eventsPage": {
+      "upcomingEvents": [
+        {
+          "date": "DECEMBER 5, 2025",
+          "name": "[EVENT NAME]",
+          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "image": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&h=400&fit=crop"
+        },
+        {
+          "date": "DECEMBER 12, 2025",
+          "name": "[EVENT NAME]",
+          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
+        },
+        {
+          "date": "DECEMBER 19, 2025",
+          "name": "[EVENT NAME]",
+          "description": "Join us on [Date] at [Time] for an unforgettable evening featuring live jazz by [Artist/Band Name]. Savor Chef Dinesh's signature dishes while being serenaded by smooth, soulful melodies in our intimate dining room. Reserve your table now-seating is limited and this special night fills up fast!",
+          "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop"
+        }
+      ]
+    }
   }
 }

@@ -4,22 +4,7 @@ import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import content from "@/data/content.json";
-
-// Star icon component
-const StarIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="38"
-    height="38"
-    viewBox="0 0 38 38"
-    fill="none"
-  >
-    <path
-      d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
-      fill="#5C4127"
-    />
-  </svg>
-);
+import { StarIcon } from "@/components/icons";
 
 export default function HomeEvents() {
   const { theme } = useTheme();
