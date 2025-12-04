@@ -124,82 +124,73 @@ h1 {
   font-family: var(--font-hornbill-trial);
   font-weight: 900;
   font-style: italic;
-  font-size: 83px;
+  font-size: 48px;
   line-height: 100%;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  width: 489px;
-  height: 56px;
 }
 
 h2 {
   font-family: var(--font-pinyon-script);
   font-weight: 400;
   font-style: normal;
-  font-size: 82.48px;
+  font-size: 48px;
   line-height: 100%;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  width: 236px;
-  height: 56px;
 }
 
 h3 {
   font-family: var(--font-gayathri);
   font-weight: 700;
   font-style: normal;
-  font-size: 17.31px;
+  font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
   text-transform: uppercase;
   color: var(--theme-text-light-cream);
-  height: 21px;
 }
 
 h4 {
   font-family: var(--font-hornbill-trial);
   font-weight: 400;
   font-style: normal;
-  font-size: 42px;
-  line-height: 100%;
+  font-size: 28px;
+  line-height: 110%;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  width: 380px;
-  height: 154px;
 }
 
 h5 {
   font-family: var(--font-amoret-sans);
   font-weight: 400;
   font-style: normal;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  height: 25px;
 }
 
-p {
-  font-family: var(--font-gayathri);
-  font-weight: 700;
-  font-style: normal;
-  font-size: 16px;
-  line-height: 150%;
-  letter-spacing: 2%;
-  color: #000000;
-  width: 149px;
-  height: 13px;
-}
-
-span {
-  font-family: var(--font-amoret-sans);
-  font-weight: 400;
-  font-style: normal;
-  font-size: 16px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  color: #334D2D;
-  width: 149px;
-  height: 13px;
+/* Desktop typography sizes */
+@media (min-width: 768px) {
+  h1 {
+    font-size: 83px;
+  }
+  
+  h2 {
+    font-size: 82.48px;
+  }
+  
+  h3 {
+    font-size: 17.31px;
+  }
+  
+  h4 {
+    font-size: 42px;
+  }
+  
+  h5 {
+    font-size: 16px;
+  }
 }
 
 p {
@@ -210,8 +201,16 @@ p {
   line-height: 150%;
   letter-spacing: 0.02em;
   color: var(--theme-text-dark-green);
-  width: 542px;
-  height: 312px;
+}
+
+span {
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #334D2D;
 }
 
 /* Decorative Text (for logo, special headings) */
@@ -330,8 +329,6 @@ code, pre {
 .hero-frame {
   background-color: transparent;
   border: 2px solid #B29738;
-  height: 650px;
-  width: 650px;
   border-top-left-radius: 999px;
   border-top-right-radius: 999px;
   position: relative;
@@ -342,15 +339,17 @@ code, pre {
   border-radius: 999px 999px 0 0;
 }
 
-/* Component-Specific Classes */
-.brunch-est-container {
-  width: 500px;
-  position: relative;
-}
 
+/* Mobile: stack vertically */
 .hero-brunch-title {
-  position: absolute;
+  position: relative;
   z-index: 10;
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 50px;
+  line-height: 100%;
+  letter-spacing: 0%;
 }
 
 .est-1975-text {
@@ -359,20 +358,14 @@ code, pre {
   font-style: normal;
   font-size: 18.9px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  height: 25px;
-  position: absolute;
-  left: 300px;
-  top: 45px;
 }
 
-.hero-content-section {
-  height: 260px;
-}
-
-.hero-hours-section {
-  height: 60px;
+/* Desktop: larger font */
+@media (min-width: 768px) {
+  .hero-brunch-title {
+    font-size: 82.48px;
+  }
 }
 
 .hero-star-decoration {
@@ -387,10 +380,11 @@ code, pre {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 303px;
+  width: 100%;
+  max-width: 303px;
   height: 56px;
   gap: 16px;
-  padding: 20px 56px;
+  padding: 20px 32px;
   border-width: 2px;
   border-style: solid;
   border-color: #B29738;

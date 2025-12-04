@@ -1,16 +1,88 @@
+# Dependencies
 node_modules
-.DS_Store
-dist
-build
-.vite
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
 .vercel
+
+# CMS - Sanity
+.sanity/
+sanity/dist/
+
+# CMS - TinaCMS
+.tina/__generated__/
+
+# CMS - Payload
+media/
+.payload/
+
+# CMS - Strapi
+.strapi/
+.tmp/
+exports/
+*.cache/
+
+# CMS - Contentful
+.contentful.json
+
+# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-.idea
-.vscode
-.next
+lerna-debug.log*
 
-.vercel
+# OS files
+.DS_Store
+*.pem
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.local
+.cache/
+.turbo/
+.vite/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# PWA
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map

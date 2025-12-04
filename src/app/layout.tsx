@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Pinyon_Script, Gayathri } from "next/font/google";
+import { Geist, Geist_Mono, Gayathri } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -39,10 +39,10 @@ const amoretSans = localFont({
   display: "swap",
 });
 
-const pinyonScript = Pinyon_Script({
+const pinyonScript = localFont({
+  src: "../../public/fonts/PinyonScript-Regular.ttf",
   variable: "--font-pinyon-script",
-  subsets: ["latin"],
-  weight: "400",
+  display: "swap",
 });
 
 const gayathri = Gayathri({
