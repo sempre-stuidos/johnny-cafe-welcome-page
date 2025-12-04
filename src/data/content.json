@@ -47,5 +47,13 @@
   },
   "footer": {
     "tagline": "\"Where every meal tells a story\""
+  },
+  "about": {
+    "title": "Meet 30 Years of Culinary Mastery",
+    "paragraphs": [
+      "Welcome to Johnny G's! This iconic Cabbagetown spot, established in 1975, was revitalized in November 2022 by owner and Head Chef Dinesh Sharma, who brings over 30 years of restaurant experience and a lifelong passion for vibrant cuisine.",
+      "Drawing on his expertise from opening over 20 restaurants across Canada since arriving from India in 2001, Chef Sharma ensures that every dish reflects his commitment to excellence, whether you're enjoying our classic breakfast and lunch staples or exploring the flavourful Indian, Hakka, and Momo dinner menu.",
+      "Come in and experience a blend of beloved tradition and culinary mastery that promises to make your next meal truly special."
+    ]
   }
 }
