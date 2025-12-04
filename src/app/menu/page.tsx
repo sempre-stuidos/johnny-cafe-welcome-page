@@ -24,20 +24,20 @@ export default function MenuPage() {
   };
 
   return (
-      <section
-        className={cn(
-          "relative",
-          "w-full h-[100vh] md:h-auto md:min-h-[90vh]",
-          "overflow-hidden",
-          theme === "day" ? "bg-[#D3E5CD]" : "bg-[#011A0C]"
-        )}
-      >
+    <section
+      className={cn(
+        "relative",
+        "w-full min-h-screen md:min-h-[90vh]",
+        "transition-colors duration-300",
+        theme === "day" ? "bg-[#D3E5CD]" : "bg-[#011A0C]"
+      )}
+    >
         {/* Content */}
         <div
           className={cn(
             "relative z-20",
             "flex flex-col",
-            "h-full w-full max-w-[1440px] gap-8",
+            "w-full max-w-[1440px] gap-8",
             "mx-auto",
             "px-4 md:px-8",
             "py-8 md:py-12"

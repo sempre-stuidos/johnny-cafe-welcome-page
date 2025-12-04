@@ -17,7 +17,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
 
       <h4
         style={{
-          fontSize: "var(--font-size-6xl)",
+          fontSize: "clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl))",
           color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--color-theme-accent)",
           fontWeight: 700,
           lineHeight: "var(--line-height-tight)",
@@ -36,7 +36,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               "absolute -top-1 z-10",
               activeMenu === "brunch"
                 ? "left-[60px] md:left-[70px]"
-                : "left-[275px] md:left-[325px]"
+                : "left-[165px] md:left-[325px]"
             )}
           >
             <svg
@@ -52,11 +52,11 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
                 />
             </svg>
           </div>
-          <div className="flex items-center gap-12 md:gap-24">
+          <div className="flex items-center gap-8 md:gap-24">
             <p
               style={{
                 fontFamily: "var(--font-pinyon-script)",
-                fontSize: "var(--font-size-5xl)",
+                fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
                   color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
                 lineHeight: "var(--line-height-normal)",
                 fontWeight: activeMenu === "brunch" ? 600 : 400,
@@ -70,7 +70,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
             <p
               style={{
                 fontFamily: "var(--font-pinyon-script)",
-                fontSize: "var(--font-size-5xl)",
+                fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
                   color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
                   lineHeight: "var(--line-height-normal)",
                 fontWeight: activeMenu === "dinner" ? 600 : 400,
