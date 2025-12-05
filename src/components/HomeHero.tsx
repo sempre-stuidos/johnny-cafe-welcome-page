@@ -65,8 +65,8 @@ export default function HomeHero() {
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1200px]",
-            "mx-auto gap-4 md:gap-8"
+            " h-full md:h-[90vh] w-full max-w-[1200px]",
+            "mx-auto gap-4 md:gap-8 "
           )}
         >
           {/* Text Content - Top on mobile, Left on desktop */}
