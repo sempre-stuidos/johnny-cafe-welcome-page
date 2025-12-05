@@ -123,23 +123,41 @@ export default function Footer() {
 
               {/* Contact Info */}
               <div className="flex flex-col gap-4 flex-1">
-                {/* Hours */}
+                {/* Hours - Monday to Sunday */}
                 <div className="flex items-start gap-3">
                   <CalendarIcon className="flex-shrink-0" />
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-3">
                     <p className="transition-colors duration-300 footer-days">
                       MONDAY - SUNDAY
                     </p>
-                    <p className="transition-colors duration-300 footer-meal-label">
-                      Brunch{" "}
-                      <span className="footer-meal-time">
-                        7AM - 4PM
-                      </span>
+                    <div className="flex flex-col md:flex-row gap-1 md:gap-4">
+                      <p className="transition-colors duration-300 footer-meal-label">
+                        Brunch{" "}
+                        <span className="footer-meal-time">
+                          7AM - 4PM
+                        </span>
+                      </p>
+                      <p className="transition-colors duration-300 footer-meal-label">
+                        Dinner{" "}
+                        <span className="footer-meal-time">
+                          4:30PM - 10PM
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Jazz Night - Thursday to Saturday */}
+                <div className="flex items-start gap-3">
+                  <CalendarIcon className="flex-shrink-0" />
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-3">
+                    <p className="transition-colors duration-300 footer-days">
+                      THURSDAY - SATURDAY
                     </p>
                     <p className="transition-colors duration-300 footer-meal-label">
-                      Dinner{" "}
+                      Jazz{" "}
                       <span className="footer-meal-time">
-                        4:30PM - 10PM
+                        8PM till Late
                       </span>
                     </p>
                   </div>
