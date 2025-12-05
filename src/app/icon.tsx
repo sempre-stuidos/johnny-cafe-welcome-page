@@ -1,4 +1,3 @@
-import { ImageResponse } from 'next/og'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 
@@ -17,58 +16,27 @@ export default async function Icon() {
     const imagePath = join(process.cwd(), 'public', 'cafe-logo.png')
     const imageBuffer = await readFile(imagePath)
     
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'transparent',
-          }}
-        >
-          {/* @ts-ignore */}
-          <img
-            src={`data:image/png;base64,${imageBuffer.toString('base64')}`}
-            alt="Johnny G's"
-            width={32}
-            height={32}
-            style={{
-              objectFit: 'contain',
-            }}
-          />
-        </div>
-      ),
-      {
-        ...size,
-      }
-    )
-  } catch (error) {
-    // Fallback to a simple icon if image can't be loaded
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            fontSize: 20,
-            background: '#334D2D',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FAF2DD',
-            fontWeight: 'bold',
-          }}
-        >
-          JG
-        </div>
-      ),
-      {
-        ...size,
-      }
-    )
+    // Return the image buffer as a Response
+    return new Response(imageBuffer, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Cache-Control': 'public, immutable, max-age=31536000',
+      },
+    })
+  } catch {
+    // If image can't be loaded, return a simple fallback
+    // This creates a minimal 32x32 PNG with "JG" text
+    const fallbackSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+      <rect width="32" height="32" fill="#334D2D"/>
+      <text x="16" y="22" font-family="Arial" font-size="16" font-weight="bold" fill="#FAF2DD" text-anchor="middle">JG</text>
+    </svg>`
+    
+    return new Response(fallbackSvg, {
+      headers: {
+        'Content-Type': 'image/svg+xml',
+        'Cache-Control': 'public, immutable, max-age=31536000',
+      },
+    })
   }
 }
 
