@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getLiveEventsForBusiness, formatEventDateUppercase } from '@/lib/events'
+import { getLiveEventsForBusiness, getPastEventsForBusiness, formatEventDateUppercase } from '@/lib/events'
 import { resolveBusinessSlug } from '@/lib/business-utils'
 
 export async function GET(request: NextRequest) {
   try {
-    // Get business slug from query params or environment
+    // Get business slug and event type from query params
     const { searchParams } = new URL(request.url)
     const businessSlugParam = searchParams.get('businessSlug')
+    const type = searchParams.get('type') || 'live' // 'live' or 'past'
     
     const businessSlug = resolveBusinessSlug(
       businessSlugParam || undefined,
@@ -14,8 +15,10 @@ export async function GET(request: NextRequest) {
       'johnny-gs-brunch'
     )
     
-    // Fetch live events from database
-    const dbEvents = await getLiveEventsForBusiness(businessSlug)
+    // Fetch events from database based on type
+    const dbEvents = type === 'past' 
+      ? await getPastEventsForBusiness(businessSlug)
+      : await getLiveEventsForBusiness(businessSlug)
     
     // Map database events to EventItemData format
     const events = dbEvents.map(event => ({

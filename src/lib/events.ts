@@ -149,6 +149,79 @@ export async function getLiveEventsForBusiness(businessSlug: string): Promise<Ev
 }
 
 /**
+ * Get past events for a business by slug
+ * Only returns events that have ended (past events)
+ */
+export async function getPastEventsForBusiness(businessSlug: string): Promise<Event[]> {
+  try {
+    // Use admin client to bypass RLS for public landing pages
+    const supabase = supabaseAdmin
+    
+    // First get business by slug
+    const { data: businesses, error: businessError } = await supabase
+      .from('businesses')
+      .select('id, name, slug')
+      .eq('slug', businessSlug)
+      .limit(1)
+
+    if (businessError || !businesses || businesses.length === 0) {
+      console.error('Error fetching business:', businessError)
+      return []
+    }
+
+    const business = businesses[0]
+
+    // Get all events for this business
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .eq('org_id', business.id)
+      .order('starts_at', { ascending: false }) // Most recent first for past events
+
+    if (error) {
+      console.error('Error fetching events:', error)
+      return []
+    }
+
+    if (!data) {
+      return []
+    }
+
+    // Transform and filter to only past events
+    const events = (data || []).map(transformEventRecord)
+    const now = new Date()
+    
+    // Filter to past events - events where ends_at is in the past
+    const pastEvents = events
+      .map(event => {
+        // Compute status, but preserve draft and archived status
+        const finalStatus = (event.status === 'draft' || event.status === 'archived') 
+          ? event.status 
+          : computeEventStatus(event)
+        return {
+          ...event,
+          status: finalStatus,
+        }
+      })
+      .filter(event => {
+        // An event is past if:
+        // 1. It has an ends_at date that is in the past, OR
+        // 2. It has a publish_end_at that is in the past, OR
+        // 3. Its computed status is 'past'
+        const endsAt = new Date(event.ends_at)
+        const publishEndAt = event.publish_end_at ? new Date(event.publish_end_at) : null
+        
+        return endsAt < now || (publishEndAt && publishEndAt < now) || event.status === 'past'
+      })
+
+    return pastEvents
+  } catch (error) {
+    console.error('Error in getPastEventsForBusiness:', error)
+    return []
+  }
+}
+
+/**
  * Format date for display (e.g., "Dec 15, 2024")
  */
 export function formatEventDate(dateString: string): string {
