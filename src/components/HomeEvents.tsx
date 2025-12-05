@@ -1,11 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import content from "@/data/content.json";
 import { StarIcon } from "@/components/icons";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase-client";
+import { resolveBusinessSlug } from "@/lib/business-utils";
 
 interface HomeEventsProps {
   events?: Array<{
@@ -14,10 +17,121 @@ interface HomeEventsProps {
   }>;
 }
 
-export default function HomeEvents({ events }: HomeEventsProps) {
+export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
   const { theme } = useTheme();
+  const [events, setEvents] = useState<Array<{ date: string; image?: string }>>(
+    initialEvents && initialEvents.length > 0 
+      ? initialEvents 
+      : content.events.upcomingEvents
+  );
+  const [businessId, setBusinessId] = useState<string | null>(null);
 
-  // Use events from props if provided, otherwise fall back to content.json
+  // Get business slug and fetch business ID
+  useEffect(() => {
+    const fetchBusinessId = async () => {
+      const businessSlug = resolveBusinessSlug(
+        undefined,
+        process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+        'johnny-gs-brunch'
+      );
+
+      const { data: businesses, error } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('slug', businessSlug)
+        .limit(1)
+        .single();
+
+      if (!error && businesses) {
+        setBusinessId(businesses.id);
+      }
+    };
+
+    fetchBusinessId();
+  }, []);
+
+  // Fetch events initially and set up real-time subscription
+  useEffect(() => {
+    if (!businessId) return;
+
+    const fetchEvents = async () => {
+      try {
+        const businessSlug = resolveBusinessSlug(
+          undefined,
+          process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+          'johnny-gs-brunch'
+        );
+        
+        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&format=regular`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        
+        const data = await response.json();
+        // Get the latest 2 events and format them for HomeEvents
+        const latestEvents = (data.events || []).slice(0, 2).map((event: { date: string; name: string; image?: string }) => ({
+          date: event.date,
+          image: event.image,
+        }));
+        
+        if (latestEvents.length > 0) {
+          setEvents(latestEvents);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('home-events-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'events',
+          filter: `org_id=eq.${businessId}`,
+        },
+        async (payload) => {
+          console.log('Home events change detected:', payload.eventType, payload);
+          
+          // Refetch events to get the latest state
+          const businessSlug = resolveBusinessSlug(
+            undefined,
+            process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+            'johnny-gs-brunch'
+          );
+          
+          try {
+            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&format=regular`);
+            if (response.ok) {
+              const data = await response.json();
+              // Get the latest 2 events and format them for HomeEvents
+              const latestEvents = (data.events || []).slice(0, 2).map((event: { date: string; name: string; image?: string }) => ({
+                date: event.date,
+                image: event.image,
+              }));
+              
+              if (latestEvents.length > 0) {
+                setEvents(latestEvents);
+              }
+            }
+          } catch (error) {
+            console.error('Error refetching events after change:', error);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [businessId]);
+
+  // Use events from state if available, otherwise fall back to content.json
   const displayEvents = events && events.length > 0 
     ? events 
     : content.events.upcomingEvents;

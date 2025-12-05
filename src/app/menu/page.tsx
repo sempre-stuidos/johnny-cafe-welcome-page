@@ -27,20 +27,64 @@ export default function MenuPage() {
     <section
       className={cn(
         "relative",
-        "w-full min-h-screen md:min-h-[90vh]",
-        "transition-colors duration-300",
-        theme === "day" ? "bg-[#D3E5CD]" : "bg-[#011A0C]"
+        "w-full min-h-screen md:min-h-[90vh] pt-12",
+        "overflow-hidden",
+        "transition-colors duration-300"
       )}
+      style={{
+        backgroundColor:
+          theme === "day" ? "rgba(194, 202, 168, 1)" : "rgba(1, 26, 12, 1)",
+      }}
     >
-        {/* Content */}
+      {/* Background Image - 6 tiles grid (3x2) with overlap */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <div
           className={cn(
-            "relative z-20",
+            "grid grid-cols-3 grid-rows-2 gap-0",
+            "w-[calc(100%+6px)] h-[calc(100%+4px)]",
+            "-ml-[3px] -mt-[2px]"
+          )}
+        >
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                "bg-[url('/assets/imgs/bg.png')]",
+                "bg-center bg-[length:calc(100%+2px)_calc(100%+2px)]",
+                "-m-px"
+              )}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Theme Overlay */}
+      <div
+        className={cn(
+          "absolute inset-0 z-10",
+          "transition-colors duration-300"
+        )}
+        style={{
+          backgroundColor:
+            theme === "day"
+              ? "rgba(194, 202, 168, 0.85)"
+              : "rgba(1, 26, 12, 0.70)",
+        }}
+      />
+
+      {/* Content */}
+      <div
+        className={cn(
+          "relative z-20",
+          "h-full w-full",
+          "px-4 md:px-8 py-0 md:py-0"
+        )}
+      >
+        <div
+          className={cn(
             "flex flex-col",
-            "w-full max-w-[1440px] gap-8",
-            "mx-auto",
-            "px-4 md:px-8",
-            "py-8 md:py-12"
+            "h-full w-full max-w-[1440px]",
+            "mx-auto gap-8"
           )}
         >
           <MenuHeader activeMenu={activeMenu} onMenuChange={handleMenuChange} />
@@ -61,6 +105,7 @@ export default function MenuPage() {
             </>
           )}
         </div>
-      </section>
+      </div>
+    </section>
   );
 }
