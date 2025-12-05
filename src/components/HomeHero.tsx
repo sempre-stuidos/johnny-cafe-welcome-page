@@ -151,6 +151,12 @@ export default function HomeHero() {
                 "flex items-center gap-2",
                 "mt-4 md:mt-8 mb-4"
               )}
+              onClick={() => {
+                const reservationSection = document.getElementById("reservation");
+                if (reservationSection) {
+                  reservationSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
             >
               Reservation
               <Image

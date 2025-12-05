@@ -61,6 +61,7 @@ export default function HomeReservation() {
 
   return (
     <section
+      id="reservation"
       className={cn(
         "relative",
         "w-full h-auto min-h-[668px]",
