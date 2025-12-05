@@ -109,7 +109,7 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-4 md:gap-2"
           )}
         >

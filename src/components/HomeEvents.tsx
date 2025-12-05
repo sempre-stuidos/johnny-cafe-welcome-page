@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import content from "@/data/content.json";
 import { StarIcon } from "@/components/icons";
 import Link from "next/link";
+import { useScrollReveal } from "@/lib/animations/hooks";
 
 interface HomeEventsProps {
   events?: Array<{
@@ -16,6 +17,7 @@ interface HomeEventsProps {
 
 export default function HomeEvents({ events }: HomeEventsProps) {
   const { theme } = useTheme();
+  const contentRef = useScrollReveal();
 
   // Use events from props if provided, otherwise fall back to content.json
   const displayEvents = events && events.length > 0 
@@ -69,16 +71,18 @@ export default function HomeEvents({ events }: HomeEventsProps) {
 
       {/* Content */}
       <div
+        ref={contentRef}
         className={cn(
           "relative z-20",
           "h-full w-full",
           "px-4 md:px-8 py-8 md:py-12"
         )}
+        data-animate="section"
       >
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-6 md:gap-12"
           )}
         >

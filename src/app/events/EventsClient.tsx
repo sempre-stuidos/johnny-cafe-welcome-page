@@ -151,7 +151,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
         className={cn(
           "relative z-20",
           "flex flex-col",
-          "w-full max-w-[1440px] gap-6 md:gap-12",
+          "w-full max-w-[1200px] gap-6 md:gap-12",
           "mx-auto",
           "px-4 md:px-8",
           "py-6 md:py-12"

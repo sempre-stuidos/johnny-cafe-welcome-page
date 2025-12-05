@@ -4,9 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
+import { useScrollReveal } from "@/lib/animations/hooks";
 
 export default function HomeReservation() {
   const { theme } = useTheme();
+  const contentRef = useScrollReveal();
   const [partySize, setPartySize] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -108,16 +110,18 @@ export default function HomeReservation() {
 
       {/* Content */}
       <div
+        ref={contentRef}
         className={cn(
           "relative z-20",
           "h-full w-full",
           "px-4 md:px-8 py-0 md:py-0"
         )}
+        data-animate="section"
       >
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-4 md:gap-8"
           )}
         >
@@ -126,7 +130,7 @@ export default function HomeReservation() {
             className={cn(
               "flex flex-col",
               "gap-6 md:gap-8",
-              "w-full md:w-[60%]",
+              "w-full md:w-[40%]",
               "pt-4 md:pt-6",
               "order-1"
             )}
@@ -170,7 +174,7 @@ export default function HomeReservation() {
           <div
             className={cn(
               "flex items-center justify-center md:justify-end",
-              "w-full md:w-[40%]",
+              "w-full md:w-[60%]",
               "order-2",
               "py-8 md:py-0 md:mt-8",
               "relative"

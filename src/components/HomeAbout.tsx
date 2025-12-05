@@ -5,16 +5,19 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { StarDivider } from "@/components/icons";
 import content from "@/data/content.json";
+import { useScrollReveal } from "@/lib/animations/hooks";
 
 export default function HomeAbout() {
   const { theme } = useTheme();
+  const contentRef = useScrollReveal();
 
   return (
     <section
       className={cn(
         "relative",
         "w-full h-auto min-h-[668px]",
-        "transition-colors duration-300"
+        "transition-colors duration-300",
+        "z-30"
       )}
       style={{ backgroundColor: "var(--about-bg)" }}
     >
@@ -56,16 +59,18 @@ export default function HomeAbout() {
 
       {/* Content */}
       <div
+        ref={contentRef}
         className={cn(
           "relative z-20",
           "h-full w-full",
           "px-4 md:px-8 py-8 md:py-12"
         )}
+        data-animate="section"
       >
         <div
           className={cn(
             "flex flex-col-reverse md:flex-row",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-4 md:gap-12"
           )}
         >
@@ -119,7 +124,7 @@ export default function HomeAbout() {
             className={cn(
               "absolute right-0 top-0 md:-top-30",
               "w-auto h-auto",
-              "z-30",
+              "z-40",
               "pointer-events-none"
             )}
           >
