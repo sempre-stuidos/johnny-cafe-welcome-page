@@ -1,23 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navLinks } from "@/data/navigation";
+import { usePageLoadAnimation } from "@/lib/animations/hooks";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
+  // Page load animations
+  usePageLoadAnimation('[data-animate="nav-logo"]', "nav-logo", navRef);
+  usePageLoadAnimation('[data-animate="nav-links"]', "nav-links", navRef);
+  usePageLoadAnimation('[data-animate="nav-toggle"]', "nav-toggle", navRef);
+
   return (
     <>
       <nav
+        ref={navRef}
         className={cn(
           "sticky top-0 z-50 w-full transition-colors duration-300",
           "border-b border-white/10"
@@ -26,12 +34,13 @@ export default function Nav() {
           backgroundColor: theme === "day" ? "#334D2D" : "#011A0C",
         }}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
             <Link
               href="/"
               className="hover:opacity-80 transition-opacity z-50"
+              data-animate="nav-logo"
             >
               <Image
                 src="/cafe-logo.png"
@@ -43,7 +52,7 @@ export default function Nav() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex items-center space-x-8 pt-2">
+            <div className="hidden md:flex items-center space-x-8 pt-2" data-animate="nav-links">
               {navLinks
                 .filter((link) => !["/about", "/gallery", "/contact"].includes(link.href))
                 .map((link) => (
@@ -64,6 +73,7 @@ export default function Nav() {
                 onClick={toggleTheme}
                 className="hidden md:flex items-end gap-3"
                 aria-label={`Switch to ${theme === "day" ? "night" : "day"} theme`}
+                data-animate="nav-toggle"
               >
                 <div className="theme-toggle-container relative">
                   <div

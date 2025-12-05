@@ -9,6 +9,7 @@ import { StarIcon } from "@/components/icons";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase-client";
 import { resolveBusinessSlug } from "@/lib/business-utils";
+import { useScrollReveal } from "@/lib/animations/hooks";
 
 interface HomeEventsProps {
   events?: Array<{
@@ -20,11 +21,12 @@ interface HomeEventsProps {
 export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
   const { theme } = useTheme();
   const [events, setEvents] = useState<Array<{ date: string; image?: string }>>(
-    initialEvents && initialEvents.length > 0 
-      ? initialEvents 
+    initialEvents && initialEvents.length > 0
+      ? initialEvents
       : content.events.upcomingEvents
   );
   const [businessId, setBusinessId] = useState<string | null>(null);
+  const contentRef = useScrollReveal();
 
   // Get business slug and fetch business ID
   useEffect(() => {
@@ -61,19 +63,19 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
           process.env.NEXT_PUBLIC_BUSINESS_SLUG,
           'johnny-gs-brunch'
         );
-        
+
         const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&format=regular`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }
-        
+
         const data = await response.json();
         // Get the latest 2 events and format them for HomeEvents
         const latestEvents = (data.events || []).slice(0, 2).map((event: { date: string; name: string; image?: string }) => ({
           date: event.date,
           image: event.image,
         }));
-        
+
         if (latestEvents.length > 0) {
           setEvents(latestEvents);
         }
@@ -97,14 +99,14 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
         },
         async (payload) => {
           console.log('Home events change detected:', payload.eventType, payload);
-          
+
           // Refetch events to get the latest state
           const businessSlug = resolveBusinessSlug(
             undefined,
             process.env.NEXT_PUBLIC_BUSINESS_SLUG,
             'johnny-gs-brunch'
           );
-          
+
           try {
             const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&format=regular`);
             if (response.ok) {
@@ -114,7 +116,7 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
                 date: event.date,
                 image: event.image,
               }));
-              
+
               if (latestEvents.length > 0) {
                 setEvents(latestEvents);
               }
@@ -183,16 +185,18 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
 
       {/* Content */}
       <div
+        ref={contentRef}
         className={cn(
           "relative z-20",
           "h-full w-full",
           "px-4 md:px-8 py-8 md:py-12"
         )}
+        data-animate="section"
       >
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-6 md:gap-12"
           )}
         >

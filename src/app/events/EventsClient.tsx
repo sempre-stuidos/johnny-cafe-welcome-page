@@ -164,7 +164,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
                 process.env.NEXT_PUBLIC_BUSINESS_SLUG,
                 'johnny-gs-brunch'
               );
-              
+
               const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=past`);
               if (response.ok) {
                 const data = await response.json();

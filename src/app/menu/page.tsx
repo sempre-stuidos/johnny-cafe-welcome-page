@@ -83,8 +83,10 @@ export default function MenuPage() {
         <div
           className={cn(
             "flex flex-col",
-            "h-full w-full max-w-[1440px]",
-            "mx-auto gap-8"
+            "w-full max-w-[1200px] gap-8",
+            "mx-auto",
+            "px-4 md:px-8",
+            "py-8 md:py-12"
           )}
         >
           <MenuHeader activeMenu={activeMenu} onMenuChange={handleMenuChange} />

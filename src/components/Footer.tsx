@@ -62,7 +62,7 @@ export default function Footer() {
         <div
           className={cn(
             "flex flex-col",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-8 md:gap-12"
           )}
         >

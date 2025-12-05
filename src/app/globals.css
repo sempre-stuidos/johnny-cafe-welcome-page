@@ -623,3 +623,15 @@ code, pre {
 .footer-star-fill {
   fill: #B29738;
 }
+
+/* GSAP Animation - Prevent Flash of Content */
+/* Hide elements that will be animated until GSAP initializes them */
+[data-animate="nav-logo"],
+[data-animate="nav-links"],
+[data-animate="nav-toggle"],
+[data-animate="hero-content"],
+[data-animate="section"] {
+  opacity: 0;
+}
+
+/* Once GSAP has taken control, it will override these values */

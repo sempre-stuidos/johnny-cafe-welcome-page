@@ -1,11 +1,16 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
+import { usePageLoadAnimation } from "@/lib/animations/hooks";
 
 export default function HomeHero() {
   const { theme } = useTheme();
+
+  // Page load animation - triggers after nav completes
+  usePageLoadAnimation('[data-animate="hero-content"]', "hero");
 
   return (
     <section
@@ -13,6 +18,7 @@ export default function HomeHero() {
         "relative",
         "w-full h-[100vh] md:h-auto md:min-h-[668px]",
         "overflow-hidden",
+        "z-10",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
       )}
     >
@@ -54,18 +60,19 @@ export default function HomeHero() {
           "h-full w-full",
           "px-4 md:px-8"
         )}
+        data-animate="hero-content"
       >
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-4 md:gap-8"
           )}
         >
           {/* Text Content - Top on mobile, Left on desktop */}
           <div
             className={cn(
-              "flex flex-col",
+              "flex flex-col relative",
               "gap-4 md:gap-0 md:justify-between",
               "w-full md:w-[60%]",
               "py-4 md:py-6",
@@ -76,7 +83,7 @@ export default function HomeHero() {
               <h3>478 PARLIAMENT ST</h3>
 
               {/* Hero Title Image - Day/Night */}
-              <div className="relative mt-1 pb-8 md:pb-12">
+              <div className="relative mt-1 pb-8 md:pb-12 z-6">
                 <Image
                   src={
                     theme === "day"
@@ -100,7 +107,7 @@ export default function HomeHero() {
               width={200}
               height={200}
               className={cn(
-                "hidden md:block",
+                "hidden md:block absolute top-[100px]",
                 "w-auto h-auto",
                 "mt-8"
               )}
@@ -163,7 +170,7 @@ export default function HomeHero() {
           <div
             className={cn(
               "flex items-end justify-center md:justify-end",
-              "w-full md:w-[40%]",
+              "w-full md:w-[60%]",
               "flex-1 md:flex-none",
               "order-2",
               "pb-4 md:mt-8 md:pb-0"

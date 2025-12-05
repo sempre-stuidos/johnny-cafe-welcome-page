@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import content from "@/data/content.json";
+import { useScrollReveal } from "@/lib/animations/hooks";
 
 // Import Swiper styles
 import "swiper/css";
@@ -16,13 +17,15 @@ import "swiper/css";
 export default function HomeMenu() {
   const { theme } = useTheme();
   const swiperRef = useRef<SwiperType | null>(null);
+  const contentRef = useScrollReveal();
 
   return (
     <section
       className={cn(
         "relative",
         "w-full h-auto min-h-[600px] md:min-h-[700px]",
-        "transition-colors duration-300"
+        "transition-colors duration-300",
+        "z-20"
       )}
       style={{
         backgroundColor:
@@ -67,16 +70,18 @@ export default function HomeMenu() {
 
       {/* Content */}
       <div
+        ref={contentRef}
         className={cn(
           "relative z-20",
           "h-full w-full",
           "px-4 md:px-8 py-8 md:py-16"
         )}
+        data-animate="section"
       >
         <div
           className={cn(
             "flex flex-col",
-            "h-full w-full max-w-[1440px]",
+            "h-full w-full max-w-[1200px]",
             "mx-auto gap-8 md:gap-12"
           )}
         >
