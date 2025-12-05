@@ -83,7 +83,7 @@ export default function EventItem({ event }: EventItemProps) {
         {/* Right Column - Event Poster */}
         <div className="flex-shrink-0 w-full md:w-[300px]">
           {event.image ? (
-            <div className="relative w-full aspect-square overflow-hidden transition-colors duration-300">
+            <div className="relative w-full aspect-square overflow-hidden rounded-lg border-2 border-[#B29738] transition-colors duration-300">
               <Image
                 src={event.image}
                 alt={`Event poster for ${event.name}`}
