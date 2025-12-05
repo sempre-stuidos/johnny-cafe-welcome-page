@@ -28,7 +28,7 @@ import { animationConfig } from "./config";
 export function usePageLoadAnimation(
   selector: string,
   type: "nav-logo" | "nav-links" | "nav-toggle" | "hero",
-  containerRef?: RefObject<HTMLElement>
+  containerRef?: RefObject<HTMLElement | null>
 ) {
   const { contextSafe } = useGSAP({ scope: containerRef });
 
