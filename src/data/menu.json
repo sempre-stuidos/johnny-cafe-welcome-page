@@ -3,255 +3,260 @@
     "breakfast": [
       {
         "name": "English Breakfast",
-        "price": 15,
-        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+        "price": 14.99,
+        "description": "3 Scrambled eggs , 4 Sausages served with Brown Beans."
       },
       {
         "name": "Five Star Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+        "price": 16.99,
+        "description": "Choice of small 3 eggs served with 2 Sausages, 2 ham and 2 Peameal bacon."
       },
       {
         "name": "Grand Slam Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+        "price": 14.99,
+        "description": "Choice of small 3 eggs with 2 bacons,2 sausages and 2 hams.(Extra $4 for peameal bacon)"
       },
       {
         "name": "Continental Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+        "price": 14.99,
+        "description": "3 scrambled , 2 sausages, saute mushrooms, tomatoes and mozzarella cheese"
       },
       {
         "name": "Big Breakfast",
-        "price": 12,
-        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+        "price": 11.99,
+        "description": "Choice of small 3 eggs with 4 bacons or 4 sausages or 5 hams."
+      },
+      {
+        "name": "Veggie Breakfast",
+        "price": 15.99,
+        "description": "Choice of small 3 eggs with Avocado, saute Mushrooms, Brussels sprout, Artichokes, Bell peppers , Spinach and tomatoes"
       },
       {
         "name": "Steak in Breakfast",
-        "price": 20,
-        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+        "price": 19.99,
+        "description": "Choice of small 3 eggs served with 6oz steak (choices/rare/medium rare/welldone)"
+      },
+      {
+        "name": "Corned Beef Hash With Eggs",
+        "price": 13.99,
+        "description": "Choice of small 3 eggs with chopped corned beef/bell peppers,onions and served with pickled cabbage."
       },
       {
         "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "price": 10.99,
+        "description": "Choice of small 3 eggs served with sliced Cucumber and Tomatoes."
       },
       {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Peameal Bacon Breakfast",
+        "price": 15.99,
+        "description": "Choice of small 3 eggs served with 3 sliced Peameal bacon."
       }
     ],
     "breakfastAndFries": [
       {
-        "name": "English Breakfast",
+        "name": "Johnny G S Burger",
+        "price": 17,
+        "description": "Home made grilled beef burger served with grilled bacon, saute mushroom, swiss cheese with choice of toppings"
+      },
+      {
+        "name": "Banquet Burger",
+        "price": 16,
+        "description": "Home made grilled beef burger served with grilled bacon , Real Cheddar cheese with choice of toppings."
+      },
+      {
+        "name": "Cheese Burger",
         "price": 15,
-        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+        "description": "Home made grilled beef burger served with choices of Real Cheddar or Swiss cheese and toppings"
       },
       {
-        "name": "Five Star Breakfast",
+        "name": "Grilled Chicken Burger",
+        "price": 17,
+        "description": "Grilled chicken breast with choice of Real Cheddar or Swiss cheese and toppings"
+      },
+      {
+        "name": "Crispy Chicken Burger",
+        "price": 16,
+        "description": "Deep fried battered chicken breast served with choices of toppings"
+      },
+      {
+        "name": "Potato Tikki Burger(Vegan)",
         "price": 15,
-        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
-      },
-      {
-        "name": "Grand Slam Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Continental Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Big Breakfast",
-        "price": 12,
-        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
-      },
-      {
-        "name": "Steak in Breakfast",
-        "price": 20,
-        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
-      },
-      {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
-      },
-      {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "description": "Chef special deep fried battered potato cake with choice of toppings."
       }
     ],
     "eggsBenedict": [
       {
-        "name": "English Breakfast",
-        "price": 15,
-        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+        "name": "Peameal Eggs Benedict",
+        "price": 15.99,
+        "description": "Choice of 3 small Poached eggs with 2 peameal bacon and homemade Hollandaise sauce."
       },
       {
-        "name": "Five Star Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+        "name": "Meat Benedict",
+        "price": 17.99,
+        "description": "Choice of 3 small Poached eggs with 2 Ham / 2 Sausages / 2 bacon and(extra $ 2 peameal bacon)with homemade Hollandaise sauce and swiss Cheese."
       },
       {
-        "name": "Grand Slam Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+        "name": "Veggie Benedict",
+        "price": 15.99,
+        "description": "Choice of 3 small Poached eggs with Avocado, saute bell peppers , onions , spinach and Grilled Tomatoes with homemade Hollandaise sauce."
       },
       {
-        "name": "Continental Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
+        "name": "Florentine Benedict",
+        "price": 15.99,
+        "description": "Choice of 3 small Poached eggs served with Saute fresh spinach and homemade Hollandaise sauce."
       },
       {
-        "name": "Big Breakfast",
-        "price": 12,
-        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+        "name": "Parisian Benedict",
+        "price": 15.99,
+        "description": "Choice of 3 small Poached eggs served with Saute Mushrooms and homemade Hollandaise sauce."
       },
       {
-        "name": "Steak in Breakfast",
-        "price": 20,
-        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+        "name": "Ham Benedict",
+        "price": 15.99,
+        "description": "Choice of 3 small Poached eggs served with Grilled 5 ham and homemade Hollandaise sauce."
       },
       {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
-      },
-      {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Egg Neptune Benedict",
+        "price": 16.99,
+        "description": "Choice of 3 small Poached eggs served with Smoked Salmon and homemade Hollandaise sauce."
       }
     ]
   },
   "dinner": {
     "soup": [
       {
-        "name": "English Breakfast",
-        "price": 15,
-        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+        "name": "Tomato Soup",
+        "price": 10,
+        "description": "Fresh Tomato Puree Cooked with Cream and Indian spices."
       },
       {
-        "name": "Five Star Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
-      },
-      {
-        "name": "Grand Slam Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Continental Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Big Breakfast",
-        "price": 12,
-        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
-      },
-      {
-        "name": "Steak in Breakfast",
-        "price": 20,
-        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
-      },
-      {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
-      },
-      {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Mulligatawny Soup",
+        "price": 10,
+        "description": "Yellow lentils and green apple cooked with coconut milk and Indian spices."
       }
     ],
     "appetizers": [
       {
-        "name": "English Breakfast",
-        "price": 15,
-        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+        "name": "Vegetable Samosa(2 pcs)",
+        "price": 7,
+        "description": "Cube potato, green peas and Indian spices stuffed in pastries."
       },
       {
-        "name": "Five Star Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
+        "name": "Onion Bhajis (2pcs)",
+        "price": 7,
+        "description": "Deep fried sliced onion mixed with Indian spices, chickpeas flour and served with mint and tamarind ."
       },
       {
-        "name": "Grand Slam Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
+        "name": "Fried Aloo Tikki",
+        "price": 10,
+        "description": "Breaded mashed potato stuffed with yellow dry lentil,coconut milk and Indianspices."
       },
       {
-        "name": "Continental Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Big Breakfast",
+        "name": "Cauliflower Bites",
         "price": 12,
-        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
+        "description": "Batter deep fried cauliflower cooked with Chef 's special souce."
       },
       {
-        "name": "Steak in Breakfast",
-        "price": 20,
-        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+        "name": "Tandoori Chicken Legs",
+        "price": 15,
+        "description": "Over night marinated chicken legs mix with yogurt and cooked in clay tandoori oven."
       },
       {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Chicken 65",
+        "price": 15,
+        "description": "Batter fried boneless dark meat cooked with spicy South Indian spices."
       },
       {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Chicken Tikka",
+        "price": 15,
+        "description": "Over night marinated boneless chicken mixed with yogurt and cooked in clay tandoori oven."
       }
     ],
     "mains": [
       {
-        "name": "English Breakfast",
-        "price": 15,
-        "description": "3 Scrambled eggs, 4 Sausages served with Brown Beans."
+        "name": "Butter Chicken",
+        "price": 22,
+        "description": "Roasted boneless chicken tikka cooked in rich tomato sauce."
       },
       {
-        "name": "Five Star Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs served with 2 Sausages, 2 ham, and 2 Peameal bacon."
-      },
-      {
-        "name": "Grand Slam Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Continental Breakfast",
-        "price": 15,
-        "description": "Choice of 3 eggs with 2 bacons, 2 sausages, and 2 hams. (Extra $4 for peameal bacon)"
-      },
-      {
-        "name": "Big Breakfast",
-        "price": 12,
-        "description": "Choice of 3 eggs with 4 bacons or 4 sausages or 5 hams."
-      },
-      {
-        "name": "Steak in Breakfast",
+        "name": "Tikka Masala (Paneer)",
         "price": 20,
-        "description": "Choice of 3 eggs served with a 6oz steak (rare / medium rare / well done)."
+        "description": "Roasted boneless chicken tikka or paneer tikka cooked with bell peppers and Indian spices."
       },
       {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Tikka Masala (chicken)",
+        "price": 22,
+        "description": "Roasted boneless chicken tikka or paneer tikka cooked with bell peppers and Indian spices."
       },
       {
-        "name": "No Meat Breakfast",
-        "price": 11,
-        "description": "Choice of 3 eggs served with sliced cucumber and tomatoes."
+        "name": "Chattnad (chicken)",
+        "price": 22,
+        "description": "Boneless chicken/lamb cooked with coconut milk and spicy South Indian spices."
+      },
+      {
+        "name": "Chattnad (lamb)",
+        "price": 26,
+        "description": "Boneless chicken/lamb cooked with coconut milk and spicy South Indian spices."
+      },
+      {
+        "name": "Saag (panner)",
+        "price": 20,
+        "description": "Paneer/boneless chicken/lamb cooked in Spinach puree with Indian spices."
+      },
+      {
+        "name": "Saag (chicken)",
+        "price": 22,
+        "description": "Paneer/boneless chicken/lamb cooked in Spinach puree with Indian spices."
+      },
+      {
+        "name": "Saag (lamb or steak)",
+        "price": 26,
+        "description": "Paneer/boneless chicken/lamb cooked in Spinach puree with Indian spices."
+      },
+      {
+        "name": "Vindaloo (chicken)",
+        "price": 22,
+        "description": "Boneless chicken/lamb/steak cooked in Indian spice with red wine vinegar and served with spicy sauce."
+      },
+      {
+        "name": "Vindaloo (lamb or steak)",
+        "price": 26,
+        "description": "Boneless chicken/lamb/steak cooked in Indian spice with red wine vinegar and served with spicy sauce."
+      },
+      {
+        "name": "Rogan Josh (chicken)",
+        "price": 22,
+        "description": "Boneless chicken/lamb/steak cooked with saffron and Indian spices."
+      },
+      {
+        "name": "Rogan Josh (lamb or steak)",
+        "price": 26,
+        "description": "Boneless chicken/lamb/steak cooked with saffron and Indian spices."
+      },
+      {
+        "name": "Lime Masala (chicken)",
+        "price": 22,
+        "description": "Boneless chicken/lamb/ steak meat cooked with lemon grass,bell peppers and coconut milk."
+      },
+      {
+        "name": "Lime Masala (lamb or steak)",
+        "price": 26,
+        "description": "Boneless chicken/lamb/ steak meat cooked with lemon grass,bell peppers and coconut milk."
+      },
+      {
+        "name": "Fish Curry",
+        "price": 27,
+        "description": "Halibut fish cooked with Indian spices and coconut milk."
+      },
+      {
+        "name": "Coconut Prawn Curry",
+        "price": 27,
+        "description": "Crest coconut cooked with tiger shrimps ,dill leaves and Indian spices"
+      },
+      {
+        "name": "Bottman Curry(CHEF'S SPECIAL)",
+        "price": 30,
+        "description": "Combination of tiger shrimps,scallop fish and calamari cooked in chef 's special sauce."
       }
     ]
   }
