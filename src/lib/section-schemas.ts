@@ -19,9 +19,6 @@ import { z } from "zod";
  */
 export const HomeHeroSectionSchema = z.object({
   address: z.string(),
-  title: z.string(),
-  subtitle: z.string(),
-  established: z.string(),
   daysLabel: z.string(),
   day: z.object({
     description: z.string(),
@@ -39,6 +36,51 @@ export const HomeHeroSectionSchema = z.object({
 
 export type HomeHeroSectionContent = z.infer<typeof HomeHeroSectionSchema>;
 
+/**
+ * HomeAboutSection Schema
+ * Enforces flat structure with title and paragraphs
+ */
+export const HomeAboutSectionSchema = z.object({
+  title: z.string(),
+  paragraphs: z.array(z.string()),
+});
+
+export type HomeAboutSectionContent = z.infer<typeof HomeAboutSectionSchema>;
+
+/**
+ * HomeMenuSection Schema
+ * Enforces flat structure with title, description, and images array
+ */
+export const HomeMenuSectionSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  images: z.array(z.string()), // Array of image paths
+});
+
+export type HomeMenuSectionContent = z.infer<typeof HomeMenuSectionSchema>;
+
+/**
+ * HomeEventsSection Schema
+ * Enforces flat structure with title and description
+ */
+export const HomeEventsSectionSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+});
+
+export type HomeEventsSectionContent = z.infer<typeof HomeEventsSectionSchema>;
+
+/**
+ * HomeReservationSection Schema
+ * Minimal content for reservation section (mostly form-based)
+ */
+export const HomeReservationSectionSchema = z.object({
+  heading: z.string().optional(),
+  subheading: z.string().optional(),
+});
+
+export type HomeReservationSectionContent = z.infer<typeof HomeReservationSectionSchema>;
+
 // ============================================================================
 // Schema Registry
 // ============================================================================
@@ -48,6 +90,10 @@ export type HomeHeroSectionContent = z.infer<typeof HomeHeroSectionSchema>;
  */
 export const sectionSchemas: Record<string, z.ZodSchema> = {
   HomeHeroSection: HomeHeroSectionSchema,
+  HomeAboutSection: HomeAboutSectionSchema,
+  HomeMenuSection: HomeMenuSectionSchema,
+  HomeEventsSection: HomeEventsSectionSchema,
+  HomeReservationSection: HomeReservationSectionSchema,
 };
 
 /**

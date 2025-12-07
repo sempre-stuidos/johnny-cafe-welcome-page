@@ -1,13 +1,18 @@
-import { cn } from "@/lib/utils";
-import HomeHero from "@/components/HomeHero";
-import HomeAbout from "@/components/HomeAbout";
-import HomeMenu from "@/components/HomeMenu";
-import HomeEvents from "@/components/HomeEvents";
-import HomeReservation from "@/components/HomeReservation";
-import { getLiveEventsForBusiness, formatEventDate } from "@/lib/events";
+import DynamicSection from "@/components/dynamic-section";
+import { CanvasEditorHandler } from "@/components/canvas-editor-handler";
+import { getPageBySlug, getPageSections } from "@/lib/pages";
+import { validatePreviewToken } from "@/lib/preview";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 
-export default async function Home() {
+interface HomeProps {
+  searchParams: Promise<{ token?: string; page?: string }>
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
+  const previewToken = params.token;
+  const pageSlug = params.page || 'home';
+  
   // Get business slug from environment or use default
   const businessSlug = resolveBusinessSlug(
     undefined,
@@ -15,28 +20,43 @@ export default async function Home() {
     'johnny-gs-brunch'
   );
   
-  // Fetch live events from database (limit to 2 for homepage)
-  const dbEvents = await getLiveEventsForBusiness(businessSlug);
+  // Get the page
+  const page = await getPageBySlug(businessSlug, pageSlug);
   
-  // Map database events to HomeEvents format (only first 2, formatted for display)
-  const homeEvents = dbEvents.slice(0, 2).map(event => ({
-    date: formatEventDate(event.starts_at),
-    image: event.image_url,
-  }));
+  // If no page found, show default static content (fallback)
+  if (!page) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-muted-foreground">Page not found. Please configure your pages in the dashboard.</p>
+      </div>
+    );
+  }
+
+  // Validate preview token if provided
+  let useDraft = false;
+  if (previewToken) {
+    const validation = await validatePreviewToken(previewToken, undefined, page.id);
+    useDraft = validation.valid;
+  }
+
+  // Get sections for this page
+  const { sections, useDraft: isDraftMode } = await getPageSections(page.id, useDraft, previewToken);
+
+  // Determine which content to use (draft or published)
+  const contentToUse = isDraftMode ? 'draft_content' : 'published_content';
 
   return (
-    <main
-      className={cn(
-        "min-h-screen",
-        "transition-colors duration-300"
-      )}
-      style={{ backgroundColor: "var(--theme-bg-primary)" }}
-    >
-      <HomeHero />
-      <HomeAbout />
-      <HomeMenu />
-      <HomeEvents events={homeEvents} />
-      <HomeReservation />
-    </main>
-  )
+    <>
+      {sections.map((section) => (
+        <DynamicSection
+          key={section.id}
+          component={section.component}
+          content={section[contentToUse] || {}}
+          sectionKey={section.key}
+          sectionId={section.id}
+        />
+      ))}
+      <CanvasEditorHandler sections={sections.map(s => ({ id: s.id, key: s.key }))} />
+    </>
+  );
 }

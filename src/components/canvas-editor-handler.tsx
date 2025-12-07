@@ -83,40 +83,51 @@ export function CanvasEditorHandler({ sections }: CanvasEditorHandlerProps) {
         })
 
         // Add click listeners for components within this section
-        const componentElements = sectionElement.querySelectorAll('[data-section-component-key]')
-        componentElements.forEach((componentElement) => {
-          const componentKey = componentElement.getAttribute('data-section-component-key')
-          if (componentKey) {
-            const componentClickHandler = (e: Event) => {
+        // Use a single delegated event listener on the section for better performance and to catch dynamically added elements
+        const componentClickHandler = (e: Event) => {
+          const target = e.target as HTMLElement
+          // Find the closest element with data-section-component-key
+          const componentElement = target.closest('[data-section-component-key]')
+          if (componentElement) {
+            e.stopPropagation()
+            e.stopImmediatePropagation() // Prevent other handlers on the same element from running
+            const componentKey = componentElement.getAttribute('data-section-component-key')
+            if (componentKey) {
               const key = sectionElement.getAttribute('data-section-key') || section.key
               const id = sectionElement.getAttribute('data-section-id') || section.id
               handleComponentClick(e as MouseEvent, id, key, componentKey)
             }
-            componentElement.addEventListener('click', componentClickHandler)
-            
-            // Add visual indication that component is clickable
-            const componentHtmlElement = componentElement as HTMLElement
-            componentHtmlElement.style.cursor = 'pointer'
-            componentHtmlElement.style.transition = 'opacity 0.2s'
-            
-            const componentHoverHandler = () => {
-              componentHtmlElement.style.opacity = '0.9'
-            }
-            const componentLeaveHandler = () => {
-              componentHtmlElement.style.opacity = '1'
-            }
-            componentElement.addEventListener('mouseenter', componentHoverHandler)
-            componentElement.addEventListener('mouseleave', componentLeaveHandler)
-
-            cleanupFunctions.push(() => {
-              componentElement.removeEventListener('click', componentClickHandler)
-              componentElement.removeEventListener('mouseenter', componentHoverHandler)
-              componentElement.removeEventListener('mouseleave', componentLeaveHandler)
-              componentHtmlElement.style.cursor = ''
-              componentHtmlElement.style.opacity = ''
-              componentHtmlElement.style.transition = ''
-            })
           }
+        }
+        sectionElement.addEventListener('click', componentClickHandler, true) // Use capture phase to catch events early
+        
+        // Add visual indication to all component elements
+        const componentElements = sectionElement.querySelectorAll('[data-section-component-key]')
+        componentElements.forEach((componentElement) => {
+          const componentHtmlElement = componentElement as HTMLElement
+          componentHtmlElement.style.cursor = 'pointer'
+          componentHtmlElement.style.transition = 'opacity 0.2s'
+          
+          const componentHoverHandler = () => {
+            componentHtmlElement.style.opacity = '0.9'
+          }
+          const componentLeaveHandler = () => {
+            componentHtmlElement.style.opacity = '1'
+          }
+          componentElement.addEventListener('mouseenter', componentHoverHandler)
+          componentElement.addEventListener('mouseleave', componentLeaveHandler)
+
+          cleanupFunctions.push(() => {
+            componentElement.removeEventListener('mouseenter', componentHoverHandler)
+            componentElement.removeEventListener('mouseleave', componentLeaveHandler)
+            componentHtmlElement.style.cursor = ''
+            componentHtmlElement.style.opacity = ''
+            componentHtmlElement.style.transition = ''
+          })
+        })
+
+        cleanupFunctions.push(() => {
+          sectionElement.removeEventListener('click', componentClickHandler, true)
         })
       }
     })

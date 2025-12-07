@@ -24,9 +24,11 @@ interface HomeHeroSectionProps {
     reservationPhone?: string;
     reservationLabel?: string;
   };
+  'data-section-key'?: string;
+  'data-section-id'?: string;
 }
 
-export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
+export function HomeHeroSection({ content, 'data-section-key': sectionKey, 'data-section-id': sectionId }: HomeHeroSectionProps = {}) {
   const { theme } = useTheme();
 
   // Default values
@@ -66,6 +68,8 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
         "overflow-hidden",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
       )}
+      data-section-key={sectionKey}
+      data-section-id={sectionId}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -128,22 +132,21 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
                 <h3>{address}</h3>
               </div>
 
-              {/* H1 with Brunch & EST overlapping */}
-              <div className="relative mt-1 pb-8 md:pb-12">
-                {/* Brunch & EST - in front with higher z-index (DOM first) */}
-                <div className="flex flex-row items-start absolute left-0 top-[40%] md:top-[45%] z-10">
-                  <div data-section-component-key="subtitle">
-                    <h2 className="hero-brunch-title">{subtitle}</h2>
-                  </div>
-                  <div data-section-component-key="established">
-                    <p className="est-1975-text ml-6 md:ml-10 mt-6 md:mt-10">{established}</p>
-                  </div>
-                </div>
-                
-                {/* JOHNNY G's - behind with lower z-index */}
-                <div data-section-component-key="title">
-                  <h1 className="text-stroke-dark-green relative z-0">{title}</h1>
-                </div>
+              {/* Hero Title Image - Day/Night */}
+              <div className="relative mt-1 pb-8 md:pb-12 z-6">
+                <Image
+                  src={
+                    theme === "day"
+                      ? "/assets/imgs/hero-day.png"
+                      : "/assets/imgs/hero-night.png"
+                  }
+                  alt={theme === "day" ? "Johnny G's Brunch" : "Johnny G's Dinner"}
+                  width={600}
+                  height={200}
+                  className="w-full h-auto max-w-[500px] md:max-w-[600px]"
+                  unoptimized
+                  priority
+                />
               </div>
             </div>
 
