@@ -25,12 +25,9 @@ export default function HomeMenu() {
         "relative",
         "w-full h-auto min-h-[600px] md:min-h-[700px]",
         "transition-colors duration-300",
+        theme === "day" ? "bg-menu-section-day" : "bg-menu-section-night",
         "z-20"
       )}
-      style={{
-        backgroundColor:
-          theme === "day" ? "rgba(194, 202, 168, 1)" : "rgba(1, 26, 12, 1)",
-      }}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -58,14 +55,9 @@ export default function HomeMenu() {
       <div
         className={cn(
           "absolute inset-0 z-10",
-          "transition-colors duration-300"
+          "transition-colors duration-300",
+          theme === "day" ? "overlay-menu-day" : "overlay-menu-night"
         )}
-        style={{
-          backgroundColor:
-            theme === "day"
-              ? "rgba(194, 202, 168, 0.85)"
-              : "rgba(1, 26, 12, 0.90)",
-        }}
       />
 
       {/* Content */}
@@ -86,17 +78,7 @@ export default function HomeMenu() {
           )}
         >
           {/* Title */}
-          <h2
-            className="text-left max-w-[600px] transition-colors duration-300"
-            style={{
-              fontFamily: "var(--font-hornbill-trial)",
-              fontWeight: 700,
-              fontSize: "48px",
-              lineHeight: "110%",
-              letterSpacing: "0%",
-              color: "var(--about-title)",
-            }}
-          >
+          <h2 className="section-heading text-left max-w-[600px]">
             {content.menu.title}
           </h2>
 

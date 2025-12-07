@@ -32,50 +32,20 @@ export default function EventItem({ event }: EventItemProps) {
                     <StarIcon
                         fill= "#B29738"
                     />
-                    <span
-                        style={{
-                            fontFamily: "var(--font-amoret-sans)",
-                            fontSize: "var(--font-size-lg)",
-                            color:  "var(--theme-accent)",
-                            fontWeight: 700,
-                            lineHeight: "var(--line-height-tight)",
-                            textTransform: "uppercase",
-                            letterSpacing: "var(--letter-spacing-wide)",
-                        }}
-                    >
+                    <span className="text-event-date">
                       {event.date}
                     </span>
                 </div>
 
                 {/* Event Name */}
-                <h3
-                    style={{
-                        fontFamily: "var(--font-hornbill-trial)",
-                        fontSize: "clamp(var(--font-size-lg), 4vw, var(--font-size-3xl))",
-                        color: "var(--theme-text-light-cream)",
-                        fontWeight: 700,
-                        lineHeight: "var(--line-height-tight)",
-                        textTransform: "uppercase",
-                        letterSpacing: "var(--letter-spacing-normal)",
-                    }}
-                    className="transition-colors duration-300"
-                >
+                <h3 className="event-name">
                     {event.name}
                 </h3>
             </div>
 
 
           {/* Description */}
-          <p
-            style={{
-              fontFamily: "var(--font-geist-sans)",
-              fontSize: "var(--font-size-sm)",
-              color: "var(--theme-text-light-cream)",
-              fontWeight: 400,
-              lineHeight: "var(--line-height-relaxed)",
-            }}
-            className="transition-colors duration-300"
-          >
+          <p className="text-event-description">
             {event.description}
           </p>
         </div>
@@ -98,20 +68,11 @@ export default function EventItem({ event }: EventItemProps) {
                 "w-full aspect-square",
                 "flex items-center justify-center",
                 "border-2 rounded-lg",
-                "transition-colors duration-300"
+                "transition-colors duration-300",
+                "event-placeholder"
               )}
-              style={{
-                borderColor: theme === "day" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)",
-                backgroundColor: theme === "day" ? "rgba(0, 0, 0, 0.02)" : "rgba(255, 255, 255, 0.02)",
-              }}
             >
-              <span
-                style={{
-                  fontFamily: "var(--font-geist-sans)",
-                  fontSize: "var(--font-size-sm)",
-                  color: theme === "day" ? "rgba(0, 0, 0, 0.3)" : "rgba(255, 255, 255, 0.3)",
-                }}
-              >
+              <span className="event-placeholder-text">
                 Event poster
               </span>
             </div>

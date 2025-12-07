@@ -17,9 +17,9 @@ export default function HomeAbout() {
         "relative",
         "w-full h-auto min-h-[668px]",
         "transition-colors duration-300",
+        "bg-about-section",
         "z-30"
       )}
-      style={{ backgroundColor: "var(--about-bg)" }}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -47,14 +47,9 @@ export default function HomeAbout() {
       <div
         className={cn(
           "absolute inset-0 z-10",
-          "transition-colors duration-300"
+          "transition-colors duration-300",
+          theme === "day" ? "overlay-about-day" : "overlay-about-night"
         )}
-        style={{
-          backgroundColor:
-            theme === "day"
-              ? "rgba(250, 242, 221, 0.85)"
-              : "rgba(51, 77, 45, 0.90)",
-        }}
       />
 
       {/* Content */}
@@ -83,25 +78,14 @@ export default function HomeAbout() {
               "order-1"
             )}
           >
-            <h2
-              className="transition-colors duration-300"
-              style={{ 
-                color: "var(--about-title)",
-                fontFamily: "var(--font-hornbill-trial)",
-                fontWeight: 700,
-                fontSize: "48px",
-                lineHeight: "110%",
-                letterSpacing: "0%"
-              }}
-            >
+            <h2 className="section-heading">
               {content.about.title}
             </h2>
 
             {content.about.paragraphs.map((paragraph, index) => (
               <p
                 key={index}
-                className="transition-colors duration-300"
-                style={{ color: "var(--about-text)" }}
+                className="about-paragraph"
               >
                 {paragraph}
               </p>

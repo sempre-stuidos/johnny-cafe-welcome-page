@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
 
 interface MenuItemProps {
   name: string;
@@ -16,27 +17,18 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
       {/* Title and Price Row */}
       <div className="flex items-start justify-between gap-4">
         <h6
-          style={{
-            fontFamily: "var(--font-hornbill-trial)",
-            fontSize: "var(--font-size-lg)",
-              color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
-
-              fontWeight: 400,
-            lineHeight: "var(--line-height-tight)",
-          }}
-          className="flex-1"
+          className={cn(
+            "menu-item-name flex-1",
+            theme === "day" ? "menu-item-name-day" : "menu-item-name-night"
+          )}
         >
           {name}
         </h6>
         <span
-          style={{
-            fontFamily: "var(--font-geist-sans)",
-            fontSize: "var(--font-size-lg)",
-              color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
-            fontWeight: 700,
-            lineHeight: "var(--line-height-tight)",
-          }}
-          className="whitespace-nowrap"
+          className={cn(
+            "text-menu-price whitespace-nowrap",
+            theme === "day" ? "text-menu-price-day" : "text-menu-price-night"
+          )}
         >
           {price}
         </span>
@@ -44,14 +36,10 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
 
       {/* Description */}
       <p
-        style={{
-          fontFamily: "var(--font-geist-sans)",
-          fontSize: "var(--font-size-sm)",
-          color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--color-theme-accent)",
-          fontWeight: 400,
-          lineHeight: "var(--line-height-relaxed)",
-          maxWidth: "438px",
-        }}
+        className={cn(
+          "text-menu-description",
+          theme === "day" ? "text-menu-description-day" : "text-menu-description-night"
+        )}
       >
         {description}
       </p>
