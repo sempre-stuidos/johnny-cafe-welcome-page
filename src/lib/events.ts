@@ -120,7 +120,7 @@ export async function getLiveEventsForBusiness(businessSlug: string): Promise<Ev
       .from('events')
       .select('*')
       .eq('org_id', business.id)
-      .order('starts_at', { ascending: true, nullsLast: true })
+      .order('starts_at', { ascending: true, nullsFirst: false })
 
     if (error) {
       console.error('Error fetching events:', error)
@@ -184,7 +184,7 @@ export async function getPastEventsForBusiness(businessSlug: string): Promise<Ev
       .from('events')
       .select('*')
       .eq('org_id', business.id)
-      .order('starts_at', { ascending: false, nullsLast: true }) // Most recent first for past events
+      .order('starts_at', { ascending: false, nullsFirst: false }) // Most recent first for past events
 
     if (error) {
       console.error('Error fetching events:', error)
