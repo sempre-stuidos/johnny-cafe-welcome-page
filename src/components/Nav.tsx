@@ -19,6 +19,7 @@ export default function Nav() {
   const closeMenu = () => setIsMenuOpen(false);
 
   // Page load animations
+  usePageLoadAnimation('[data-animate="nav-banner"]', "nav-banner", navRef);
   usePageLoadAnimation('[data-animate="nav-logo"]', "nav-logo", navRef);
   usePageLoadAnimation('[data-animate="nav-links"]', "nav-links", navRef);
   usePageLoadAnimation('[data-animate="nav-toggle"]', "nav-toggle", navRef);

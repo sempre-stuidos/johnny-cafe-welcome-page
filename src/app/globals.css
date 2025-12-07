@@ -849,6 +849,7 @@ code, pre {
 [data-animate="nav-logo"],
 [data-animate="nav-links"],
 [data-animate="nav-toggle"],
+[data-animate="nav-banner"],
 [data-animate="hero-content"],
 [data-animate="section"] {
   opacity: 0;

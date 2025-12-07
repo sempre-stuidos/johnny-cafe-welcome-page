@@ -22,7 +22,10 @@ export default function Banner() {
   const { brunch, dinner, jazz } = content.banner;
 
   return (
-    <div className="w-full py-2 px-4 flex items-center justify-center transition-colors duration-300 border-b border-white/10 bg-nav">
+    <div 
+      className="w-full py-2 px-4 flex items-center justify-center transition-colors duration-300 border-b border-white/10 bg-nav"
+      data-animate="nav-banner"
+    >
       <div className="hidden md:flex items-center justify-center gap-4 text-center">
         <span className="banner-text">
           Brunch: {brunch}
