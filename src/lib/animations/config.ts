@@ -16,6 +16,13 @@ export const animationConfig = {
   pageLoad: {
     // Navigation animations
     nav: {
+      banner: {
+        duration: 0.4,
+        ease: "power2.out",
+        delay: 0, // Starts first
+        from: { opacity: 0, y: -10 },
+        to: { opacity: 1, y: 0 },
+      },
       logo: {
         duration: 0.4,
         ease: "power2.out",

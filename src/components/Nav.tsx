@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navLinks } from "@/data/navigation";
 import { usePageLoadAnimation } from "@/lib/animations/hooks";
+import Banner from "@/components/Banner";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
@@ -18,6 +19,7 @@ export default function Nav() {
   const closeMenu = () => setIsMenuOpen(false);
 
   // Page load animations
+  usePageLoadAnimation('[data-animate="nav-banner"]', "nav-banner", navRef);
   usePageLoadAnimation('[data-animate="nav-logo"]', "nav-logo", navRef);
   usePageLoadAnimation('[data-animate="nav-links"]', "nav-links", navRef);
   usePageLoadAnimation('[data-animate="nav-toggle"]', "nav-toggle", navRef);
@@ -28,12 +30,13 @@ export default function Nav() {
         ref={navRef}
         className={cn(
           "sticky top-0 z-50 w-full transition-colors duration-300",
-          "border-b border-white/10"
+          "border-b border-white/10",
+          theme === "day" ? "bg-nav-day" : "bg-nav-night"
         )}
-        style={{
-          backgroundColor: theme === "day" ? "#334D2D" : "#011A0C",
-        }}
       >
+        {/* Banner - Above navigation content */}
+        <Banner />
+        
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
@@ -77,10 +80,10 @@ export default function Nav() {
               >
                 <div className="theme-toggle-container relative">
                   <div
-                    className="theme-toggle-knob absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out"
-                    style={{
-                      left: theme === "day" ? "2px" : "32px",
-                    }}
+                    className={cn(
+                      "theme-toggle-knob absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out",
+                      theme === "day" ? "theme-toggle-knob-day" : "theme-toggle-knob-night"
+                    )}
                   />
                 </div>
                 <h5 className="nav-link pt-1 whitespace-nowrap">
@@ -126,13 +129,11 @@ export default function Nav() {
           className={cn(
             "absolute top-0 right-0 h-full w-[80%] max-w-[320px]",
             "flex flex-col",
-            "pt-20 pb-8 px-6",
+            "pt-32 pb-8 px-6",
             "transition-transform duration-300 ease-in-out",
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
+            isMenuOpen ? "translate-x-0" : "translate-x-full",
+            theme === "day" ? "bg-nav-day" : "bg-nav-night"
           )}
-          style={{
-            backgroundColor: theme === "day" ? "#334D2D" : "#011A0C",
-          }}
         >
           {/* Navigation Links */}
           <div className="flex flex-col gap-6">
@@ -163,15 +164,15 @@ export default function Nav() {
             >
               <div className="theme-toggle-container relative">
                 <div
-                  className="theme-toggle-knob absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out"
-                  style={{
-                    left: theme === "day" ? "2px" : "32px",
-                  }}
+                  className={cn(
+                    "theme-toggle-knob absolute top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out",
+                    theme === "day" ? "theme-toggle-knob-day" : "theme-toggle-knob-night"
+                  )}
                 />
               </div>
-              <span className="text-[#FAF2DD] text-lg">
+              {/* <span className="text-[#FAF2DD] text-lg">
                 {theme === "day" ? "Brunch Mode" : "Dinner Mode"}
-              </span>
+              </span> */}
             </button>
           </div>
         </div>

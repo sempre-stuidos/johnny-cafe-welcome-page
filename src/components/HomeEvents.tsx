@@ -143,9 +143,9 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
       className={cn(
         "relative",
         "w-full h-auto min-h-[668px]",
-        "transition-colors duration-300"
+        "transition-colors duration-300",
+        "bg-about-section"
       )}
-      style={{ backgroundColor: "var(--about-bg)" }}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -173,14 +173,9 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
       <div
         className={cn(
           "absolute inset-0 z-10",
-          "transition-colors duration-300"
+          "transition-colors duration-300",
+          theme === "day" ? "overlay-about-day" : "overlay-about-night"
         )}
-        style={{
-          backgroundColor:
-            theme === "day"
-              ? "rgba(250, 242, 221, 0.85)"
-              : "rgba(51, 77, 45, 0.90)",
-        }}
       />
 
       {/* Content */}
@@ -209,24 +204,11 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
               "order-1"
             )}
           >
-            <h2
-              className="transition-colors duration-300"
-              style={{ 
-                color: "var(--about-title)",
-                fontFamily: "var(--font-hornbill-trial)",
-                fontWeight: 700,
-                fontSize: "48px",
-                lineHeight: "110%",
-                letterSpacing: "0%"
-              }}
-            >
+            <h2 className="section-heading">
               {content.events.title}
             </h2>
 
-            <p
-              className="transition-colors duration-300"
-              style={{ color: "var(--about-text)" }}
-            >
+            <p className="text-about">
               {content.events.description}
             </p>
 
@@ -258,10 +240,7 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
                     {/* Date with Star */}
                     <div className="flex items-center gap-3">
                       <StarIcon />
-                      <span
-                        className="transition-colors duration-300"
-                        style={{ color: "var(--about-text)" }}
-                      >
+                      <span className="text-about">
                         {event.date}
                       </span>
                     </div>

@@ -3,6 +3,11 @@
     "name": "Johnny G's",
     "established": "1975"
   },
+  "banner": {
+    "brunch": "Mon-Sun 7AM-4PM",
+    "dinner": "Mon-Sun 5PM-10PM",
+    "jazz": "Thu-Sat 8PM till late"
+  },
   "opening": {
     "heading": "We are",
     "highlight": "Open!",
