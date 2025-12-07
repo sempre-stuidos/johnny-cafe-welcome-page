@@ -30,7 +30,7 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
             theme === "day" ? "text-menu-price-day" : "text-menu-price-night"
           )}
         >
-          {price}
+          {price.toFixed(2)}
         </span>
       </div>
 
