@@ -19,10 +19,14 @@ export default async function Home() {
   const dbEvents = await getLiveEventsForBusiness(businessSlug);
   
   // Map database events to HomeEvents format (only first 2, formatted for display)
-  const homeEvents = dbEvents.slice(0, 2).map(event => ({
-    date: formatEventDate(event.starts_at),
-    image: event.image_url,
-  }));
+  // Filter out events without starts_at (weekly events) since formatEventDate requires a date
+  const homeEvents = dbEvents
+    .filter(event => event.starts_at) // Only include events with a start date
+    .slice(0, 2)
+    .map(event => ({
+      date: formatEventDate(event.starts_at!),
+      image: event.image_url,
+    }));
 
   return (
     <main
