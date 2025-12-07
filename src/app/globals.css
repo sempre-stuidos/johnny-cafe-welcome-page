@@ -658,6 +658,7 @@ code, pre {
 .banner-separator {
   color: var(--theme-accent);
   font-weight: 400;
+  font-size: 14px;
 }
 
 /* Section Heading - Used for large section titles */
@@ -846,10 +847,10 @@ code, pre {
 
 /* GSAP Animation - Prevent Flash of Content */
 /* Hide elements that will be animated until GSAP initializes them */
+[data-animate="nav-banner"],
 [data-animate="nav-logo"],
 [data-animate="nav-links"],
 [data-animate="nav-toggle"],
-[data-animate="nav-banner"],
 [data-animate="hero-content"],
 [data-animate="section"] {
   opacity: 0;

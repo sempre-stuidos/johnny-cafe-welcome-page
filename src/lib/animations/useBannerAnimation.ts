@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 
 /**
@@ -6,23 +6,36 @@ import { gsap } from "gsap";
  * Cycles through banner sections with fade in/out animation every 3 seconds
  */
 export function useBannerAnimation(isDesktop: boolean) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const elementRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (isDesktop || !containerRef.current) {
+  const runAnimation = useCallback((element: HTMLDivElement) => {
+    // Desktop: simple fade in
+    if (isDesktop) {
+      gsap.to(element, {
+        opacity: 1,
+        duration: 0.4,
+        ease: "power2.out"
+      });
       return;
     }
 
-    const sectionsNodeList = containerRef.current.querySelectorAll("[data-banner-section]");
+    const sectionsNodeList = element.querySelectorAll("[data-banner-section]");
     const sections = Array.from(sectionsNodeList);
     
     if (sections.length === 0) return;
-
-    const tl = gsap.timeline({ repeat: -1 });
+    gsap.to(element, {
+      opacity: 1,
+      duration: 0.4,
+      ease: "power2.out"
+    });
 
     gsap.set(sections[0], { opacity: 1 });
     gsap.set(sections.slice(1), { opacity: 0 });
+
+    const pageLoadDelay = 0.5;
+
+    const tl = gsap.timeline({ repeat: -1, delay: pageLoadDelay });
 
     sections.forEach((section, index) => {
       const nextIndex = (index + 1) % sections.length;
@@ -41,13 +54,22 @@ export function useBannerAnimation(isDesktop: boolean) {
     });
 
     timelineRef.current = tl;
-
-    return () => {
-      if (timelineRef.current) {
-        timelineRef.current.kill();
-      }
-    };
   }, [isDesktop]);
+
+  const containerRef = useCallback((node: HTMLDivElement | null) => {
+    if (timelineRef.current) {
+      timelineRef.current.kill();
+      timelineRef.current = null;
+    }
+
+    elementRef.current = node;
+
+    if (node) {
+      requestAnimationFrame(() => {
+        runAnimation(node);
+      });
+    }
+  }, [runAnimation]);
 
   return containerRef;
 }
