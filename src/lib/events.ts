@@ -8,12 +8,14 @@ export interface Event {
   description?: string
   image_url?: string
   event_type?: string
-  starts_at: string
-  ends_at: string
+  starts_at?: string // Optional for weekly events
+  ends_at?: string // Optional for weekly events
   publish_start_at?: string
   publish_end_at?: string
   status: 'draft' | 'scheduled' | 'live' | 'past' | 'archived'
   is_featured: boolean
+  is_weekly?: boolean
+  day_of_week?: number // 0-6, where 0=Sunday, 6=Saturday
   created_at: string
   updated_at: string
 }
@@ -74,12 +76,16 @@ function transformEventRecord(record: Record<string, unknown>): Event {
     description: record.description as string | undefined,
     image_url: record.image_url as string | undefined,
     event_type: record.event_type as string | undefined,
-    starts_at: record.starts_at as string,
-    ends_at: record.ends_at as string,
+    starts_at: record.starts_at as string | undefined,
+    ends_at: record.ends_at as string | undefined,
     publish_start_at: record.publish_start_at as string | undefined,
     publish_end_at: record.publish_end_at as string | undefined,
     status: record.status as Event['status'],
     is_featured: record.is_featured as boolean,
+    is_weekly: record.is_weekly as boolean | undefined,
+    day_of_week: record.day_of_week !== null && record.day_of_week !== undefined 
+      ? (record.day_of_week as number) 
+      : undefined,
     created_at: record.created_at as string,
     updated_at: record.updated_at as string,
   }
@@ -109,11 +115,12 @@ export async function getLiveEventsForBusiness(businessSlug: string): Promise<Ev
     const business = businesses[0]
 
     // Get all events for this business
+    // For weekly events, starts_at might be null, so we'll order by created_at as fallback
     const { data, error } = await supabase
       .from('events')
       .select('*')
       .eq('org_id', business.id)
-      .order('starts_at', { ascending: true })
+      .order('starts_at', { ascending: true, nullsLast: true })
 
     if (error) {
       console.error('Error fetching events:', error)
@@ -127,7 +134,7 @@ export async function getLiveEventsForBusiness(businessSlug: string): Promise<Ev
     // Transform and filter to only live events
     const events = (data || []).map(transformEventRecord)
     
-    // Compute status for each event and filter to only live ones
+    // Compute status for each event and filter to only live one-time events (exclude weekly)
     const liveEvents = events
       .map(event => {
         // Compute status, but preserve draft and archived status
@@ -139,7 +146,7 @@ export async function getLiveEventsForBusiness(businessSlug: string): Promise<Ev
           status: finalStatus,
         }
       })
-      .filter(event => event.status === 'live')
+      .filter(event => event.status === 'live' && !event.is_weekly)
 
     return liveEvents
   } catch (error) {
@@ -172,11 +179,12 @@ export async function getPastEventsForBusiness(businessSlug: string): Promise<Ev
     const business = businesses[0]
 
     // Get all events for this business
+    // For weekly events, starts_at might be null, so we'll order by created_at as fallback
     const { data, error } = await supabase
       .from('events')
       .select('*')
       .eq('org_id', business.id)
-      .order('starts_at', { ascending: false }) // Most recent first for past events
+      .order('starts_at', { ascending: false, nullsLast: true }) // Most recent first for past events
 
     if (error) {
       console.error('Error fetching events:', error)
@@ -208,6 +216,12 @@ export async function getPastEventsForBusiness(businessSlug: string): Promise<Ev
         // 1. It has an ends_at date that is in the past, OR
         // 2. It has a publish_end_at that is in the past, OR
         // 3. Its computed status is 'past'
+        // Note: Weekly events might not have ends_at
+        if (!event.ends_at) {
+          // For weekly events without ends_at, check publish_end_at or status
+          const publishEndAt = event.publish_end_at ? new Date(event.publish_end_at) : null
+          return (publishEndAt && publishEndAt < now) || event.status === 'past'
+        }
         const endsAt = new Date(event.ends_at)
         const publishEndAt = event.publish_end_at ? new Date(event.publish_end_at) : null
         
@@ -253,6 +267,169 @@ export function formatEventDateUppercase(dateString: string): string {
     day: 'numeric', 
     year: 'numeric' 
   }).toUpperCase()
+}
+
+/**
+ * Format date and time for display with time included (e.g., "DECEMBER 5, 2025 at 8:00 PM")
+ */
+export function formatEventDateWithTime(startsAt?: string, endsAt?: string): string {
+  if (!startsAt) {
+    return 'Invalid date'
+  }
+
+  const start = new Date(startsAt)
+  
+  if (isNaN(start.getTime())) {
+    return 'Invalid date'
+  }
+  
+  const dateStr = start.toLocaleDateString('en-US', { 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  }).toUpperCase()
+  
+  const startTime = start.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  })
+  
+  if (endsAt) {
+    const end = new Date(endsAt)
+    if (!isNaN(end.getTime())) {
+      const endTime = end.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+      })
+      
+      // If same day, show date once with time range
+      if (start.toDateString() === end.toDateString()) {
+        return `${dateStr} · ${startTime} - ${endTime}`
+      } else {
+        // Different days
+        const endDateStr = end.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        }).toUpperCase()
+        return `${dateStr} · ${startTime} → ${endDateStr} · ${endTime}`
+      }
+    }
+  }
+  
+  return `${dateStr} at ${startTime}`
+}
+
+/**
+ * Format weekly event date and time for display
+ */
+export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  const dayName = dayNames[dayOfWeek] || 'Unknown'
+
+  if (!startsAt) {
+    return `Every ${dayName}`
+  }
+
+  const start = new Date(startsAt)
+  
+  if (isNaN(start.getTime())) {
+    return `Every ${dayName}`
+  }
+
+  const startTime = start.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  })
+
+  if (!endsAt) {
+    return `Every ${dayName} at ${startTime}`
+  }
+
+  const end = new Date(endsAt)
+  
+  if (isNaN(end.getTime())) {
+    return `Every ${dayName} at ${startTime}`
+  }
+
+  const endTime = end.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  })
+
+  if (startTime === endTime) {
+    return `Every ${dayName} at ${startTime}`
+  }
+
+  return `Every ${dayName} · ${startTime} - ${endTime}`
+}
+
+/**
+ * Get weekly events for a business by slug
+ * Only returns weekly events that are currently live (visible to public)
+ */
+export async function getWeeklyEventsForBusiness(businessSlug: string): Promise<Event[]> {
+  try {
+    // Use admin client to bypass RLS for public landing pages
+    const supabase = supabaseAdmin
+    
+    // First get business by slug
+    const { data: businesses, error: businessError } = await supabase
+      .from('businesses')
+      .select('id, name, slug')
+      .eq('slug', businessSlug)
+      .limit(1)
+
+    if (businessError || !businesses || businesses.length === 0) {
+      console.error('Error fetching business:', businessError)
+      return []
+    }
+
+    const business = businesses[0]
+
+    // Get all events for this business
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .eq('org_id', business.id)
+      .eq('is_weekly', true)
+      .order('day_of_week', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching events:', error)
+      return []
+    }
+
+    if (!data) {
+      return []
+    }
+
+    // Transform and filter to only live weekly events
+    const events = (data || []).map(transformEventRecord)
+    
+    // Compute status for each event and filter to only live ones
+    const liveWeeklyEvents = events
+      .map(event => {
+        // Compute status, but preserve draft and archived status
+        const finalStatus = (event.status === 'draft' || event.status === 'archived') 
+          ? event.status 
+          : computeEventStatus(event)
+        return {
+          ...event,
+          status: finalStatus,
+        }
+      })
+      .filter(event => event.status === 'live')
+
+    return liveWeeklyEvents
+  } catch (error) {
+    console.error('Error in getWeeklyEventsForBusiness:', error)
+    return []
+  }
 }
 
 /**

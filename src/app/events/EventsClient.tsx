@@ -12,11 +12,13 @@ interface EventsClientProps {
   events: EventItemData[];
 }
 
+type EventTab = 'weekly' | 'upcoming' | 'past';
+
 export default function EventsClient({ events: initialEvents }: EventsClientProps) {
   const { theme } = useTheme();
-  const [events, setEvents] = useState<EventItemData[]>(initialEvents);
-  const [pastEvents, setPastEvents] = useState<EventItemData[]>([]);
-  const [showPastEvents, setShowPastEvents] = useState(false);
+  const [activeTab, setActiveTab] = useState<EventTab>('weekly');
+  const [events, setEvents] = useState<EventItemData[]>([]);
+  const [loading, setLoading] = useState(false);
   const [businessId, setBusinessId] = useState<string | null>(null);
 
   // Get business slug and fetch business ID
@@ -43,11 +45,12 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
     fetchBusinessId();
   }, []);
 
-  // Fetch events initially and set up real-time subscription
+  // Fetch events based on active tab
   useEffect(() => {
     if (!businessId) return;
 
     const fetchEvents = async () => {
+      setLoading(true);
       try {
         const businessSlug = resolveBusinessSlug(
           undefined,
@@ -55,7 +58,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
           'johnny-gs-brunch'
         );
         
-        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}`);
+        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=${activeTab}`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }
@@ -64,6 +67,9 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
         setEvents(data.events || []);
       } catch (error) {
         console.error('Error fetching events:', error);
+        setEvents([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -84,7 +90,6 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
           console.log('Event change detected:', payload.eventType, payload);
           
           // Refetch events to get the latest state
-          // This ensures we get the correct computed status and filtering
           const businessSlug = resolveBusinessSlug(
             undefined,
             process.env.NEXT_PUBLIC_BUSINESS_SLUG,
@@ -92,7 +97,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
           );
           
           try {
-            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}`);
+            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=${activeTab}`);
             if (response.ok) {
               const data = await response.json();
               setEvents(data.events || []);
@@ -107,7 +112,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [businessId]);
+  }, [businessId, activeTab]);
 
   return (
     <section
@@ -151,46 +156,18 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
 
       {/* Content */}
       <EventsList
-        title="Upcoming Events"
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
         events={events}
-        emptyMessage="No upcoming events at this time. Check back soon!"
-        showButton={!showPastEvents}
-        buttonText="VIEW PAST EVENTS"
-        onButtonClick={async () => {
-          if (!showPastEvents && pastEvents.length === 0) {
-            try {
-              const businessSlug = resolveBusinessSlug(
-                undefined,
-                process.env.NEXT_PUBLIC_BUSINESS_SLUG,
-                'johnny-gs-brunch'
-              );
-
-              const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=past`);
-              if (response.ok) {
-                const data = await response.json();
-                setPastEvents(data.events || []);
-              }
-            } catch (error) {
-              console.error('Error fetching past events:', error);
-            }
-          }
-          setShowPastEvents(true);
-        }}
+        emptyMessage={
+          activeTab === 'weekly' 
+            ? 'No weekly events at this time. Check back soon!'
+            : activeTab === 'upcoming'
+            ? 'No upcoming events at this time. Check back soon!'
+            : 'No past events available.'
+        }
+        loading={loading}
       />
-
-      {/* Past Events Section */}
-      {showPastEvents && (
-        <EventsList
-          title="Past Events"
-          events={pastEvents}
-          emptyMessage="No past events available."
-          showButton={true}
-          buttonText="SEE LESS"
-          onButtonClick={() => {
-            setShowPastEvents(false);
-          }}
-        />
-      )}
     </section>
   );
 }

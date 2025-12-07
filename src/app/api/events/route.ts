@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getLiveEventsForBusiness, getPastEventsForBusiness, formatEventDateUppercase } from '@/lib/events'
+import { 
+  getLiveEventsForBusiness, 
+  getPastEventsForBusiness, 
+  getWeeklyEventsForBusiness,
+  formatEventDateUppercase,
+  formatEventDateWithTime,
+  formatWeeklyEventDate
+} from '@/lib/events'
 import { resolveBusinessSlug } from '@/lib/business-utils'
 
 export async function GET(request: NextRequest) {
@@ -7,7 +14,7 @@ export async function GET(request: NextRequest) {
     // Get business slug and event type from query params
     const { searchParams } = new URL(request.url)
     const businessSlugParam = searchParams.get('businessSlug')
-    const type = searchParams.get('type') || 'live' // 'live' or 'past'
+    const type = searchParams.get('type') || 'live' // 'weekly', 'live', or 'past'
     
     const businessSlug = resolveBusinessSlug(
       businessSlugParam || undefined,
@@ -16,17 +23,38 @@ export async function GET(request: NextRequest) {
     )
     
     // Fetch events from database based on type
-    const dbEvents = type === 'past' 
-      ? await getPastEventsForBusiness(businessSlug)
-      : await getLiveEventsForBusiness(businessSlug)
+    let dbEvents
+    if (type === 'weekly') {
+      dbEvents = await getWeeklyEventsForBusiness(businessSlug)
+    } else if (type === 'past') {
+      dbEvents = await getPastEventsForBusiness(businessSlug)
+    } else {
+      // 'live' - upcoming one-time events
+      dbEvents = await getLiveEventsForBusiness(businessSlug)
+    }
     
-    // Map database events to EventItemData format
-    const events = dbEvents.map(event => ({
-      date: formatEventDateUppercase(event.starts_at),
-      name: event.title,
-      description: event.description || event.short_description || '',
-      image: event.image_url,
-    }))
+    // Map database events to EventItemData format with proper date formatting
+    const events = dbEvents.map(event => {
+      let dateStr: string
+      
+      if (event.is_weekly && event.day_of_week !== undefined) {
+        // Weekly events: format as "Every [Day] at [Time]"
+        dateStr = formatWeeklyEventDate(event.day_of_week, event.starts_at, event.ends_at)
+      } else if (event.starts_at) {
+        // One-time events: format with date AND time
+        dateStr = formatEventDateWithTime(event.starts_at, event.ends_at)
+      } else {
+        // Fallback
+        dateStr = 'Date TBD'
+      }
+      
+      return {
+        date: dateStr,
+        name: event.title,
+        description: event.description || event.short_description || '',
+        image: event.image_url,
+      }
+    })
 
     return NextResponse.json({ events })
   } catch (error) {

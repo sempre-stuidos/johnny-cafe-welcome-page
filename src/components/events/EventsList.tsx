@@ -1,25 +1,27 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
 import EventItem, { EventItemData } from "./EventItem";
 
+type EventTab = 'weekly' | 'upcoming' | 'past';
+
 interface EventsListProps {
-  title: string;
+  activeTab: EventTab;
+  onTabChange: (tab: EventTab) => void;
   events: EventItemData[];
   emptyMessage?: string;
-  showButton?: boolean;
-  buttonText?: string;
-  onButtonClick?: () => void;
+  loading?: boolean;
 }
 
 export default function EventsList({
-  title,
+  activeTab,
+  onTabChange,
   events,
   emptyMessage = "No events at this time. Check back soon!",
-  showButton = false,
-  buttonText = "VIEW EVENTS",
-  onButtonClick,
+  loading = false,
 }: EventsListProps) {
+  const { theme } = useTheme();
   return (
     <div
       className={cn(
@@ -33,22 +35,51 @@ export default function EventsList({
     >
       {/* Header Section */}
       <div className="flex flex-col gap-3 md:gap-6">
-        {/* Main Title */}
-        <h1
-          className={cn(
-            "text-center",
-            "transition-colors duration-300"
-          )}
-          style={{
-            fontFamily: "var(--font-pinyon-script)",
-            fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-5xl))",
-            color: "var(--theme-text-primary)",
-            lineHeight: "var(--line-height-tight)",
-            fontWeight: 400,
-          }}
-        >
-          {title}
-        </h1>
+        {/* Tabs */}
+        <div className="flex items-center justify-center gap-8 md:gap-24">
+          <p
+            onClick={() => onTabChange('weekly')}
+            className="cursor-pointer transition-colors duration-300"
+            style={{
+              fontFamily: "var(--font-pinyon-script)",
+              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+              color: "var(--theme-text-primary)",
+              lineHeight: "var(--line-height-normal)",
+              fontWeight: activeTab === 'weekly' ? 600 : 400,
+              fontStyle: "normal",
+            }}
+          >
+            Weekly Events
+          </p>
+          <p
+            onClick={() => onTabChange('upcoming')}
+            className="cursor-pointer transition-colors duration-300"
+            style={{
+              fontFamily: "var(--font-pinyon-script)",
+              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+              color: "var(--theme-text-primary)",
+              lineHeight: "var(--line-height-normal)",
+              fontWeight: activeTab === 'upcoming' ? 600 : 400,
+              fontStyle: "normal",
+            }}
+          >
+            Upcoming Events
+          </p>
+          <p
+            onClick={() => onTabChange('past')}
+            className="cursor-pointer transition-colors duration-300"
+            style={{
+              fontFamily: "var(--font-pinyon-script)",
+              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+              color: "var(--theme-text-primary)",
+              lineHeight: "var(--line-height-normal)",
+              fontWeight: activeTab === 'past' ? 600 : 400,
+              fontStyle: "normal",
+            }}
+          >
+            Past Events
+          </p>
+        </div>
 
         {/* Divider */}
         <div className="flex justify-center">
@@ -63,7 +94,16 @@ export default function EventsList({
 
       {/* Events List */}
       <div className="flex flex-col gap-6 md:gap-12 items-center">
-        {events.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-12">
+            <p
+              className="transition-colors duration-300"
+              style={{ color: "var(--theme-text-light-cream)" }}
+            >
+              Loading events...
+            </p>
+          </div>
+        ) : events.length === 0 ? (
           <div className="text-center py-12">
             <p
               className="transition-colors duration-300"
@@ -92,27 +132,6 @@ export default function EventsList({
           ))
         )}
       </div>
-
-      {/* Button */}
-      {showButton && (
-        <div className="flex justify-center mt-6 md:mt-12 pb-6 md:pb-0">
-          <button
-            onClick={onButtonClick}
-            className={cn(
-              "btn-reservation",
-              "flex items-center gap-2",
-              "w-full max-w-[280px] md:w-auto md:max-w-none",
-              "text-sm md:text-base",
-              "cursor-pointer"
-            )}
-            style={{
-              fontSize: "clamp(var(--font-size-sm), 3vw, var(--font-size-base))",
-            }}
-          >
-            {buttonText}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

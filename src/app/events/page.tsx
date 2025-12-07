@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import EventItem, { EventItemData } from "@/components/events/EventItem";
-import { getLiveEventsForBusiness, formatEventDateUppercase } from "@/lib/events";
+import { getWeeklyEventsForBusiness, formatWeeklyEventDate, formatEventDateWithTime } from "@/lib/events";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 import EventsClient from "./EventsClient";
 
@@ -12,16 +12,27 @@ export default async function EventsPage() {
     'johnny-gs-brunch'
   );
   
-  // Fetch live events from database
-  const dbEvents = await getLiveEventsForBusiness(businessSlug);
+  // Fetch weekly events from database (default tab)
+  const dbEvents = await getWeeklyEventsForBusiness(businessSlug);
   
   // Map database events to EventItemData format
-  const events: EventItemData[] = dbEvents.map(event => ({
-    date: formatEventDateUppercase(event.starts_at),
-    name: event.title,
-    description: event.description || event.short_description || '',
-    image: event.image_url,
-  }));
+  const events: EventItemData[] = dbEvents.map(event => {
+    let dateStr: string
+    if (event.is_weekly && event.day_of_week !== undefined) {
+      dateStr = formatWeeklyEventDate(event.day_of_week, event.starts_at, event.ends_at)
+    } else if (event.starts_at) {
+      dateStr = formatEventDateWithTime(event.starts_at, event.ends_at)
+    } else {
+      dateStr = 'Date TBD'
+    }
+    
+    return {
+      date: dateStr,
+      name: event.title,
+      description: event.description || event.short_description || '',
+      image: event.image_url,
+    }
+  });
 
   return <EventsClient events={events} />;
 }
