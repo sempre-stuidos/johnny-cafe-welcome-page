@@ -238,7 +238,6 @@ span {
   font-size: 16px;
   line-height: 100%;
   letter-spacing: 0%;
-  color: #334D2D;
 }
 
 /* Decorative Text (for logo, special headings) */
@@ -423,6 +422,22 @@ code, pre {
   font-size: 16px;
   color: #334D2D;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-reservation:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+.btn-reservation:hover .btn-reservation-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+[data-theme="night"] .btn-reservation:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
 }
 
 /* Theme Toggle */
@@ -466,6 +481,11 @@ code, pre {
 
 [data-theme="night"] .btn-reservation-arrow {
   filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+[data-theme="night"] .btn-reservation:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
 }
 
 [data-theme="night"] .theme-toggle-knob {
@@ -564,6 +584,18 @@ code, pre {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-menu:hover {
+  background-color: #B29738;
+  border-color: #B29738;
+  color: #FAF2DD;
+}
+
+.btn-menu:hover .btn-menu-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
 }
 
 .btn-menu-arrow {
@@ -580,6 +612,11 @@ code, pre {
 
 [data-theme="night"] .btn-menu-arrow {
   filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+[data-theme="night"] .btn-menu:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
 }
 
 /* Footer Styles */
@@ -1321,10 +1358,8 @@ code, pre {
 .testimonials-button-prev,
 .testimonials-button-next {
   position: absolute;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: rgba(178, 151, 56, 0.2);
+  width: 56px;
+  height: 56px;
   border: 2px solid #B29738;
   display: flex;
   align-items: center;
@@ -1332,8 +1367,7 @@ code, pre {
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
-  color: #B29738;
-  bottom: -70px;
+  bottom: -30px;
 }
 
 .testimonials-button-prev {
@@ -1346,8 +1380,28 @@ code, pre {
   transform: translateX(70px);
 }
 
-.testimonials-button-prev:hover,
-.testimonials-button-next:hover {
+/* Day Theme */
+[data-theme="day"] .testimonials-button-prev,
+[data-theme="day"] .testimonials-button-next {
+  background-color: #FAF2DD;
+  color: #334D2D;
+}
+
+[data-theme="day"] .testimonials-button-prev:hover,
+[data-theme="day"] .testimonials-button-next:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+/* Night Theme */
+[data-theme="night"] .testimonials-button-prev,
+[data-theme="night"] .testimonials-button-next {
+  background-color: #011A0C;
+  color: #FAF2DD;
+}
+
+[data-theme="night"] .testimonials-button-prev:hover,
+[data-theme="night"] .testimonials-button-next:hover {
   background-color: #B29738;
   color: #FAF2DD;
 }
@@ -1461,4 +1515,132 @@ input:-webkit-autofill:active {
   .react-datepicker__input-container input::placeholder {
     font-size: 12px;
   }
+}
+
+/* Reserve or Order Section Styles */
+.reserve-primary-btn {
+  background-color: transparent;
+  font-family: var(--font-hornbill-trial);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0%;
+  transition: all 0.3s ease;
+}
+
+.reserve-primary-btn-day {
+  border-color: #334D2D;
+  color: #334D2D;
+}
+
+.reserve-primary-btn-day:hover {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  transform: translateY(-2px);
+}
+
+.reserve-primary-btn-night {
+  border-color: var(--theme-accent);
+  color: #FAF2DD;
+}
+
+.reserve-primary-btn-night:hover {
+  background-color: var(--theme-accent);
+  color: #011A0C;
+  transform: translateY(-2px);
+}
+
+.reserve-divider-line {
+  height: 1px;
+  opacity: 0.3;
+}
+
+.reserve-divider-line-day {
+  background-color: #334D2D;
+}
+
+.reserve-divider-line-night {
+  background-color: var(--theme-accent);
+}
+
+.reserve-divider-text {
+  font-family: var(--font-amoret-sans);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.reserve-divider-text-day {
+  color: #334D2D;
+}
+
+.reserve-divider-text-night {
+  color: var(--theme-accent);
+}
+
+.reserve-subtitle {
+  font-family: var(--font-amoret-sans);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.reserve-subtitle-day {
+  color: #011A0C;
+}
+
+.reserve-subtitle-night {
+  color: #FAF2DD;
+}
+
+.reserve-delivery-btn {
+  background-color: transparent;
+  font-family: var(--font-hornbill-trial);
+  font-size: 20px;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+/* Day theme delivery buttons */
+a.reserve-delivery-btn.reserve-delivery-btn-day {
+  border-color: #334D2D;
+  color: #334D2D;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-day:hover {
+  background-color: #334D2D;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Night theme delivery buttons */
+a.reserve-delivery-btn.reserve-delivery-btn-night {
+  border-color: #B29738;
+  color: #FAF2DD;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-night:hover {
+  background-color: #B29738;
+  color: #011A0C;
+  transform: translateY(-2px);
+}
+
+/* SVG Icons - Day theme */
+a.reserve-delivery-btn.reserve-delivery-btn-day svg {
+  stroke: #334D2D;
+  transition: stroke 0.3s ease;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-day:hover svg {
+  stroke: #FFFFFF;
+}
+
+/* SVG Icons - Night theme */
+a.reserve-delivery-btn.reserve-delivery-btn-night svg {
+  stroke: #FAF2DD;
+  transition: stroke 0.3s ease;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
+  stroke: #011A0C;
 }

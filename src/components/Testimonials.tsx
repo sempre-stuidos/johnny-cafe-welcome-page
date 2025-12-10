@@ -45,7 +45,7 @@ export default function Testimonials() {
     <section
       className={cn(
         "relative",
-        "w-full h-auto min-h-[600px]",
+        "w-full h-auto min-h-[600px] pb-20",
         "transition-colors duration-300",
         theme === "day" ? "bg-menu-section-day" : "bg-menu-section-night"
       )}

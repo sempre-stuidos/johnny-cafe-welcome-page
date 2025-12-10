@@ -4,6 +4,7 @@ import HomeAbout from "@/components/HomeAbout";
 import HomeMenu from "@/components/HomeMenu";
 import HomeEvents from "@/components/HomeEvents";
 import Testimonials from "@/components/Testimonials";
+import ReserveOrOrder from "@/components/ReserveOrOrder";
 import { getLiveEventsForBusiness, formatEventDate } from "@/lib/events";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 
@@ -41,6 +42,7 @@ export default async function Home() {
       <HomeMenu />
       <HomeEvents events={homeEvents} />
       <Testimonials />
+      <ReserveOrOrder />
     </main>
   )
 }
