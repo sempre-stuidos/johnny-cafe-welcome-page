@@ -1303,6 +1303,61 @@ code, pre {
   fill: none;
 }
 
+/* Testimonials Styles */
+.testimonials-swiper {
+  position: relative;
+}
+
+.testimonial-card {
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Navigation Arrows - Below slider on all devices */
+.testimonials-swiper {
+  padding-bottom: 100px;
+}
+
+.testimonials-button-prev,
+.testimonials-button-next {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(178, 151, 56, 0.2);
+  border: 2px solid #B29738;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  color: #B29738;
+  bottom: -70px;
+}
+
+.testimonials-button-prev {
+  left: 50%;
+  transform: translateX(-70px);
+}
+
+.testimonials-button-next {
+  right: 50%;
+  transform: translateX(70px);
+}
+
+.testimonials-button-prev:hover,
+.testimonials-button-next:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+.testimonials-button-prev.swiper-button-disabled,
+.testimonials-button-next.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .react-datepicker__input-container input::placeholder {
   opacity: 1;
 }
