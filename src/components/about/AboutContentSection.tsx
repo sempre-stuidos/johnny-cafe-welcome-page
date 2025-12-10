@@ -81,7 +81,9 @@ export default function AboutContentSection() {
                 "text-[#B29738]",
                 "mb-6"
               )}
-              style={{ fontFamily: "var(--font-pinyon-script)" }}
+              style={{ fontFamily: "var(--font-pinyon-script)",
+                color: theme === "day" ? "var(--about-text)" : "var(--theme-text-light-cream)"
+            }}
             >
               {secondSection.title}
             </h2>
@@ -96,7 +98,9 @@ export default function AboutContentSection() {
                       "font-normal",
                       "leading-relaxed"
                   )}
-                  style={{ fontFamily: "var(--font-gayathri)" }}
+                  style={{ fontFamily: "var(--font-gayathri)",
+                    color: theme === "day" ? "var(--about-text)" : "var(--theme-text-light-cream)",
+              }}
               >
                 {secondSection.text}
               </p>
@@ -153,7 +157,7 @@ export default function AboutContentSection() {
                   )}
                   style={{
                     fontFamily: "var(--font-gayathri)",
-                    color: "var(--theme-text-light-cream)",
+                    color: theme === "day" ? "var(--theme-text-body)" : "var(--theme-text-light-cream)",
                   }}
                 >
                   {typeof image === 'string' ? '' : image.description}

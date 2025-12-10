@@ -133,7 +133,7 @@ export default function AboutHeroSection() {
                   style={{
                     fontFamily: "var(--font-pinyon-script)",
                     fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
-                    color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
+                    color: theme === "day" ? "var(--theme-text-light-cream)" : "var(--theme-text-light-cream)",
                     lineHeight: "var(--line-height-normal)",
                     fontWeight: 400,
                     fontStyle: "normal",
