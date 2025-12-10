@@ -57,7 +57,7 @@ export default function Nav() {
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-8 pt-2" data-animate="nav-links">
               {navLinks
-                .filter((link) => !["/about", "/gallery", "/contact"].includes(link.href))
+                .filter((link) => !["/gallery", "/contact"].includes(link.href))
                 .map((link) => (
                   <Link
                     key={link.href}
@@ -138,7 +138,7 @@ export default function Nav() {
           {/* Navigation Links */}
           <div className="flex flex-col gap-6">
             {navLinks
-              .filter((link) => !["/about", "/gallery", "/contact"].includes(link.href))
+              .filter((link) => !["/gallery", "/contact"].includes(link.href))
               .map((link) => (
                 <Link
                   key={link.href}
