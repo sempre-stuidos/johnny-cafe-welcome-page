@@ -15,7 +15,7 @@ export default function HomeAbout() {
     <section
       className={cn(
         "relative",
-        "w-full h-auto min-h-[668px]",
+        "w-full h-auto min-h-[600px]",
         "transition-colors duration-300",
         "bg-about-section",
         "z-30"

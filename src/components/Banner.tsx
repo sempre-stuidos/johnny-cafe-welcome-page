@@ -50,50 +50,74 @@ export default function Banner() {
         className="hidden md:flex items-center justify-center gap-4 text-center"
         data-animate="nav-banner"
       >
-        <span className="banner-text">
-          Brunch: {brunch}
+        <span className="flex items-baseline gap-2">
+          <span className="footer-meal-label" style={{ fontSize: '24px' }}>
+            Brunch
+          </span>
+          <span className="footer-meal-time">
+            {brunch}
+          </span>
         </span>
         <span className="banner-separator">
           |
         </span>
-        <span className="banner-text">
-          Dinner: {dinner}
+        <span className="flex items-baseline gap-2">
+          <span className="footer-meal-label" style={{ fontSize: '24px' }}>
+            Dinner
+          </span>
+          <span className="footer-meal-time">
+            {dinner}
+          </span>
         </span>
         <span className="banner-separator">
           |
         </span>
-        <span className="banner-text">
-          Live Jazz: {jazz}
+        <span className="flex items-baseline gap-2">
+          <span className="footer-meal-label" style={{ fontSize: '24px' }}>
+            Jazz
+          </span>
+          <span className="footer-meal-time">
+            {jazz}
+          </span>
         </span>
       </div>
 
       <div
         ref={!isDesktop ? containerRef : null}
-        className="md:hidden relative w-full text-center min-h-[20px]"
+        className="md:hidden relative w-full text-center min-h-[28px]"
         data-animate="nav-banner"
       >
         <div
           data-banner-section
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center gap-2"
         >
-          <span className="banner-text">
-            Brunch: {brunch}
+          <span className="footer-meal-label" style={{ fontSize: '20px' }}>
+            Brunch
+          </span>
+          <span className="footer-meal-time" style={{ fontSize: '12px' }}>
+            {brunch}
           </span>
         </div>
         <div
           data-banner-section
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center gap-2"
         >
-          <span className="banner-text">
-            Dinner: {dinner}
+          <span className="footer-meal-label" style={{ fontSize: '20px' }}>
+            Dinner
+          </span>
+          <span className="footer-meal-time" style={{ fontSize: '12px' }}>
+            {dinner}
           </span>
         </div>
         <div
           data-banner-section
-          className="absolute inset-0 flex items-center justify-center"
+          className="absolute inset-0 flex items-center justify-center gap-2"
         >
-          <span className="banner-text">
-            Live Jazz: {jazz}
+          <span className="footer-meal-label" style={{ fontSize: '20px' }}>
+            Jazz
+          </span>
+          <span className="footer-meal-time" style={{ fontSize: '12px' }}>
+            {jazz}
           </span>
         </div>
       </div>

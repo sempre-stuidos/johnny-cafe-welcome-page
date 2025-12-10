@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/lib/animations/hooks";
@@ -10,8 +12,8 @@ export default function HomeReservation() {
   const { theme } = useTheme();
   const contentRef = useScrollReveal();
   const [partySize, setPartySize] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,10 +25,18 @@ export default function HomeReservation() {
     setError("");
 
     // Basic validation
-    if (!partySize || !date || !time || !email || !phone) {
+    if (!partySize || !selectedDate || !selectedTime || !email || !phone) {
       setError("Please fill in all fields");
       return;
     }
+
+    // Format date as YYYY-MM-DD
+    const formattedDate = selectedDate.toISOString().split('T')[0];
+    
+    // Format time as HH:MM
+    const hours = selectedTime.getHours().toString().padStart(2, '0');
+    const minutes = selectedTime.getMinutes().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
 
     setIsSubmitting(true);
 
@@ -38,8 +48,8 @@ export default function HomeReservation() {
         },
         body: JSON.stringify({
           partySize,
-          date,
-          time,
+          date: formattedDate,
+          time: formattedTime,
           email,
           phone,
         }),
@@ -65,13 +75,10 @@ export default function HomeReservation() {
       className={cn(
         "relative",
         "w-full h-auto min-h-[668px]",
-        "overflow-hidden",
-        "transition-colors duration-300"
+        "overflow-visible",
+        "reservation-section-bg",
+        "pb-[400px] md:pb-[450px]"
       )}
-      style={{
-        backgroundColor:
-          theme === "day" ? "rgba(194, 202, 168, 1)" : "rgba(1, 26, 12, 1)",
-      }}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -99,14 +106,8 @@ export default function HomeReservation() {
       <div
         className={cn(
           "absolute inset-0 z-10",
-          "transition-colors duration-300"
+          "reservation-overlay"
         )}
-        style={{
-          backgroundColor:
-            theme === "day"
-              ? "rgba(194, 202, 168, 0.85)"
-              : "rgba(1, 26, 12, 0.70)",
-        }}
       />
 
       {/* Content */}
@@ -115,7 +116,8 @@ export default function HomeReservation() {
         className={cn(
           "relative z-20",
           "h-full w-full",
-          "px-4 md:px-8 py-0 md:py-0"
+          "px-4 md:px-8 py-0 md:py-0",
+          "overflow-visible"
         )}
         data-animate="section"
       >
@@ -123,37 +125,27 @@ export default function HomeReservation() {
           className={cn(
             "flex flex-col md:flex-row",
             "h-full w-full max-w-[1200px]",
-            "mx-auto gap-4 md:gap-8"
+            "mx-auto gap-4 md:gap-8",
+            "overflow-visible"
           )}
         >
           {/* Left Side Content - Top on mobile, Left on desktop */}
           <div
             className={cn(
-              "flex flex-col",
+              "flex flex-col justify-between",
               "gap-6 md:gap-8",
               "w-full md:w-[40%]",
               "pt-4 md:pt-6",
-              "order-1"
             )}
           >
             {/* Heading */}
               <div className="flex flex-col gap-4">
-                  <h4
-                      style={{
-                          fontSize: "clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl))",
-                          color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--color-theme-accent)",
-                          fontWeight: 400,
-                          lineHeight: "var(--line-height-tight)",
-                      }}
-                      className="capitalize"
-                  >
+                  <h4 className="reservation-heading">
                      Your Table Awaits
                   </h4>
 
                   {/* Decorative "Reserve Now" text */}
-                  <h2
-                      className="hero-brunch-title transition-colors duration-300"
-                  >
+                  <h2 className="hero-brunch-title transition-colors duration-300">
                       Reserve Now
                   </h2>
               </div>
@@ -178,7 +170,8 @@ export default function HomeReservation() {
               "w-full md:w-[60%]",
               "order-2",
               "py-8 md:py-0 md:mt-8",
-              "relative"
+              "relative",
+              "overflow-visible"
             )}
           >
             <div
@@ -188,53 +181,17 @@ export default function HomeReservation() {
                 "min-h-[600px] md:min-h-[668px] max-w-full md:max-w-[597px]",
                 "relative",
                 "p-4 md:p-8 pb-8",
-                "overflow-visible"
+                "overflow-visible",
+                "reservation-frame"
               )}
-              style={{
-                backgroundColor: "transparent",
-              }}
             >
               {/* Confirmation Message */}
               {isSubmitted ? (
-                <div
-                  className="flex flex-col items-center justify-center gap-4 w-full absolute"
-                  style={{
-                    backgroundColor: "transparent",
-                    top: "180px",
-                    left: "0",
-                    right: "0",
-                    padding: "0px 80px",
-                  }}
-                >
-                  <h3
-                    className="uppercase text-center transition-colors duration-300"
-                    style={{
-                      fontFamily: "var(--font-gayathri)",
-                      fontWeight: 700,
-                      fontSize: "24px",
-                      lineHeight: "120%",
-                      letterSpacing: "2%",
-                      color:
-                        theme === "day"
-                          ? "#334D2D"
-                          : "var(--theme-text-light-cream)",
-                      marginBottom: "8px",
-                    }}
-                  >
+                <div className="flex flex-col items-center justify-center gap-4 w-full absolute reservation-confirmation-container">
+                  <h3 className="reservation-confirmation-title">
                     Thank You!
                   </h3>
-                  <p
-                    className="text-center transition-colors duration-300"
-                    style={{
-                      fontFamily: "var(--font-amoret-sans)",
-                      fontSize: "var(--font-size-base)",
-                      lineHeight: "150%",
-                      color:
-                        theme === "day"
-                          ? "#334D2D"
-                          : "var(--theme-text-light-cream)",
-                    }}
-                  >
+                  <p className="reservation-confirmation">
                     Your reservation request has been submitted successfully. We will contact you soon to confirm your reservation.
                   </p>
                 </div>
@@ -242,31 +199,14 @@ export default function HomeReservation() {
                 /* Form */
                 <form
                   onSubmit={handleSubmit}
-                  className="flex flex-col gap-3 md:gap-4 w-full absolute px-2 md:px-20"
-                  style={{
-                    backgroundColor: "transparent",
-                    bottom: "20px",
-                    left: "0",
-                    right: "0",
-                  }}
+                  className="flex flex-col gap-3 md:gap-4 w-full absolute px-2 md:px-20 reservation-form-container"
                 >
                 {/* Row 1: Party Size + Star Vector */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex flex-col gap-2 relative">
                     <label
                       htmlFor="party-size"
-                      className="uppercase transition-colors duration-300"
-                      style={{
-                        fontFamily: "var(--font-gayathri)",
-                        fontWeight: 700,
-                        fontSize: "17.31px",
-                        lineHeight: "100%",
-                        letterSpacing: "2%",
-                        color:
-                          theme === "day"
-                            ? "#334D2D"
-                            : "var(--theme-text-light-cream)",
-                      }}
+                      className="reservation-label"
                     >
                       PARTY SIZE
                     </label>
@@ -278,21 +218,7 @@ export default function HomeReservation() {
                       value={partySize}
                       onChange={(e) => setPartySize(e.target.value)}
                       required
-                      className="transition-colors duration-300 focus:outline-none"
-                      style={{
-                        width: "173px",
-                        height: "40px",
-                        border: "1px solid #B29738",
-                        borderWidth: "1px",
-                        backgroundColor: "transparent",
-                        color:
-                          theme === "day"
-                            ? "#334D2D"
-                            : "var(--theme-text-light-cream)",
-                        padding: "0 12px",
-                        fontFamily: "var(--font-amoret-sans)",
-                        fontSize: "var(--font-size-base)",
-                      }}
+                      className="reservation-party-size-input"
                     />
                     <Image
                       src="/star-vector.svg"
@@ -314,83 +240,44 @@ export default function HomeReservation() {
                   <div className="flex flex-col gap-2 flex-1">
                     <label
                       htmlFor="date"
-                      className="uppercase transition-colors duration-300"
-                      style={{
-                        fontFamily: "var(--font-gayathri)",
-                        fontWeight: 700,
-                        fontSize: "17.31px",
-                        lineHeight: "100%",
-                        letterSpacing: "2%",
-                        color:
-                          theme === "day"
-                            ? "#334D2D"
-                            : "var(--theme-text-light-cream)",
-                      }}
+                      className="reservation-label"
                     >
                       DATE
                     </label>
-                    <input
-                      type="date"
-                      id="date"
-                      name="date"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
+                    <DatePicker
+                      selected={selectedDate}
+                      onChange={(date) => setSelectedDate(date)}
+                      minDate={new Date()}
+                      dateFormat="MMM d, yyyy"
+                      placeholderText="Select a date"
                       required
-                      className="w-full transition-colors duration-300 focus:outline-none"
-                      style={{
-                        height: "40px",
-                        border: "1px solid #B29738",
-                        borderWidth: "1px",
-                        backgroundColor: "transparent",
-                        color:
-                          theme === "day"
-                            ? "#334D2D"
-                            : "var(--theme-text-light-cream)",
-                        padding: "0 12px",
-                        fontFamily: "var(--font-amoret-sans)",
-                        fontSize: "var(--font-size-base)",
-                      }}
+                      popperPlacement="bottom-start"
+                      className="w-full transition-colors duration-300 focus:outline-none reservation-datepicker"
+                      wrapperClassName="w-full"
                     />
                   </div>
                   <div className="flex flex-col gap-2 flex-1">
                     <label
                       htmlFor="time"
-                      className="uppercase transition-colors duration-300"
-                      style={{
-                        fontFamily: "var(--font-gayathri)",
-                        fontWeight: 700,
-                        fontSize: "17.31px",
-                        lineHeight: "100%",
-                        letterSpacing: "2%",
-                        color:
-                          theme === "day"
-                            ? "#334D2D"
-                            : "var(--theme-text-light-cream)",
-                      }}
+                      className="reservation-label"
                     >
                       TIME
                     </label>
-                    <input
-                      type="time"
-                      id="time"
-                      name="time"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
+                    <DatePicker
+                      selected={selectedTime}
+                      onChange={(date) => setSelectedTime(date)}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={30}
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
+                      placeholderText="Select a time"
                       required
-                      className="w-full transition-colors duration-300 focus:outline-none"
-                      style={{
-                        height: "40px",
-                        border: "1px solid #B29738",
-                        borderWidth: "1px",
-                        backgroundColor: "transparent",
-                        color:
-                          theme === "day"
-                            ? "#334D2D"
-                            : "var(--theme-text-light-cream)",
-                        padding: "0 12px",
-                        fontFamily: "var(--font-amoret-sans)",
-                        fontSize: "var(--font-size-base)",
-                      }}
+                      popperPlacement="bottom-start"
+                      minTime={new Date(new Date().setHours(19, 0, 0, 0))}
+                      maxTime={new Date(new Date().setHours(23, 30, 0, 0))}
+                      className="w-full transition-colors duration-300 focus:outline-none reservation-datepicker"
+                      wrapperClassName="w-full"
                     />
                   </div>
                 </div>
@@ -399,18 +286,7 @@ export default function HomeReservation() {
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="email"
-                    className="uppercase transition-colors duration-300"
-                    style={{
-                      fontFamily: "var(--font-gayathri)",
-                      fontWeight: 700,
-                      fontSize: "17.31px",
-                      lineHeight: "100%",
-                      letterSpacing: "2%",
-                      color:
-                        theme === "day"
-                          ? "#334D2D"
-                          : "var(--theme-text-light-cream)",
-                    }}
+                    className="reservation-label"
                   >
                     EMAIL
                   </label>
@@ -421,20 +297,7 @@ export default function HomeReservation() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full transition-colors duration-300 focus:outline-none"
-                    style={{
-                      height: "40px",
-                      border: "1px solid #B29738",
-                      borderWidth: "1px",
-                      backgroundColor: "transparent",
-                      color:
-                        theme === "day"
-                          ? "#334D2D"
-                          : "var(--theme-text-light-cream)",
-                      padding: "0 12px",
-                      fontFamily: "var(--font-amoret-sans)",
-                      fontSize: "var(--font-size-base)",
-                    }}
+                    className="reservation-input"
                   />
                 </div>
 
@@ -442,18 +305,7 @@ export default function HomeReservation() {
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="phone"
-                    className="uppercase transition-colors duration-300"
-                    style={{
-                      fontFamily: "var(--font-gayathri)",
-                      fontWeight: 700,
-                      fontSize: "17.31px",
-                      lineHeight: "100%",
-                      letterSpacing: "2%",
-                      color:
-                        theme === "day"
-                          ? "#334D2D"
-                          : "var(--theme-text-light-cream)",
-                    }}
+                    className="reservation-label"
                   >
                     PHONE
                   </label>
@@ -464,54 +316,29 @@ export default function HomeReservation() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required
-                    className="w-full transition-colors duration-300 focus:outline-none"
-                    style={{
-                      height: "40px",
-                      border: "1px solid #B29738",
-                      borderWidth: "1px",
-                      backgroundColor: "transparent",
-                      color:
-                        theme === "day"
-                          ? "#334D2D"
-                          : "var(--theme-text-light-cream)",
-                      padding: "0 12px",
-                      fontFamily: "var(--font-amoret-sans)",
-                      fontSize: "var(--font-size-base)",
-                    }}
+                    className="reservation-input"
                   />
                 </div>
 
                 {/* Error Message */}
                 {error && (
-                  <div
-                    className="text-center transition-colors duration-300"
-                    style={{
-                      fontFamily: "var(--font-amoret-sans)",
-                      fontSize: "var(--font-size-sm)",
-                      color: "#dc2626",
-                      padding: "8px 0",
-                    }}
-                  >
+                  <div className="reservation-error">
                     {error}
                   </div>
                 )}
 
                 {/* Submit Button */}
-                <div className="flex justify-center mt-4 ">
+                <div className="flex justify-center mt-4">
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     className={cn(
                       "btn-reservation",
+                      "reservation-submit-button",
                       "flex items-center gap-2",
                       "w-full",
                       isSubmitting && "opacity-50 cursor-not-allowed"
                     )}
-                    style={{
-                      fontSize: "clamp(var(--font-size-xs), 2.5vw, var(--font-size-sm))",
-                      height: "44px",
-                      padding: "12px 24px",
-                    }}
                   >
                     {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
                   </button>

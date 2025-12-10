@@ -3,22 +3,17 @@
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
-import { usePageLoadAnimation } from "@/lib/animations/hooks";
 
 export default function PrivateEventsNotice() {
   const { theme } = useTheme();
-
-  // Page load animation - triggers after nav completes
-  usePageLoadAnimation('[data-animate="private-events-content"]', "hero");
 
   return (
     <section
       className={cn(
         "relative",
-        "w-full h-[100vh] md:h-auto md:min-h-[668px]",
-        "overflow-hidden",
-        "z-10",
-        theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
+        "w-full h-auto",
+        "transition-colors duration-300",
+        "bg-about-section"
       )}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
@@ -43,12 +38,12 @@ export default function PrivateEventsNotice() {
         </div>
       </div>
 
-      {/* Theme Overlay - light for day, dark for night */}
+      {/* Theme Overlay */}
       <div
         className={cn(
           "absolute inset-0 z-10",
           "transition-colors duration-300",
-          theme === "day" ? "bg-[#334D2D]/85" : "bg-[#011A0C]/90"
+          theme === "day" ? "overlay-about-day" : "overlay-about-night"
         )}
       />
 
@@ -57,41 +52,104 @@ export default function PrivateEventsNotice() {
         className={cn(
           "relative z-20",
           "h-full w-full",
-          "px-4 md:px-8"
+          "px-4 md:px-8 py-8 md:py-12"
         )}
-        data-animate="private-events-content"
       >
-        <div
-          className={cn(
-            "flex flex-col md:flex-row",
-            "h-full md:h-[90vh] w-full max-w-[1200px]",
-            "mx-auto gap-4 md:gap-8"
-          )}
-        >
-          {/* Text Content - Centered */}
-          <div
-            className={cn(
-              "flex flex-col items-center justify-center",
-              "w-full",
-              "py-4 md:py-6",
-              "text-center"
-            )}
-          >
-            <div className="hero-title-section mt-2 md:mt-6">
-              <h3 className="mb-4 md:mb-6">PRIVATE EVENTS</h3>
-              
-              <h4 className="max-w-[600px] mb-8 md:mb-12 mx-auto">
-                If you are looking for private events, please make an inquiry
-              </h4>
-              
-              <div className="flex justify-center w-full">
+        <div className={cn(
+          "flex flex-col items-center",
+          "w-full max-w-[1200px]",
+          "mx-auto",
+          "text-center"
+        )}>
+          <h2 className="section-heading mb-4">
+            Private Events & Booking
+          </h2>
+          
+          <p className="text-about mb-8 md:mb-12 max-w-[900px]">
+            Host your special occasion in the intimate ambiance of Johnny G's. Perfect for corporate events, celebrations, and private performances.
+          </p>
+
+          {/* Three Features */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 w-full max-w-[1000px] mb-12">
+            {/* Intimate Gatherings */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="private-events-icon-circle">
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="private-events-icon"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <h3 className="private-events-feature-title">
+                INTIMATE GATHERINGS
+              </h3>
+              <p className="text-about">
+                Perfect for groups of 10-50 guests
+              </p>
+            </div>
+
+            {/* Live Entertainment */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="private-events-icon-circle">
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="private-events-icon"
+                >
+                  <path d="M9 18V5l12-2v13" />
+                  <circle cx="6" cy="18" r="3" />
+                  <circle cx="18" cy="16" r="3" />
+                </svg>
+              </div>
+              <h3 className="private-events-feature-title">
+                LIVE ENTERTAINMENT
+              </h3>
+              <p className="text-about">
+                Custom jazz performances available
+              </p>
+            </div>
+
+            {/* Flexible Timing */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="private-events-icon-circle">
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="private-events-icon"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <h3 className="private-events-feature-title">
+                FLEXIBLE TIMING
+              </h3>
+              <p className="text-about">
+                Daytime and evening availability
+              </p>
+            </div>
+          </div>
+
+          {/* Make Inquiry Button */}
                 <a
                   href="mailto:johnnygs478@gmail.com"
                   className={cn(
                     "btn-reservation",
-                    "flex items-center gap-2",
-                    "mt-4 md:mt-8 mb-4",
-                    "inline-flex"
+              "flex items-center gap-2"
                   )}
                 >
                   Make Inquiry
@@ -106,12 +164,8 @@ export default function PrivateEventsNotice() {
                     )}
                   />
                 </a>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
   );
 }
-

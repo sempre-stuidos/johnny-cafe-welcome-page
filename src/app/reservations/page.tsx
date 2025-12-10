@@ -28,7 +28,6 @@ export default function ReservationsPage() {
     >
       <HomeReservation />
       <PrivateEventsNotice />
-      
     </main>
   );
 }

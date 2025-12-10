@@ -23,7 +23,7 @@ export default function HomeHero() {
     <section
       className={cn(
         "relative",
-        "w-full h-[100vh] md:h-auto md:min-h-[668px]",
+        "w-full md:h-auto",
         "overflow-hidden",
         "z-10",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
@@ -72,7 +72,7 @@ export default function HomeHero() {
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            " h-full md:h-[90vh] w-full max-w-[1200px]",
+            " h-full md:h-[70vh] w-full max-w-[1200px]",
             "mx-auto gap-4 md:gap-8 "
           )}
         >

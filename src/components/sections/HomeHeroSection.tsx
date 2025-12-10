@@ -62,7 +62,7 @@ export function HomeHeroSection({ content }: HomeHeroSectionProps = {}) {
     <section
       className={cn(
         "relative",
-        "w-full h-[100vh] md:h-auto md:min-h-[668px]",
+        "w-full md:h-auto",
         "overflow-hidden",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
       )}
