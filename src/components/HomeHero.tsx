@@ -2,15 +2,22 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { usePageLoadAnimation } from "@/lib/animations/hooks";
 
 export default function HomeHero() {
   const { theme } = useTheme();
+  const router = useRouter();
 
   // Page load animation - triggers after nav completes
   usePageLoadAnimation('[data-animate="hero-content"]', "hero");
+
+  const handleReservationClick = () => {
+    router.push("/reservations");
+   
+  };
 
   return (
     <section
@@ -151,12 +158,7 @@ export default function HomeHero() {
                 "flex items-center gap-2",
                 "mt-4 md:mt-8 mb-4"
               )}
-              onClick={() => {
-                const reservationSection = document.getElementById("reservation");
-                if (reservationSection) {
-                  reservationSection.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
+              onClick={handleReservationClick}
             >
               Reservation
               <Image
