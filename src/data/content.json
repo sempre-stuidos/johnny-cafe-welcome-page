@@ -106,5 +106,35 @@
         }
       ]
     }
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "About Us",
+      "subtitle": "Where Passion Meets Melody"
+    },
+    "story": {
+      "title": "Johnny G's Story",
+      "image": "https://lh3.googleusercontent.com/p/AF1QipNFn5UiY4SZxe5YBvdJGCxQGf5XdHsW8Eef6nvh=s1360-w1360-h1020-rw",
+      "paragraphs": [
+        "Since 1985, Johnny G's has been the heartbeat of jazz in the city. Named after the legendary saxophonist Johnny Griffin, our intimate venue has played host to countless unforgettable performances, from local talent to internationally acclaimed artists.",
+        "What started as a small basement club has evolved into a cherished institution where the spirit of jazz thrives every night.",
+        "We believe that jazz isn't just music—it's a conversation, a feeling, a moment suspended in time.",
+        "Our commitment to preserving the vintage charm while embracing modern comforts means you'll experience the best of both worlds: a curated cocktail menu, an acoustically perfect listening room, and an atmosphere that honors the rich history of jazz."
+      ]
+    },
+    "secondSection": {
+      "title": "Meet the Owners",
+      "text": "Two friends, one vision: to keep the spirit of jazz alive and thriving for generations to come.",
+      "images": [
+        {
+          "url": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347834634-IMG-2624--1-.JPG",
+          "description": "Our head chef brings over 30 years of culinary expertise, crafting each dish with passion and precision."
+        },
+        {
+          "url": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347796375-0205C9D0-6629-4ED3-A688-965A49B8B1D4.JPG",
+          "description": "Our restaurant manager ensures every guest experiences the perfect blend of hospitality and jazz ambiance."
+        }
+      ]
+    }
   }
 }
