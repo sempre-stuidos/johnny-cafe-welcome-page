@@ -77,7 +77,6 @@ export default function HomeReservation() {
         "w-full h-auto min-h-[668px]",
         "overflow-visible",
         "reservation-section-bg",
-        "pb-[400px] md:pb-[450px]"
       )}
     >
       {/* Background Image - 6 tiles grid (3x2) with overlap */}
