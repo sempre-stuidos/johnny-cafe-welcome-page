@@ -22,8 +22,16 @@ export function getCategoryDisplayTitle(slug: string): string {
     'lunch_entree': 'LUNCH ENTREE',
     'side_orders': 'SIDE ORDERS',
     'soup': 'SOUP',
+    'soups': 'SOUPS',
     'appetizers': 'APPETIZERS',
-    'mains': 'MAINS'
+    'starters': 'STARTERS',
+    'mains': 'MAINS',
+    'seafood_specialties': 'SEAFOOD SPECIALTIES',
+    'hakka_specials': 'HAKKA SPECIALS',
+    'veg_vegan_specialties': 'VEG & VEGAN SPECIALTIES',
+    'bread_selection': 'BREAD SELECTION',
+    'rice_selection': 'RICE SELECTION',
+    'sides_accompaniments': 'SIDES & ACCOMPANIMENTS'
   }
   return mapping[slug] || slug.toUpperCase()
 }
