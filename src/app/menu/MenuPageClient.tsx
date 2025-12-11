@@ -109,9 +109,15 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories }: M
 
   // Define category order for dinner menu
   const dinnerCategoryOrder = [
-    'soup',
-    'appetizers',
-    'mains'
+    'soups',
+    'starters',
+    'mains',
+    'seafood_specialties',
+    'hakka_specials',
+    'veg_vegan_specialties',
+    'bread_selection',
+    'rice_selection',
+    'sides_accompaniments'
   ];
 
   return (
