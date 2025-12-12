@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactElement } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 
@@ -12,10 +13,10 @@ interface MenuItemProps {
 /**
  * Renders menu item name with numbers in parentheses styled with Amoret Sans font
  */
-function renderMenuItemName(name: string): JSX.Element {
+function renderMenuItemName(name: string): ReactElement {
   // Match patterns like "(4)" or "(123)" - numbers in parentheses
   const regex = /(\((\d+)\))/g;
-  const parts: (string | JSX.Element)[] = [];
+  const parts: (string | ReactElement)[] = [];
   let lastIndex = 0;
   let match;
 
