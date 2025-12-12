@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/lib/animations/hooks";
@@ -12,34 +13,64 @@ import "swiper/css/navigation";
 const testimonials = [
   {
     id: 1,
-    name: "Sarah Mitchell",
-    text: "The brunch at Johnny G's is absolutely divine! The atmosphere is cozy and intimate, perfect for a relaxing Sunday morning. The jazz music adds such a wonderful touch to the experience.",
+    name: "vivek rocky",
+    text: "Had breakfast here and also tried their Indian food honestly the best food I've had on Parliament St! The quality was outstanding, full of flavor and perfectly cooked. The place has such a cool retro vintage vibe, and the touch of jazz music in the background makes the atmosphere even better. Highly recommend this spot if you're looking for amazing food and a unique experience.",
   },
   {
     id: 2,
-    name: "James Thompson",
-    text: "Best jazz club in the city! The live performances are exceptional, and the dinner menu is outstanding. We've hosted several private events here and it never disappoints.",
+    name: "Emily A",
+    text: "Super cute breakfast place! Was a little smaller than we thought it would be, but not in a bad way! Everything was really well designed and the food was delicious! Reasonable prices and wonderful service!",
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
-    text: "Johnny G's has become our go-to spot for special occasions. The staff is incredibly attentive, the food is exquisite, and the ambiance is unmatched. Highly recommend the evening jazz sessions!",
+    name: "Thenuka Jayasooriya",
+    text: "Johnny G's Café by the Chef is a hidden gem in Cabbagetown! The customer service was exceptional, and the chef truly knows his craft—every dish we tried was perfect.",
   },
   {
     id: 4,
-    name: "Michael Chen",
-    text: "From the moment you walk in, you're transported to a different era. The authentic jazz atmosphere combined with modern culinary excellence makes this place truly unique.",
+    name: "Nicki Iskander",
+    text: "Popped in here last night with two friends before a show at the Phoenix. We saw the live jazz band performing from the street and decided to go in for a drink. They had a nice, simple cocktail menu. The service was lovely. There was a space heater that added to the cozy atmosphere.",
   },
   {
     id: 5,
-    name: "Lisa Anderson",
-    text: "Outstanding experience from start to finish! The cocktails are creative, the music is sublime, and the service is impeccable. This is what fine dining with entertainment should be.",
+    name: "Jeremi De Pue",
+    text: "Warm inviting atmosphere!! A great spot for classic breakfast options. We went there 3 days in a row.. I'll let that speak for our level of satisfaction",
   },
 ];
+
+// Max character length based on Emily A's review
+const MAX_CHAR_LENGTH = 201;
 
 export default function Testimonials() {
   const { theme } = useTheme();
   const contentRef = useScrollReveal();
+  const [expandedTestimonials, setExpandedTestimonials] = useState<Set<number>>(new Set());
+
+  const toggleExpanded = (id: number) => {
+    setExpandedTestimonials((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  const truncateText = (text: string, id: number): string => {
+    if (text.length <= MAX_CHAR_LENGTH) {
+      return text;
+    }
+    const isExpanded = expandedTestimonials.has(id);
+    if (isExpanded) {
+      return text;
+    }
+    // Find the last space before the max length to avoid cutting words
+    const truncated = text.substring(0, MAX_CHAR_LENGTH);
+    const lastSpace = truncated.lastIndexOf(" ");
+    return text.substring(0, lastSpace > 0 ? lastSpace : MAX_CHAR_LENGTH);
+  };
 
   return (
     <section
@@ -148,9 +179,44 @@ export default function Testimonials() {
                       "testimonial-card"
                     )}
                   >
-                    <p className="text-about text-lg md:text-xl leading-relaxed flex-grow">
-                      "{testimonial.text}"
-                    </p>
+                    <div className="flex-grow">
+                      <p className="text-about text-lg md:text-xl leading-relaxed">
+                        &ldquo;{truncateText(testimonial.text, testimonial.id)}&rdquo;
+                        {testimonial.text.length > MAX_CHAR_LENGTH &&
+                          !expandedTestimonials.has(testimonial.id) && (
+                            <>
+                              {" "}
+                              <button
+                                onClick={() => toggleExpanded(testimonial.id)}
+                                className="text-[#B29738] font-semibold hover:underline cursor-pointer"
+                              >
+                                ... more
+                              </button>
+                            </>
+                          )}
+                        {testimonial.text.length > MAX_CHAR_LENGTH &&
+                          expandedTestimonials.has(testimonial.id) && (
+                            <>
+                              {" "}
+                              <button
+                                onClick={() => toggleExpanded(testimonial.id)}
+                                className="text-[#B29738] font-semibold hover:underline cursor-pointer"
+                              >
+                                less
+                              </button>
+                            </>
+                          )}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <StarIcon
+                          key={i}
+                          className="w-4 h-4 md:w-5 md:h-5"
+                          fill="#B29738"
+                        />
+                      ))}
+                    </div>
                     <p className="text-about font-bold text-base md:text-lg">
                       — {testimonial.name}
                     </p>
