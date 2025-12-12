@@ -9,6 +9,45 @@ interface MenuItemProps {
   description: string;
 }
 
+/**
+ * Renders menu item name with numbers in parentheses styled with Amoret Sans font
+ */
+function renderMenuItemName(name: string): JSX.Element {
+  // Match patterns like "(4)" or "(123)" - numbers in parentheses
+  const regex = /(\((\d+)\))/g;
+  const parts: (string | JSX.Element)[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(name)) !== null) {
+    // Add text before the match
+    if (match.index > lastIndex) {
+      parts.push(name.substring(lastIndex, match.index));
+    }
+    
+    // Add the styled number in parentheses
+    parts.push(
+      <span key={match.index} style={{ fontFamily: "var(--font-amoret-sans)" }}>
+        {match[0]}
+      </span>
+    );
+    
+    lastIndex = regex.lastIndex;
+  }
+  
+  // Add remaining text after the last match
+  if (lastIndex < name.length) {
+    parts.push(name.substring(lastIndex));
+  }
+  
+  // If no matches found, return the original name as JSX
+  if (parts.length === 0) {
+    return <>{name}</>;
+  }
+  
+  return <>{parts}</>;
+}
+
 export default function MenuItem({ name, price, description }: MenuItemProps) {
   const { theme } = useTheme();
 
@@ -22,7 +61,7 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
             theme === "day" ? "menu-item-name-day" : "menu-item-name-night"
           )}
         >
-          {name}
+          {renderMenuItemName(name)}
         </h6>
         <span
           className={cn(
