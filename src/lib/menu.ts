@@ -201,17 +201,25 @@ export async function getMenuDataForBusiness(businessSlug: string): Promise<Menu
 }
 
 /**
- * Get menu items grouped by category for a specific menu type (brunch/dinner)
+ * Get menu items grouped by category for a specific menu type (brunch/dinner/late-night)
  */
 export async function getMenuItemsByType(
   businessSlug: string,
-  menuType: 'brunch' | 'dinner'
+  menuType: 'brunch' | 'dinner' | 'late-night'
 ): Promise<Record<string, MenuItemData[]>> {
   try {
     const menus = await getMenusForBusiness(businessSlug)
     
-    // Find the appropriate menu (Breakfast for brunch, Dinner for dinner)
-    const menuName = menuType === 'brunch' ? 'Breakfast' : 'Dinner'
+    // Find the appropriate menu (Breakfast for brunch, Dinner for dinner, Late Night for late-night)
+    let menuName: string
+    if (menuType === 'brunch') {
+      menuName = 'Breakfast'
+    } else if (menuType === 'dinner') {
+      menuName = 'Dinner'
+    } else {
+      menuName = 'Late Night'
+    }
+    
     const menu = menus.find(m => m.name.toLowerCase() === menuName.toLowerCase())
     
     if (!menu) {

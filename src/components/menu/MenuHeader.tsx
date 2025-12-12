@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import gsap from "gsap";
 
 interface MenuHeaderProps {
-  activeMenu: "brunch" | "dinner";
-  onMenuChange: (menu: "brunch" | "dinner") => void;
+  activeMenu: "brunch" | "dinner" | "late-night";
+  onMenuChange: (menu: "brunch" | "dinner" | "late-night") => void;
 }
 
 export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps) {
@@ -15,6 +15,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
   const starRef = useRef<HTMLDivElement>(null);
   const brunchRef = useRef<HTMLParagraphElement>(null);
   const dinnerRef = useRef<HTMLParagraphElement>(null);
+  const lateNightRef = useRef<HTMLParagraphElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   // Initial fade-in animation
@@ -34,9 +35,17 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
 
   // Animate star movement when active menu changes
   useEffect(() => {
-    if (!starRef.current || !brunchRef.current || !dinnerRef.current) return;
+    if (!starRef.current || !brunchRef.current || !dinnerRef.current || !lateNightRef.current) return;
 
-    const targetRef = activeMenu === "brunch" ? brunchRef.current : dinnerRef.current;
+    let targetRef: HTMLParagraphElement;
+    if (activeMenu === "brunch") {
+      targetRef = brunchRef.current;
+    } else if (activeMenu === "dinner") {
+      targetRef = dinnerRef.current;
+    } else {
+      targetRef = lateNightRef.current;
+    }
+    
     const targetRect = targetRef.getBoundingClientRect();
     const containerRect = targetRef.parentElement?.getBoundingClientRect();
     
@@ -49,7 +58,7 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
       left: leftPosition,
       duration: 0.6,
       ease: "power2.inOut",
-      rotate: activeMenu === "brunch" ? 0 : 180
+      rotate: activeMenu === "brunch" ? 0 : activeMenu === "dinner" ? 180 : 90
     });
   }, [activeMenu]);
 
@@ -125,6 +134,22 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               onClick={() => onMenuChange("dinner")}
             >
               Dinner
+            </p>
+            <p
+              ref={lateNightRef}
+              style={{
+                fontFamily: "var(--font-pinyon-script)",
+                fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
+                  color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
+                  lineHeight: "var(--line-height-normal)",
+                fontWeight: activeMenu === "late-night" ? 600 : 400,
+                fontStyle: "normal",
+                transition: "font-weight 0.3s ease"
+              }}
+              className="cursor-pointer"
+              onClick={() => onMenuChange("late-night")}
+            >
+              Late Night
             </p>
           </div>
         </div>

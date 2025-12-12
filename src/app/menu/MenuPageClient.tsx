@@ -10,11 +10,12 @@ import gsap from "gsap";
 interface MenuPageClientProps {
   brunchCategories: Record<string, MenuItemData[]>;
   dinnerCategories: Record<string, MenuItemData[]>;
+  lateNightCategories: Record<string, MenuItemData[]>;
 }
 
-export default function MenuPageClient({ brunchCategories, dinnerCategories }: MenuPageClientProps) {
+export default function MenuPageClient({ brunchCategories, dinnerCategories, lateNightCategories }: MenuPageClientProps) {
   const { theme } = useTheme();
-  const [activeMenu, setActiveMenu] = useState<"brunch" | "dinner">("brunch");
+  const [activeMenu, setActiveMenu] = useState<"brunch" | "dinner" | "late-night">("brunch");
   const [isAnimating, setIsAnimating] = useState(false);
   const [bgTileCount, setBgTileCount] = useState(90);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -57,7 +58,7 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories }: M
     return () => ctx.revert();
   }, []);
 
-  const handleMenuChange = (menu: "brunch" | "dinner") => {
+  const handleMenuChange = (menu: "brunch" | "dinner" | "late-night") => {
     if (menu === activeMenu || isAnimating) return;
 
     setIsAnimating(true);
@@ -118,6 +119,13 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories }: M
     'bread_selection',
     'rice_selection',
     'sides_accompaniments'
+  ];
+
+  // Define category order for late night menu
+  const lateNightCategoryOrder = [
+    'small_plates',
+    'jazz_bar_bites',
+    'desserts'
   ];
 
   return (
@@ -221,6 +229,25 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories }: M
               <div className="flex flex-col gap-8">
                 {dinnerCategoryOrder.map((categorySlug) => {
                   const items = dinnerCategories[categorySlug];
+                  if (!items || items.length === 0) {
+                    return null;
+                  }
+                  return (
+                    <CategorySection
+                      key={categorySlug}
+                      title={getCategoryDisplayTitle(categorySlug)}
+                      items={items}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            
+            {/* Late Night Menu Sections */}
+            {activeMenu === "late-night" && (
+              <div className="flex flex-col gap-8">
+                {lateNightCategoryOrder.map((categorySlug) => {
+                  const items = lateNightCategories[categorySlug];
                   if (!items || items.length === 0) {
                     return null;
                   }

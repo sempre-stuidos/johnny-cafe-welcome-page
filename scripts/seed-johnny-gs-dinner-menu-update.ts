@@ -145,7 +145,7 @@ const DINNER_CATEGORIES: CategoryData[] = [
   },
   {
     slug: 'mains',
-    name: '◆ MAINS',
+    name: 'MAINS',
     sortOrder: 3,
     items: [
       {

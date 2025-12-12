@@ -16,10 +16,14 @@ export default async function MenuPage() {
   // Get all dinner categories with items
   const dinnerCategories = await getMenuItemsByType(businessSlug, 'dinner');
 
+  // Get all late night categories with items
+  const lateNightCategories = await getMenuItemsByType(businessSlug, 'late-night');
+
   return (
     <MenuPageClient 
       brunchCategories={brunchCategories}
       dinnerCategories={dinnerCategories}
+      lateNightCategories={lateNightCategories}
     />
   );
 }

@@ -31,7 +31,10 @@ export function getCategoryDisplayTitle(slug: string): string {
     'veg_vegan_specialties': 'VEG & VEGAN SPECIALTIES',
     'bread_selection': 'BREAD SELECTION',
     'rice_selection': 'RICE SELECTION',
-    'sides_accompaniments': 'SIDES & ACCOMPANIMENTS'
+    'sides_accompaniments': 'SIDES & ACCOMPANIMENTS',
+    'small_plates': 'SMALL PLATES',
+    'jazz_bar_bites': 'JAZZ BAR BITES',
+    'desserts': 'DESSERTS'
   }
   return mapping[slug] || slug.toUpperCase()
 }
