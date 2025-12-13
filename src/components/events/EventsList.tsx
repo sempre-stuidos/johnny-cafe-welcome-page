@@ -2,9 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
+import Image from "next/image";
 import EventItem, { EventItemData } from "./EventItem";
 
-type EventTab = 'weekly' | 'upcoming' | 'past';
+type EventTab = 'weekly' | 'upcoming' | 'past' | 'gallery';
 
 interface EventsListProps {
   activeTab: EventTab;
@@ -36,49 +37,69 @@ export default function EventsList({
       {/* Header Section */}
       <div className="flex flex-col gap-3 md:gap-6">
         {/* Tabs */}
-        <div className="flex items-center justify-center gap-8 md:gap-24">
-          <p
-            onClick={() => onTabChange('weekly')}
-            className="cursor-pointer transition-colors duration-300"
-            style={{
-              fontFamily: "var(--font-pinyon-script)",
-              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
-              color: "var(--theme-text-primary)",
-              lineHeight: "var(--line-height-normal)",
-              fontWeight: activeTab === 'weekly' ? 600 : 400,
-              fontStyle: "normal",
-            }}
-          >
-            Weekly Events
-          </p>
-          <p
-            onClick={() => onTabChange('upcoming')}
-            className="cursor-pointer transition-colors duration-300"
-            style={{
-              fontFamily: "var(--font-pinyon-script)",
-              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
-              color: "var(--theme-text-primary)",
-              lineHeight: "var(--line-height-normal)",
-              fontWeight: activeTab === 'upcoming' ? 600 : 400,
-              fontStyle: "normal",
-            }}
-          >
-            Upcoming Events
-          </p>
-          <p
-            onClick={() => onTabChange('past')}
-            className="cursor-pointer transition-colors duration-300"
-            style={{
-              fontFamily: "var(--font-pinyon-script)",
-              fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
-              color: "var(--theme-text-primary)",
-              lineHeight: "var(--line-height-normal)",
-              fontWeight: activeTab === 'past' ? 600 : 400,
-              fontStyle: "normal",
-            }}
-          >
-            Past Events
-          </p>
+        <div className="flex justify-center">
+          <div className="max-w-7xl w-full flex items-center justify-between px-4 md:px-8">
+            <div className="flex items-center gap-8 md:gap-24">
+              <p
+                onClick={() => onTabChange('weekly')}
+                className="cursor-pointer transition-colors duration-300"
+                style={{
+                  fontFamily: "var(--font-pinyon-script)",
+                  fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+                  color: "var(--theme-text-primary)",
+                  lineHeight: "var(--line-height-normal)",
+                  fontWeight: activeTab === 'weekly' ? 600 : 400,
+                  fontStyle: "normal",
+                }}
+              >
+                Weekly Events
+              </p>
+              <p
+                onClick={() => onTabChange('upcoming')}
+                className="cursor-pointer transition-colors duration-300"
+                style={{
+                  fontFamily: "var(--font-pinyon-script)",
+                  fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+                  color: "var(--theme-text-primary)",
+                  lineHeight: "var(--line-height-normal)",
+                  fontWeight: activeTab === 'upcoming' ? 600 : 400,
+                  fontStyle: "normal",
+                }}
+              >
+                Upcoming Events
+              </p>
+              <p
+                onClick={() => onTabChange('past')}
+                className="cursor-pointer transition-colors duration-300"
+                style={{
+                  fontFamily: "var(--font-pinyon-script)",
+                  fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+                  color: "var(--theme-text-primary)",
+                  lineHeight: "var(--line-height-normal)",
+                  fontWeight: activeTab === 'past' ? 600 : 400,
+                  fontStyle: "normal",
+                }}
+              >
+                Past Events
+              </p>
+            </div>
+            <div>
+              <p
+                onClick={() => onTabChange('gallery')}
+                className="cursor-pointer transition-colors duration-300"
+                style={{
+                  fontFamily: "var(--font-pinyon-script)",
+                  fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
+                  color: "var(--theme-text-primary)",
+                  lineHeight: "var(--line-height-normal)",
+                  fontWeight: activeTab === 'gallery' ? 600 : 400,
+                  fontStyle: "normal",
+                }}
+              >
+                Gallery
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Divider */}
@@ -92,44 +113,67 @@ export default function EventsList({
         </div>
       </div>
 
-      {/* Events List */}
-      <div className="flex flex-col gap-6 md:gap-12 items-center">
-        {loading ? (
-          <div className="text-center py-12">
-            <p
-              className="transition-colors duration-300"
-              style={{ color: "var(--theme-text-light-cream)" }}
-            >
-              Loading events...
-            </p>
-          </div>
-        ) : events.length === 0 ? (
-          <div className="text-center py-12">
-            <p
-              className="transition-colors duration-300"
-              style={{ color: "var(--theme-text-light-cream)" }}
-            >
-              {emptyMessage}
-            </p>
-          </div>
-        ) : (
-          events.map((event, index) => (
-            <div key={index} className="flex flex-col gap-6 md:gap-12 max-w-7xl w-full">
-              <EventItem event={event} />
-
-              {/* Divider between events and after last event */}
-              <div className="flex justify-center">
-                <div
-                  className="max-w-7xl w-full h-[1px]"
-                  style={{
-                    backgroundColor: "var(--theme-accent)",
-                  }}
+      {/* Content based on active tab */}
+      {activeTab === 'gallery' ? (
+        /* Gallery Grid */
+        <div className="flex justify-center">
+          <div className="grid grid-cols-3 gap-4 md:gap-6 max-w-7xl w-full">
+            {Array.from({ length: 9 }).map((_, index) => (
+              <div
+                key={index}
+                className="relative w-full aspect-square overflow-hidden border-2 border-[#B29738] transition-colors duration-300"
+              >
+                <Image
+                  src="http://127.0.0.1:54321/storage/v1/object/public/gallery/d7f93a7a-1c9d-4b73-8298-c330b365027f/1765577593388-thursday.png"
+                  alt={`Gallery image ${index + 1}`}
+                  fill
+                  className="object-cover"
+                  unoptimized
                 />
               </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* Events List */
+        <div className="flex flex-col gap-6 md:gap-12 items-center">
+          {loading ? (
+            <div className="text-center py-12">
+              <p
+                className="transition-colors duration-300"
+                style={{ color: "var(--theme-text-light-cream)" }}
+              >
+                Loading events...
+              </p>
             </div>
-          ))
-        )}
-      </div>
+          ) : events.length === 0 ? (
+            <div className="text-center py-12">
+              <p
+                className="transition-colors duration-300"
+                style={{ color: "var(--theme-text-light-cream)" }}
+              >
+                {emptyMessage}
+              </p>
+            </div>
+          ) : (
+            events.map((event, index) => (
+              <div key={index} className="flex flex-col gap-6 md:gap-12 max-w-7xl w-full">
+                <EventItem event={event} />
+
+                {/* Divider between events and after last event */}
+                <div className="flex justify-center">
+                  <div
+                    className="max-w-7xl w-full h-[1px]"
+                    style={{
+                      backgroundColor: "var(--theme-accent)",
+                    }}
+                  />
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }
