@@ -5,7 +5,8 @@ import {
   getWeeklyEventsForBusiness,
   formatEventDateUppercase,
   formatEventDateWithTime,
-  formatWeeklyEventDate
+  formatWeeklyEventDate,
+  getEventGalleryImagesForBusiness
 } from '@/lib/events'
 import { resolveBusinessSlug } from '@/lib/business-utils'
 
@@ -14,13 +15,22 @@ export async function GET(request: NextRequest) {
     // Get business slug and event type from query params
     const { searchParams } = new URL(request.url)
     const businessSlugParam = searchParams.get('businessSlug')
-    const type = searchParams.get('type') || 'live' // 'weekly', 'live', or 'past'
+    const type = searchParams.get('type') || 'live' // 'weekly', 'live', 'past', or 'gallery'
     
     const businessSlug = resolveBusinessSlug(
       businessSlugParam || undefined,
       process.env.NEXT_PUBLIC_BUSINESS_SLUG,
       'johnny-gs-brunch'
     )
+    
+    // Handle gallery images request
+    if (type === 'gallery') {
+      const galleryImages = await getEventGalleryImagesForBusiness(businessSlug)
+      const response = NextResponse.json({ galleryImages })
+      // Add cache headers for faster subsequent loads (cache for 5 minutes)
+      response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+      return response
+    }
     
     // Fetch events from database based on type
     let dbEvents

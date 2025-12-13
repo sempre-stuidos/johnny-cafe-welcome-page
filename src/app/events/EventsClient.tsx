@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { EventItemData } from "@/components/events/EventItem";
-import EventsList from "@/components/events/EventsList";
+import EventsList, { GalleryImage } from "@/components/events/EventsList";
 import { supabase } from "@/lib/supabase-client";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 
@@ -19,6 +19,8 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   const [activeTab, setActiveTab] = useState<EventTab>('weekly');
   const [events, setEvents] = useState<EventItemData[]>(initialEvents);
   const [loading, setLoading] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(false);
   const [businessId, setBusinessId] = useState<string | null>(null);
 
   // Get business slug and fetch business ID
@@ -45,25 +47,44 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
     fetchBusinessId();
   }, []);
 
-  // Fetch events based on active tab
+  // Fetch events or gallery images based on active tab
   useEffect(() => {
     if (!businessId) return;
-    
-    // Don't fetch events for gallery tab
+
+    const businessSlug = resolveBusinessSlug(
+      undefined,
+      process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+      'johnny-gs-brunch'
+    );
+
     if (activeTab === 'gallery') {
-      setLoading(false);
+      // Fetch gallery images
+      const fetchGalleryImages = async () => {
+        setGalleryLoading(true);
+        try {
+          const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=gallery`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch gallery images');
+          }
+          
+          const data = await response.json();
+          setGalleryImages(data.galleryImages || []);
+        } catch (error) {
+          console.error('Error fetching gallery images:', error);
+          setGalleryImages([]);
+        } finally {
+          setGalleryLoading(false);
+        }
+      };
+
+      fetchGalleryImages();
       return;
     }
 
+    // Fetch events for other tabs
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        const businessSlug = resolveBusinessSlug(
-          undefined,
-          process.env.NEXT_PUBLIC_BUSINESS_SLUG,
-          'johnny-gs-brunch'
-        );
-        
         const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=${activeTab}`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
@@ -167,6 +188,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
         activeTab={activeTab}
         onTabChange={setActiveTab}
         events={events}
+        galleryImages={galleryImages}
         emptyMessage={
           activeTab === 'weekly' 
             ? 'No weekly events at this time. Check back soon!'
@@ -175,6 +197,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
             : 'No past events available.'
         }
         loading={loading}
+        galleryLoading={galleryLoading}
       />
     </section>
   );

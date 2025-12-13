@@ -2,25 +2,35 @@
 
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
-import Image from "next/image";
 import EventItem, { EventItemData } from "./EventItem";
+import LazyGalleryImage from "./LazyGalleryImage";
 
 type EventTab = 'weekly' | 'upcoming' | 'past' | 'gallery';
+
+export interface GalleryImage {
+  id: string;
+  url: string;
+  name?: string;
+}
 
 interface EventsListProps {
   activeTab: EventTab;
   onTabChange: (tab: EventTab) => void;
   events: EventItemData[];
+  galleryImages?: GalleryImage[];
   emptyMessage?: string;
   loading?: boolean;
+  galleryLoading?: boolean;
 }
 
 export default function EventsList({
   activeTab,
   onTabChange,
   events,
+  galleryImages = [],
   emptyMessage = "No events at this time. Check back soon!",
   loading = false,
+  galleryLoading = false,
 }: EventsListProps) {
   const { theme } = useTheme();
   return (
@@ -117,22 +127,41 @@ export default function EventsList({
       {activeTab === 'gallery' ? (
         /* Gallery Grid */
         <div className="flex justify-center">
-          <div className="grid grid-cols-3 gap-4 md:gap-6 max-w-7xl w-full">
-            {Array.from({ length: 9 }).map((_, index) => (
-              <div
-                key={index}
-                className="relative w-full aspect-square overflow-hidden border-2 border-[#B29738] transition-colors duration-300"
+          {galleryLoading ? (
+            <div className="text-center py-12">
+              <p
+                className="transition-colors duration-300"
+                style={{ color: "var(--theme-text-light-cream)" }}
               >
-                <Image
-                  src="http://127.0.0.1:54321/storage/v1/object/public/gallery/d7f93a7a-1c9d-4b73-8298-c330b365027f/1765577593388-thursday.png"
-                  alt={`Gallery image ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-            ))}
-          </div>
+                Loading gallery images...
+              </p>
+            </div>
+          ) : galleryImages.length === 0 ? (
+            <div className="text-center py-12">
+              <p
+                className="transition-colors duration-300"
+                style={{ color: "var(--theme-text-light-cream)" }}
+              >
+                No gallery images available.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-4 md:gap-6 max-w-7xl w-full">
+              {galleryImages.map((image, index) => (
+                <div
+                  key={image.id}
+                  className="relative w-full aspect-square overflow-hidden border-2 border-[#B29738] transition-colors duration-300"
+                >
+                  <LazyGalleryImage
+                    src={image.url}
+                    alt={image.name || `Gallery image ${image.id}`}
+                    // Load first 3 images (first row) with priority for faster initial render
+                    priority={index < 3}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         /* Events List */

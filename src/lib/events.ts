@@ -433,9 +433,17 @@ async function fetchBandsForEvents(eventIds: string[]): Promise<Record<string, B
     for (const eventBand of eventBands) {
       const eventId = eventBand.event_id as string
       // The nested relationship is aliased as 'band' in the query
-      const band = (eventBand as any).band as Band | null
+      // Supabase returns it as an object, not an array
+      const bandData = (eventBand as unknown as { band: Band | null }).band
       
-      if (band && typeof band === 'object' && 'id' in band && 'name' in band) {
+      if (bandData && typeof bandData === 'object' && 'id' in bandData && 'name' in bandData) {
+        const band: Band = {
+          id: bandData.id,
+          name: bandData.name,
+          description: bandData.description,
+          image_url: bandData.image_url,
+        }
+        
         if (!bandsByEventId[eventId]) {
           bandsByEventId[eventId] = []
         }
@@ -551,5 +559,69 @@ export function formatEventDateTime(startsAt: string, endsAt: string): string {
   // Different days
   const endDate = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   return `${startDate} · ${startTime} → ${endDate} · ${endTime}`
+}
+
+export interface GalleryImage {
+  id: string
+  url: string
+  name?: string
+}
+
+/**
+ * Get gallery images with Event category for a business
+ */
+export async function getEventGalleryImagesForBusiness(businessSlug: string): Promise<GalleryImage[]> {
+  try {
+    // Sanitize business slug for matching
+    const sanitizedSlug = businessSlug.replace(/[^a-zA-Z0-9-_]/g, '-')
+
+    // Fetch gallery images with Event category
+    // Filter by file_url containing the business slug (same pattern as agency-light)
+    const { data: filesAssets, error } = await supabaseAdmin
+      .from('files_assets')
+      .select('id, name, file_url, image_category')
+      .eq('type', 'Images')
+      .eq('project', 'Gallery')
+      .eq('image_category', 'Event')
+      .order('uploaded', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching gallery images:', error)
+      return []
+    }
+
+    if (!filesAssets || filesAssets.length === 0) {
+      return []
+    }
+
+    // Filter by business slug in file_url (same pattern as agency-light)
+    const businessImages = filesAssets.filter((file) => 
+      file.file_url?.includes(`${sanitizedSlug}/gallery/`)
+    )
+
+    if (businessImages.length === 0) {
+      return []
+    }
+
+    // Transform to GalleryImage format
+    return businessImages
+      .filter(file => file.file_url) // Only include files with URLs
+      .map(file => {
+        // Get public URL using Supabase storage API
+        // file_url format: business-slug/gallery/filename.png
+        const { data } = supabaseAdmin.storage
+          .from('gallery')
+          .getPublicUrl(file.file_url)
+        
+        return {
+          id: file.id,
+          url: data.publicUrl,
+          name: file.name || undefined,
+        }
+      })
+  } catch (error) {
+    console.error('Error in getEventGalleryImagesForBusiness:', error)
+    return []
+  }
 }
 
