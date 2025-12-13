@@ -10,6 +10,7 @@ export interface EventItemData {
   name: string;
   description: string;
   image?: string;
+  bands?: Array<{ id: string; name: string }>;
 }
 
 interface EventItemProps {
@@ -48,6 +49,22 @@ export default function EventItem({ event }: EventItemProps) {
           <p className="text-event-description">
             {event.description}
           </p>
+
+          {/* Artist Line Up - Only show if there are bands */}
+          {event.bands && event.bands.length > 0 && (
+            <div className="flex flex-col gap-2 md:gap-3 mt-6 md:mt-12">
+              <span className="text-event-date">
+                ARTIST LINE UP
+              </span>
+              <div className="flex flex-col gap-1">
+                {event.bands.map((band) => (
+                  <p key={band.id} className="text-event-description">
+                    {band.name}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Column - Event Poster */}

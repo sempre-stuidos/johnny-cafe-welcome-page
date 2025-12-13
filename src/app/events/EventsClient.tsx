@@ -17,7 +17,7 @@ type EventTab = 'weekly' | 'upcoming' | 'past';
 export default function EventsClient({ events: initialEvents }: EventsClientProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<EventTab>('weekly');
-  const [events, setEvents] = useState<EventItemData[]>([]);
+  const [events, setEvents] = useState<EventItemData[]>(initialEvents);
   const [loading, setLoading] = useState(false);
   const [businessId, setBusinessId] = useState<string | null>(null);
 

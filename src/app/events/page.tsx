@@ -31,6 +31,7 @@ export default async function EventsPage() {
       name: event.title,
       description: event.description || event.short_description || '',
       image: event.image_url,
+      bands: event.bands?.map(band => ({ id: band.id, name: band.name })),
     }
   });
 

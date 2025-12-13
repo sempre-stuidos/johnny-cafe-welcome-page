@@ -1,5 +1,12 @@
 import { supabaseAdmin } from './supabase'
 
+export interface Band {
+  id: string
+  name: string
+  description?: string
+  image_url?: string
+}
+
 export interface Event {
   id: string
   org_id: string
@@ -18,6 +25,7 @@ export interface Event {
   day_of_week?: number // 0-6, where 0=Sunday, 6=Saturday
   created_at: string
   updated_at: string
+  bands?: Band[] // Bands associated with this event
 }
 
 /**
@@ -148,7 +156,15 @@ export async function getLiveEventsForBusiness(businessSlug: string): Promise<Ev
       })
       .filter(event => event.status === 'live' && !event.is_weekly)
 
-    return liveEvents
+    // Fetch bands for all events
+    const eventIds = liveEvents.map(e => e.id)
+    const bandsByEventId = await fetchBandsForEvents(eventIds)
+
+    // Attach bands to events
+    return liveEvents.map(event => ({
+      ...event,
+      bands: bandsByEventId[event.id] || []
+    }))
   } catch (error) {
     console.error('Error in getLiveEventsForBusiness:', error)
     return []
@@ -228,7 +244,15 @@ export async function getPastEventsForBusiness(businessSlug: string): Promise<Ev
         return endsAt < now || (publishEndAt && publishEndAt < now) || event.status === 'past'
       })
 
-    return pastEvents
+    // Fetch bands for all events
+    const eventIds = pastEvents.map(e => e.id)
+    const bandsByEventId = await fetchBandsForEvents(eventIds)
+
+    // Attach bands to events
+    return pastEvents.map(event => ({
+      ...event,
+      bands: bandsByEventId[event.id] || []
+    }))
   } catch (error) {
     console.error('Error in getPastEventsForBusiness:', error)
     return []
@@ -374,6 +398,64 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
 }
 
 /**
+ * Fetch bands for a list of events
+ */
+async function fetchBandsForEvents(eventIds: string[]): Promise<Record<string, Band[]>> {
+  if (eventIds.length === 0) {
+    return {}
+  }
+
+  try {
+    const supabase = supabaseAdmin
+    
+    const { data: eventBands, error } = await supabase
+      .from('event_bands')
+      .select(`
+        event_id,
+        order,
+        band:bands(id, name, description, image_url)
+      `)
+      .in('event_id', eventIds)
+      .order('order', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching event bands:', error)
+      return {}
+    }
+
+    if (!eventBands) {
+      return {}
+    }
+
+    // Group bands by event_id
+    const bandsByEventId: Record<string, Band[]> = {}
+    
+    for (const eventBand of eventBands) {
+      const eventId = eventBand.event_id as string
+      // The nested relationship is aliased as 'band' in the query
+      const band = (eventBand as any).band as Band | null
+      
+      if (band && typeof band === 'object' && 'id' in band && 'name' in band) {
+        if (!bandsByEventId[eventId]) {
+          bandsByEventId[eventId] = []
+        }
+        bandsByEventId[eventId].push(band)
+      }
+    }
+
+    // Debug logging
+    if (Object.keys(bandsByEventId).length > 0) {
+      console.log('Fetched bands for events:', bandsByEventId)
+    }
+
+    return bandsByEventId
+  } catch (error) {
+    console.error('Error in fetchBandsForEvents:', error)
+    return {}
+  }
+}
+
+/**
  * Get weekly events for a business by slug
  * Only returns weekly events that are currently live (visible to public)
  */
@@ -430,7 +512,15 @@ export async function getWeeklyEventsForBusiness(businessSlug: string): Promise<
       })
       .filter(event => event.status === 'live')
 
-    return liveWeeklyEvents
+    // Fetch bands for all events
+    const eventIds = liveWeeklyEvents.map(e => e.id)
+    const bandsByEventId = await fetchBandsForEvents(eventIds)
+
+    // Attach bands to events
+    return liveWeeklyEvents.map(event => ({
+      ...event,
+      bands: bandsByEventId[event.id] || []
+    }))
   } catch (error) {
     console.error('Error in getWeeklyEventsForBusiness:', error)
     return []
