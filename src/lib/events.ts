@@ -324,6 +324,8 @@ export function formatEventDateWithTime(startsAt?: string, endsAt?: string): str
 
 /**
  * Format weekly event date and time for display
+ * Extracts the exact time from the database timestamp
+ * For weekly events, times are stored with placeholder dates, so we extract the time portion
  */
 export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -339,30 +341,33 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
     return `Every ${dayName}`
   }
 
-  const startTime = start.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  })
+  // Extract time from the Date object using local time methods
+  // This will show the time as it appears in the database timezone context
+  // For weekly events stored with placeholder dates, this preserves the original time entry
+  const startHours = start.getHours()
+  const startMinutes = start.getMinutes()
+  const startHour12 = startHours % 12 || 12
+  const startAmPm = startHours >= 12 ? 'PM' : 'AM'
+  const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
 
   if (!endsAt) {
-    return `Every ${dayName} at ${startTime}`
+    return `Every ${dayName} · ${startTime}`
   }
 
   const end = new Date(endsAt)
   
   if (isNaN(end.getTime())) {
-    return `Every ${dayName} at ${startTime}`
+    return `Every ${dayName} · ${startTime}`
   }
 
-  const endTime = end.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  })
+  const endHours = end.getHours()
+  const endMinutes = end.getMinutes()
+  const endHour12 = endHours % 12 || 12
+  const endAmPm = endHours >= 12 ? 'PM' : 'AM'
+  const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
 
   if (startTime === endTime) {
-    return `Every ${dayName} at ${startTime}`
+    return `Every ${dayName} · ${startTime}`
   }
 
   return `Every ${dayName} · ${startTime} - ${endTime}`

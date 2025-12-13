@@ -117,17 +117,15 @@ export default function EventsList({
             <div key={index} className="flex flex-col gap-6 md:gap-12 max-w-7xl w-full">
               <EventItem event={event} />
 
-              {/* Divider between events */}
-              {index < events.length - 1 && (
-                <div className="flex justify-center">
-                  <div
-                    className="max-w-7xl w-full h-[1px]"
-                    style={{
-                      backgroundColor: "var(--theme-accent)",
-                    }}
-                  />
-                </div>
-              )}
+              {/* Divider between events and after last event */}
+              <div className="flex justify-center">
+                <div
+                  className="max-w-7xl w-full h-[1px]"
+                  style={{
+                    backgroundColor: "var(--theme-accent)",
+                  }}
+                />
+              </div>
             </div>
           ))
         )}
