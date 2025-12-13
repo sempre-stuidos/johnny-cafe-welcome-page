@@ -81,7 +81,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
       return;
     }
 
-    // Fetch events for other tabs
+    // Fetch events for other tabs (weekly, upcoming, past)
     const fetchEvents = async () => {
       setLoading(true);
       try {
@@ -103,44 +103,43 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
     fetchEvents();
 
     // Set up real-time subscription (only for event tabs, not gallery)
-    if (activeTab !== 'gallery') {
-      const channel = supabase
-        .channel('events-changes')
-        .on(
-          'postgres_changes',
-          {
-            event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
-            schema: 'public',
-            table: 'events',
-            filter: `org_id=eq.${businessId}`,
-          },
-          async (payload) => {
-            console.log('Event change detected:', payload.eventType, payload);
-            
-            // Refetch events to get the latest state
-            const businessSlug = resolveBusinessSlug(
-              undefined,
-              process.env.NEXT_PUBLIC_BUSINESS_SLUG,
-              'johnny-gs-brunch'
-            );
-            
-            try {
-              const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=${activeTab}`);
-              if (response.ok) {
-                const data = await response.json();
-                setEvents(data.events || []);
-              }
-            } catch (error) {
-              console.error('Error refetching events after change:', error);
+    // TypeScript knows activeTab is 'weekly' | 'upcoming' | 'past' here
+    const channel = supabase
+      .channel('events-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'events',
+          filter: `org_id=eq.${businessId}`,
+        },
+        async (payload) => {
+          console.log('Event change detected:', payload.eventType, payload);
+          
+          // Refetch events to get the latest state
+          const businessSlug = resolveBusinessSlug(
+            undefined,
+            process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+            'johnny-gs-brunch'
+          );
+          
+          try {
+            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=${activeTab}`);
+            if (response.ok) {
+              const data = await response.json();
+              setEvents(data.events || []);
             }
+          } catch (error) {
+            console.error('Error refetching events after change:', error);
           }
-        )
-        .subscribe();
+        }
+      )
+      .subscribe();
 
-      return () => {
-        supabase.removeChannel(channel);
-      };
-    }
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [businessId, activeTab]);
 
   return (
