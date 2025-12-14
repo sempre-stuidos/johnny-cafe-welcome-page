@@ -1644,3 +1644,87 @@ a.reserve-delivery-btn.reserve-delivery-btn-night svg {
 a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   stroke: #011A0C;
 }
+
+/* Animated Hamburger Menu Toggle */
+.menu-toggle-wrapper {
+  display: inline-block;
+}
+
+.menu-toggle-input {
+  display: none;
+}
+
+.menu-toggle-label {
+  cursor: pointer;
+  display: block;
+}
+
+.menu-toggle {
+  transition: all 0.49s;
+  position: relative;
+  width: 43px;
+  height: 43px;
+  border-radius: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle-part {
+  width: 23px; 
+  height: 3px; 
+  position: absolute;
+  right: 0;
+  margin: auto;
+  left: 0;
+  border-radius: 2px;
+  transition: all 0.49s cubic-bezier(0.6, 0.1, 0.1, 1.6);
+}
+
+/* Day Theme - Dark green bars */
+[data-theme="day"] .menu-toggle-part {
+  background: var(--theme-text-dark-green);
+}
+
+/* Night Theme - Light cream bars */
+[data-theme="night"] .menu-toggle-part {
+  background: var(--theme-text-light-cream);
+}
+
+.menu-toggle-part:nth-of-type(1) {
+  top: calc(50% - ((6.5px)) + -2px);
+  width: 23px;
+}
+
+.menu-toggle-part:nth-of-type(2) {
+  top: calc(50% - ((6.5px)) + 3px);
+  width: 23px;
+}
+
+.menu-toggle-part:nth-of-type(3) {
+  top: calc(50% - ((6.5px)) + 8px);
+  width: 23px;
+}
+
+/* Checked state animations */
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle {
+  transform: scale(1.11) rotate(0deg);
+}
+
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle .menu-toggle-part:nth-of-type(1) {
+  transform: rotate(45deg);
+  width: 23px !important;
+  top: calc(50% - (1.5px)) !important;
+}
+
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle .menu-toggle-part:nth-of-type(2) {
+  left: 0px !important;
+  opacity: 0;
+}
+
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle .menu-toggle-part:nth-of-type(3) {
+  transform: rotate(-45deg);
+  width: 23px !important;
+  top: calc(50% - (1.5px)) !important;
+}

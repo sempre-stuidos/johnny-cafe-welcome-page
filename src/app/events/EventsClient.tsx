@@ -7,6 +7,7 @@ import { EventItemData } from "@/components/events/EventItem";
 import EventsList, { GalleryImage } from "@/components/events/EventsList";
 import { supabase } from "@/lib/supabase-client";
 import { resolveBusinessSlug } from "@/lib/business-utils";
+import ArtistsSignUp from "@/components/events/ArtistsSignUp";
 
 interface EventsClientProps {
   events: EventItemData[];
@@ -143,62 +144,67 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   }, [businessId, activeTab]);
 
   return (
-    <section
-      className={cn(
-        "relative",
-        "w-full min-h-screen md:min-h-[668px]",
-        "overflow-hidden",
-        theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
-      )}
-    >
-      {/* Background Image - 6 tiles grid (3x2) with overlap */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+    <>
+      <section
+        className={cn(
+          "relative",
+          "w-full min-h-screen md:min-h-[668px]",
+          "overflow-hidden",
+          theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
+        )}
+      >
+        {/* Background Image - 6 tiles grid (3x2) with overlap */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div
+            className={cn(
+              "grid grid-cols-3 grid-rows-2 gap-0",
+              "w-[calc(100%+6px)] h-[calc(100%+4px)]",
+              "-ml-[3px] -mt-[2px]"
+            )}
+          >
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "bg-[url('/assets/imgs/bg.png')]",
+                  "bg-center bg-[length:calc(100%+2px)_calc(100%+2px)]",
+                  "-m-px"
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Theme Overlay - light for day, dark for night */}
         <div
           className={cn(
-            "grid grid-cols-3 grid-rows-2 gap-0",
-            "w-[calc(100%+6px)] h-[calc(100%+4px)]",
-            "-ml-[3px] -mt-[2px]"
+            "absolute inset-0 z-10",
+            "transition-colors duration-300",
+            theme === "day" ? "bg-[#334D2D]/85" : "bg-[#011A0C]/90"
           )}
-        >
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className={cn(
-                "bg-[url('/assets/imgs/bg.png')]",
-                "bg-center bg-[length:calc(100%+2px)_calc(100%+2px)]",
-                "-m-px"
-              )}
-            />
-          ))}
-        </div>
-      </div>
+        />
 
-      {/* Theme Overlay - light for day, dark for night */}
-      <div
-        className={cn(
-          "absolute inset-0 z-10",
-          "transition-colors duration-300",
-          theme === "day" ? "bg-[#334D2D]/85" : "bg-[#011A0C]/90"
-        )}
-      />
+        {/* Content */}
+        <EventsList
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          events={events}
+          galleryImages={galleryImages}
+          emptyMessage={
+            activeTab === 'weekly' 
+              ? 'No weekly events at this time. Check back soon!'
+              : activeTab === 'upcoming'
+              ? 'No upcoming events at this time. Check back soon!'
+              : 'No past events available.'
+          }
+          loading={loading}
+          galleryLoading={galleryLoading}
+        />
+      </section>
 
-      {/* Content */}
-      <EventsList
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        events={events}
-        galleryImages={galleryImages}
-        emptyMessage={
-          activeTab === 'weekly' 
-            ? 'No weekly events at this time. Check back soon!'
-            : activeTab === 'upcoming'
-            ? 'No upcoming events at this time. Check back soon!'
-            : 'No past events available.'
-        }
-        loading={loading}
-        galleryLoading={galleryLoading}
-      />
-    </section>
+      {/* Artists Sign Up Section */}
+      <ArtistsSignUp />
+    </>
   );
 }
 

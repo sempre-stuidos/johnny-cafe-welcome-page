@@ -93,7 +93,7 @@ export default function HomeReservation() {
               key={i}
               className={cn(
                 "bg-[url('/assets/imgs/bg.png')]",
-                "bg-center bg-[length:calc(100%+2px)_calc(100%+2px)]",
+                "bg-center bg-[length:calc(100%+2px)_calc(100%+2px)]", "",
                 "-m-px"
               )}
             />

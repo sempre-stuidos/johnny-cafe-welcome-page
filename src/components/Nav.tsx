@@ -4,11 +4,11 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
-import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navLinks } from "@/data/navigation";
 import { usePageLoadAnimation } from "@/lib/animations/hooks";
 import Banner from "@/components/Banner";
+import MenuToggle from "@/components/MenuToggle";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
@@ -92,17 +92,9 @@ export default function Nav() {
               </button>
 
               {/* Mobile Menu Button */}
-              <button
-                onClick={toggleMenu}
-                className="md:hidden p-2 text-[#FAF2DD] hover:text-[#B29738] transition-colors z-50"
-                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
+              <div className="md:hidden z-50" data-animate="nav-toggle">
+                <MenuToggle isOpen={isMenuOpen} onToggle={toggleMenu} />
+              </div>
             </div>
           </div>
         </div>
