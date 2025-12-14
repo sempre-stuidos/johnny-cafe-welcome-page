@@ -5,7 +5,7 @@ import HomeMenu from "@/components/HomeMenu";
 import HomeEvents from "@/components/HomeEvents";
 import Testimonials from "@/components/Testimonials";
 import ReserveOrOrder from "@/components/ReserveOrOrder";
-import { getLiveEventsForBusiness, formatEventDate } from "@/lib/events";
+import { getWeeklyEventsForBusiness, formatWeeklyEventDateUppercase } from "@/lib/events";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 
 export default async function Home() {
@@ -16,16 +16,16 @@ export default async function Home() {
     'johnny-gs-brunch'
   );
   
-  // Fetch live events from database (limit to 2 for homepage)
-  const dbEvents = await getLiveEventsForBusiness(businessSlug);
+  // Fetch weekly events from database (limit to 2 for homepage)
+  const dbEvents = await getWeeklyEventsForBusiness(businessSlug);
   
   // Map database events to HomeEvents format (only first 2, formatted for display)
-  // Filter out events without starts_at (weekly events) since formatEventDate requires a date
   const homeEvents = dbEvents
-    .filter(event => event.starts_at) // Only include events with a start date
     .slice(0, 2)
     .map(event => ({
-      date: formatEventDate(event.starts_at!),
+      date: event.is_weekly && event.day_of_week !== undefined
+        ? formatWeeklyEventDateUppercase(event.day_of_week, event.starts_at, event.ends_at)
+        : 'Date TBD',
       image: event.image_url,
     }));
 

@@ -64,13 +64,13 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
           'johnny-gs-brunch'
         );
 
-        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&format=regular`);
+        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=weekly`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }
 
         const data = await response.json();
-        // Get the latest 2 events and format them for HomeEvents
+        // Get the latest 2 weekly events and format them for HomeEvents
         const latestEvents = (data.events || []).slice(0, 2).map((event: { date: string; name: string; image?: string }) => ({
           date: event.date,
           image: event.image,
@@ -108,10 +108,10 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
           );
 
           try {
-            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&format=regular`);
+            const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=weekly&format=uppercase`);
             if (response.ok) {
               const data = await response.json();
-              // Get the latest 2 events and format them for HomeEvents
+              // Get the latest 2 weekly events and format them for HomeEvents
               const latestEvents = (data.events || []).slice(0, 2).map((event: { date: string; name: string; image?: string }) => ({
                 date: event.date,
                 image: event.image,

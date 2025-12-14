@@ -228,13 +228,17 @@ export async function getPastEventsForBusiness(businessSlug: string): Promise<Ev
         }
       })
       .filter(event => {
-        // An event is past if:
+        // For weekly events, check if they have past occurrences
+        if (event.is_weekly && event.day_of_week !== undefined) {
+          return hasPastOccurrence(event.day_of_week, event.starts_at, event.ends_at)
+        }
+        
+        // For non-weekly events, check if they are past:
         // 1. It has an ends_at date that is in the past, OR
         // 2. It has a publish_end_at that is in the past, OR
         // 3. Its computed status is 'past'
-        // Note: Weekly events might not have ends_at
         if (!event.ends_at) {
-          // For weekly events without ends_at, check publish_end_at or status
+          // For events without ends_at, check publish_end_at or status
           const publishEndAt = event.publish_end_at ? new Date(event.publish_end_at) : null
           return (publishEndAt && publishEndAt < now) || event.status === 'past'
         }
@@ -429,6 +433,225 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
   }
 
   return `${dateStr} · ${startTime} - ${endTime}`
+}
+
+/**
+ * Format weekly event date and time for display (past occurrence)
+ * Calculates the last occurrence of the specified day of week and displays it with the actual date
+ * For weekly events, times are stored with placeholder dates, so we extract the time portion
+ */
+export function formatWeeklyEventDatePast(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  const dayName = dayNames[dayOfWeek] || 'Unknown'
+
+  // Calculate the last occurrence date
+  const today = new Date()
+  const currentDay = today.getDay()
+  
+  // Calculate days since last occurrence
+  let daysSinceLast = (currentDay - dayOfWeek + 7) % 7
+  
+  // If it's today, check if the time has passed
+  if (daysSinceLast === 0 && startsAt) {
+    const start = new Date(startsAt)
+    if (!isNaN(start.getTime())) {
+      const startHours = start.getHours()
+      const startMinutes = start.getMinutes()
+      const now = new Date()
+      const currentHours = now.getHours()
+      const currentMinutes = now.getMinutes()
+      
+      // If the event time has already passed today, show last week's occurrence
+      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+        daysSinceLast = 7
+      }
+    }
+  }
+  
+  // If daysSinceLast is 0, it means it's today and time hasn't passed, so use 0
+  // Otherwise, use the calculated days (going backwards)
+  const lastDate = new Date(today)
+  lastDate.setDate(today.getDate() - daysSinceLast)
+  
+  // Format date as "DayName Month Day" (e.g., "Thursday Dec 18")
+  const monthName = lastDate.toLocaleDateString('en-US', { month: 'short' })
+  const dayNumber = lastDate.getDate()
+  const dateStr = `${dayName} ${monthName} ${dayNumber}`
+
+  if (!startsAt) {
+    return dateStr
+  }
+
+  const start = new Date(startsAt)
+  
+  if (isNaN(start.getTime())) {
+    return dateStr
+  }
+
+  // Extract time from the Date object using local time methods
+  // This will show the time as it appears in the database timezone context
+  // For weekly events stored with placeholder dates, this preserves the original time entry
+  const startHours = start.getHours()
+  const startMinutes = start.getMinutes()
+  const startHour12 = startHours % 12 || 12
+  const startAmPm = startHours >= 12 ? 'PM' : 'AM'
+  const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
+
+  if (!endsAt) {
+    return `${dateStr} · ${startTime}`
+  }
+
+  const end = new Date(endsAt)
+  
+  if (isNaN(end.getTime())) {
+    return `${dateStr} · ${startTime}`
+  }
+
+  const endHours = end.getHours()
+  const endMinutes = end.getMinutes()
+  const endHour12 = endHours % 12 || 12
+  const endAmPm = endHours >= 12 ? 'PM' : 'AM'
+  const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
+
+  if (startTime === endTime) {
+    return `${dateStr} · ${startTime}`
+  }
+
+  return `${dateStr} · ${startTime} - ${endTime}`
+}
+
+/**
+ * Format weekly event date and time for display with uppercase date format
+ * Calculates the next occurrence of the specified day of week and displays it with uppercase date
+ * Used for home page display
+ */
+export function formatWeeklyEventDateUppercase(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  const dayName = dayNames[dayOfWeek] || 'Unknown'
+
+  // Calculate the next occurrence date
+  const today = new Date()
+  const currentDay = today.getDay()
+  
+  // Calculate days until next occurrence
+  let daysUntilNext = (dayOfWeek - currentDay + 7) % 7
+  
+  // If it's today, check if the time has passed
+  if (daysUntilNext === 0 && startsAt) {
+    const start = new Date(startsAt)
+    if (!isNaN(start.getTime())) {
+      const startHours = start.getHours()
+      const startMinutes = start.getMinutes()
+      const now = new Date()
+      const currentHours = now.getHours()
+      const currentMinutes = now.getMinutes()
+      
+      // If the event time has already passed today, show next week's occurrence
+      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+        daysUntilNext = 7
+      }
+    }
+  }
+  
+  // If daysUntilNext is 0, it means it's today and time hasn't passed, so use 0
+  // Otherwise, use the calculated days
+  const nextDate = new Date(today)
+  nextDate.setDate(today.getDate() + daysUntilNext)
+  
+  // Format date as "MONTH DAY, YEAR" in uppercase (e.g., "DECEMBER 18, 2025")
+  const dateStr = nextDate.toLocaleDateString('en-US', { 
+    month: 'long', 
+    day: 'numeric', 
+    year: 'numeric' 
+  }).toUpperCase()
+
+  if (!startsAt) {
+    return dateStr
+  }
+
+  const start = new Date(startsAt)
+  
+  if (isNaN(start.getTime())) {
+    return dateStr
+  }
+
+  // Extract time from the Date object using local time methods
+  const startHours = start.getHours()
+  const startMinutes = start.getMinutes()
+  const startHour12 = startHours % 12 || 12
+  const startAmPm = startHours >= 12 ? 'PM' : 'AM'
+  const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
+
+  if (!endsAt) {
+    return `${dateStr} · ${startTime}`
+  }
+
+  const end = new Date(endsAt)
+  
+  if (isNaN(end.getTime())) {
+    return `${dateStr} · ${startTime}`
+  }
+
+  const endHours = end.getHours()
+  const endMinutes = end.getMinutes()
+  const endHour12 = endHours % 12 || 12
+  const endAmPm = endHours >= 12 ? 'PM' : 'AM'
+  const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
+
+  if (startTime === endTime) {
+    return `${dateStr} · ${startTime}`
+  }
+
+  return `${dateStr} · ${startTime} - ${endTime}`
+}
+
+/**
+ * Check if a weekly event has at least one past occurrence
+ * Returns true if the last occurrence date/time is in the past
+ */
+export function hasPastOccurrence(dayOfWeek: number, startsAt?: string, endsAt?: string): boolean {
+  if (dayOfWeek === undefined || dayOfWeek === null) {
+    return false
+  }
+
+  const today = new Date()
+  const currentDay = today.getDay()
+  
+  // Calculate days since last occurrence
+  let daysSinceLast = (currentDay - dayOfWeek + 7) % 7
+  
+  // If it's today, check if the time has passed
+  if (daysSinceLast === 0 && startsAt) {
+    const start = new Date(startsAt)
+    if (!isNaN(start.getTime())) {
+      const startHours = start.getHours()
+      const startMinutes = start.getMinutes()
+      const now = new Date()
+      const currentHours = now.getHours()
+      const currentMinutes = now.getMinutes()
+      
+      // If the event time has already passed today, it's in the past
+      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+        return true
+      }
+      // If time hasn't passed today, check if there was a previous occurrence
+      // (i.e., if this event has been running for at least a week)
+      // For now, we'll consider it past if time has passed, otherwise not
+      return false
+    }
+  }
+  
+  // If daysSinceLast > 0, there was a past occurrence
+  // If daysSinceLast === 0 and we're here, it means either no startsAt or time hasn't passed
+  // In that case, check if there was a previous week's occurrence
+  if (daysSinceLast === 0) {
+    // If it's today and time hasn't passed, check if event has been running (has publish_start_at in past)
+    // For simplicity, if it's today and time hasn't passed, we'll say it's not past yet
+    return false
+  }
+  
+  // There was a past occurrence (daysSinceLast > 0)
+  return true
 }
 
 /**

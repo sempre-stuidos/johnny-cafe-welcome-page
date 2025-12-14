@@ -6,6 +6,8 @@ import {
   formatEventDateUppercase,
   formatEventDateWithTime,
   formatWeeklyEventDate,
+  formatWeeklyEventDatePast,
+  formatWeeklyEventDateUppercase,
   getEventGalleryImagesForBusiness
 } from '@/lib/events'
 import { resolveBusinessSlug } from '@/lib/business-utils'
@@ -16,6 +18,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const businessSlugParam = searchParams.get('businessSlug')
     const type = searchParams.get('type') || 'live' // 'weekly', 'live', 'past', or 'gallery'
+    const format = searchParams.get('format') // 'uppercase' for uppercase date format
     
     const businessSlug = resolveBusinessSlug(
       businessSlugParam || undefined,
@@ -48,8 +51,14 @@ export async function GET(request: NextRequest) {
       let dateStr: string
       
       if (event.is_weekly && event.day_of_week !== undefined) {
-        // Weekly events: format as "Every [Day] at [Time]"
-        dateStr = formatWeeklyEventDate(event.day_of_week, event.starts_at, event.ends_at)
+        // Weekly events: use appropriate format based on type and format parameter
+        if (type === 'past') {
+          dateStr = formatWeeklyEventDatePast(event.day_of_week, event.starts_at, event.ends_at)
+        } else if (format === 'uppercase') {
+          dateStr = formatWeeklyEventDateUppercase(event.day_of_week, event.starts_at, event.ends_at)
+        } else {
+          dateStr = formatWeeklyEventDate(event.day_of_week, event.starts_at, event.ends_at)
+        }
       } else if (event.starts_at) {
         // One-time events: format with date AND time
         dateStr = formatEventDateWithTime(event.starts_at, event.ends_at)
