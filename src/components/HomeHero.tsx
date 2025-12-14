@@ -23,7 +23,7 @@ export default function HomeHero() {
     <section
       className={cn(
         "relative",
-        "w-full md:min-h-[600px]",
+        "w-full min-h-[638px] md:min-h-[638px]",
         "overflow-hidden",
         "z-10",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
@@ -63,8 +63,8 @@ export default function HomeHero() {
       {/* Content */}
       <div
         className={cn(
-          "relative z-20",
-          "h-full w-full",
+          "absolute inset-0 z-20",
+          "w-full",
           "px-4 md:px-8"
         )}
         data-animate="hero-content"
@@ -72,8 +72,8 @@ export default function HomeHero() {
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            " h-full md:h-[70vh] w-full max-w-[1200px]",
-            "mx-auto gap-4 md:gap-8 "
+            "h-full w-full max-w-[1200px]",
+            "mx-auto gap-4 md:gap-8"
           )}
         >
           {/* Text Content - Top on mobile, Left on desktop */}
@@ -181,14 +181,15 @@ export default function HomeHero() {
               "w-full md:w-[60%]",
               "flex-1 md:flex-none",
               "order-2",
-              "md:mt-8 md:pb-0"
+              "pb-0"
             )}
           >
             <div
               className={cn(
                 "hero-frame",
-                "w-full h-full",
-                "min-h-[300px] max-w-[597px] "
+                "w-full",
+                "min-h-[300px] max-w-[597px]",
+                "h-[calc(100%-50px)]"
               )}
             >
               <Image
