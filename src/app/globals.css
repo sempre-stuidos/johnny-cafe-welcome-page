@@ -85,6 +85,10 @@
   --letter-spacing-widest: 0.1em;
 }
 
+html {
+  overflow-x: clip;
+}
+
 body {
   background: var(--theme-bg-primary);
   color: var(--theme-text-body);

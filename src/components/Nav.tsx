@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useLenis } from "@/contexts/LenisContext";
 import { cn } from "@/lib/utils";
 import { navLinks } from "@/data/navigation";
 import { usePageLoadAnimation } from "@/lib/animations/hooks";
@@ -12,11 +13,21 @@ import MenuToggle from "@/components/MenuToggle";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
+  const { stop, start } = useLenis();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+
+  // Prevent scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      stop();
+    } else {
+      start();
+    }
+  }, [isMenuOpen, stop, start]);
 
   // Page load animations
   usePageLoadAnimation('[data-animate="nav-banner"]', "nav-banner", navRef);
