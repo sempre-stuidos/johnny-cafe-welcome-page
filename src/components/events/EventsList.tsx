@@ -5,7 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import EventItem, { EventItemData } from "./EventItem";
 import LazyGalleryImage from "./LazyGalleryImage";
 
-type EventTab = 'weekly' | 'upcoming' | 'past' | 'gallery';
+type EventTab = 'weekly' | 'past' | 'gallery';
 
 export interface GalleryImage {
   id: string;
@@ -63,20 +63,6 @@ export default function EventsList({
                 }}
               >
                 Weekly Events
-              </p>
-              <p
-                onClick={() => onTabChange('upcoming')}
-                className="cursor-pointer transition-colors duration-300"
-                style={{
-                  fontFamily: "var(--font-pinyon-script)",
-                  fontSize: "clamp(var(--font-size-xl), 6vw, var(--font-size-3xl))",
-                  color: "var(--theme-text-primary)",
-                  lineHeight: "var(--line-height-normal)",
-                  fontWeight: activeTab === 'upcoming' ? 600 : 400,
-                  fontStyle: "normal",
-                }}
-              >
-                Upcoming Events
               </p>
               <p
                 onClick={() => onTabChange('past')}

@@ -14,7 +14,7 @@ interface EventsClientProps {
   events: EventItemData[];
 }
 
-type EventTab = 'weekly' | 'upcoming' | 'past' | 'gallery';
+type EventTab = 'weekly' | 'past' | 'gallery';
 
 export default function EventsClient({ events: initialEvents }: EventsClientProps) {
   const { theme } = useTheme();
@@ -83,7 +83,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
       return;
     }
 
-    // Fetch events for other tabs (weekly, upcoming, past)
+    // Fetch events for other tabs (weekly, past)
     const fetchEvents = async () => {
       setLoading(true);
       try {
@@ -105,7 +105,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
     fetchEvents();
 
     // Set up real-time subscription (only for event tabs, not gallery)
-    // TypeScript knows activeTab is 'weekly' | 'upcoming' | 'past' here
+    // TypeScript knows activeTab is 'weekly' | 'past' here
     const channel = supabase
       .channel('events-changes')
       .on(
@@ -186,21 +186,19 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
         />
 
         {/* Content */}
-        <EventsList
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          events={events}
-          galleryImages={galleryImages}
-          emptyMessage={
-            activeTab === 'weekly' 
-              ? 'No weekly events at this time. Check back soon!'
-              : activeTab === 'upcoming'
-              ? 'No upcoming events at this time. Check back soon!'
-              : 'No past events available.'
-          }
-          loading={loading}
-          galleryLoading={galleryLoading}
-        />
+          <EventsList
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              events={events}
+              galleryImages={galleryImages}
+              emptyMessage={
+                  activeTab === 'weekly'
+                      ? 'No weekly events at this time. Check back soon!'
+                      : 'No past events available.'
+              }
+              loading={loading}
+              galleryLoading={galleryLoading}
+          />
       </section>
 
       {/* Jazz Night Vibe Section */}

@@ -348,21 +348,55 @@ export function formatEventDateWithTime(startsAt?: string, endsAt?: string): str
 
 /**
  * Format weekly event date and time for display
- * Extracts the exact time from the database timestamp
+ * Calculates the next occurrence of the specified day of week and displays it with the actual date
  * For weekly events, times are stored with placeholder dates, so we extract the time portion
  */
 export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const dayName = dayNames[dayOfWeek] || 'Unknown'
 
+  // Calculate the next occurrence date
+  const today = new Date()
+  const currentDay = today.getDay()
+  
+  // Calculate days until next occurrence
+  let daysUntilNext = (dayOfWeek - currentDay + 7) % 7
+  
+  // If it's today, check if the time has passed
+  if (daysUntilNext === 0 && startsAt) {
+    const start = new Date(startsAt)
+    if (!isNaN(start.getTime())) {
+      const startHours = start.getHours()
+      const startMinutes = start.getMinutes()
+      const now = new Date()
+      const currentHours = now.getHours()
+      const currentMinutes = now.getMinutes()
+      
+      // If the event time has already passed today, show next week's occurrence
+      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+        daysUntilNext = 7
+      }
+    }
+  }
+  
+  // If daysUntilNext is 0, it means it's today and time hasn't passed, so use 0
+  // Otherwise, use the calculated days
+  const nextDate = new Date(today)
+  nextDate.setDate(today.getDate() + daysUntilNext)
+  
+  // Format date as "DayName Month Day" (e.g., "Thursday Dec 18")
+  const monthName = nextDate.toLocaleDateString('en-US', { month: 'short' })
+  const dayNumber = nextDate.getDate()
+  const dateStr = `${dayName} ${monthName} ${dayNumber}`
+
   if (!startsAt) {
-    return `Every ${dayName}`
+    return dateStr
   }
 
   const start = new Date(startsAt)
   
   if (isNaN(start.getTime())) {
-    return `Every ${dayName}`
+    return dateStr
   }
 
   // Extract time from the Date object using local time methods
@@ -375,13 +409,13 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
   const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
 
   if (!endsAt) {
-    return `Every ${dayName} · ${startTime}`
+    return `${dateStr} · ${startTime}`
   }
 
   const end = new Date(endsAt)
   
   if (isNaN(end.getTime())) {
-    return `Every ${dayName} · ${startTime}`
+    return `${dateStr} · ${startTime}`
   }
 
   const endHours = end.getHours()
@@ -391,10 +425,10 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
   const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
 
   if (startTime === endTime) {
-    return `Every ${dayName} · ${startTime}`
+    return `${dateStr} · ${startTime}`
   }
 
-  return `Every ${dayName} · ${startTime} - ${endTime}`
+  return `${dateStr} · ${startTime} - ${endTime}`
 }
 
 /**
