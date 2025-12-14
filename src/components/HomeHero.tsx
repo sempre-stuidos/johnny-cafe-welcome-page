@@ -23,7 +23,7 @@ export default function HomeHero() {
     <section
       className={cn(
         "relative",
-        "w-full min-h-[638px] md:min-h-[638px]",
+        "w-full min-h-[538px] md:min-h-[638px]",
         "overflow-hidden",
         "z-10",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
