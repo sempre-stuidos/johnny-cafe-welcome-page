@@ -17,31 +17,31 @@ const geistMono = Geist_Mono({
 });
 
 const yellowtail = localFont({
-  src: "../../public/fonts/Yellowtail-Regular.ttf",
+  src: "./../../public/fonts/Yellowtail-Regular.ttf",
   variable: "--font-yellowtail",
   display: "swap",
 });
 
 const fjallaOne = localFont({
-  src: "../../public/fonts/FjallaOne-Regular.ttf",
+  src: "./../../public/fonts/FjallaOne-Regular.ttf",
   variable: "--font-fjalla-one",
   display: "swap",
 });
 
 const hornbillTrial = localFont({
-  src: "../../public/fonts/Hornbill-Trial-Black.ttf",
+  src: "./../../public/fonts/Hornbill-Trial-Black.ttf",
   variable: "--font-hornbill-trial",
   display: "swap",
 });
 
 const amoretSans = localFont({
-  src: "../../public/fonts/Amoret-Collection-Sans.ttf",
+  src: "./../../public/fonts/Amoret-Collection-Sans.ttf",
   variable: "--font-amoret-sans",
   display: "swap",
 });
 
 const pinyonScript = localFont({
-  src: "../../public/fonts/PinyonScript-Regular.ttf",
+  src: "./../../public/fonts/PinyonScript-Regular.ttf",
   variable: "--font-pinyon-script",
   display: "swap",
 });

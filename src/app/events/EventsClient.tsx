@@ -7,6 +7,7 @@ import { EventItemData } from "@/components/events/EventItem";
 import EventsList, { GalleryImage } from "@/components/events/EventsList";
 import { supabase } from "@/lib/supabase-client";
 import { resolveBusinessSlug } from "@/lib/business-utils";
+import EventsVibe from "@/components/events/EventsVibe";
 import ArtistsSignUp from "@/components/events/ArtistsSignUp";
 
 interface EventsClientProps {
@@ -201,6 +202,9 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
           galleryLoading={galleryLoading}
         />
       </section>
+
+      {/* Jazz Night Vibe Section */}
+      <EventsVibe />
 
       {/* Artists Sign Up Section */}
       <ArtistsSignUp />

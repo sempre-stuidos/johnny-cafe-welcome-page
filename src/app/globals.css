@@ -1645,6 +1645,52 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   stroke: #011A0C;
 }
 
+/* Events Vibe Section */
+.bg-events-vibe-day {
+  background-color: rgba(194, 202, 168, 1);
+}
+
+.bg-events-vibe-night {
+  background-color: #022414;
+}
+
+.overlay-events-vibe-day {
+  background-color: rgba(194, 202, 168, 0.85);
+}
+
+.overlay-events-vibe-night {
+  background-color: rgba(2, 36, 20, 0.85);
+}
+
+.events-vibe-title {
+  font-family: var(--font-hornbill-trial);
+  font-size: clamp(36px, 5vw, 48px);
+  line-height: 110%;
+  color: var(--about-title);
+  transition: color 0.3s ease;
+}
+
+.events-vibe-policy-box {
+  border: 2px solid var(--theme-accent);
+  background-color: transparent;
+}
+
+.events-vibe-policy-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--theme-accent);
+}
+
+.events-vibe-policy-text {
+  font-family: var(--font-amoret-sans);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--theme-accent);
+}
+
 /* Animated Hamburger Menu Toggle */
 .menu-toggle-wrapper {
   display: inline-block;
