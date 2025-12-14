@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Gayathri } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LenisProvider } from "@/contexts/LenisContext";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
@@ -125,11 +126,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} antialiased`}
       >
-        <ThemeProvider>
-          <Nav />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <LenisProvider>
+          <ThemeProvider>
+            <Nav />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </LenisProvider>
       </body>
     </html>
   );
