@@ -298,51 +298,160 @@ export function formatEventDateUppercase(dateString: string): string {
 }
 
 /**
+ * Parse ISO string and extract components in Toronto timezone
+ * Converts UTC time from database to Toronto timezone before extracting components
+ */
+function parseISOString(isoString: string): { year: number; month: number; day: number; hours: number; minutes: number } | null {
+  const date = new Date(isoString)
+  
+  if (isNaN(date.getTime())) {
+    return null
+  }
+  
+  // Get date components in Toronto timezone
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Toronto',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+  
+  const parts = formatter.formatToParts(date)
+  const year = parseInt(parts.find(p => p.type === 'year')?.value || '0', 10)
+  const month = parseInt(parts.find(p => p.type === 'month')?.value || '0', 10)
+  const day = parseInt(parts.find(p => p.type === 'day')?.value || '0', 10)
+  const hours = parseInt(parts.find(p => p.type === 'hour')?.value || '0', 10)
+  const minutes = parseInt(parts.find(p => p.type === 'minute')?.value || '0', 10)
+  
+  return { year, month, day, hours, minutes }
+}
+
+
+/**
+ * Format date from components (already in Toronto timezone from parseISOString)
+ */
+function formatDateUTC(year: number, month: number, day: number, uppercase: boolean = false): string {
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  const monthName = monthNames[month - 1]
+  const dateStr = `${monthName} ${day}, ${year}`
+  return uppercase ? dateStr.toUpperCase() : dateStr
+}
+
+/**
+ * Get current date/time components in Toronto timezone
+ */
+function getTorontoNowComponents(): { year: number; month: number; day: number; hours: number; minutes: number } {
+  const now = new Date()
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Toronto',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+  
+  const parts = formatter.formatToParts(now)
+  return {
+    year: parseInt(parts.find(p => p.type === 'year')?.value || '0', 10),
+    month: parseInt(parts.find(p => p.type === 'month')?.value || '0', 10),
+    day: parseInt(parts.find(p => p.type === 'day')?.value || '0', 10),
+    hours: parseInt(parts.find(p => p.type === 'hour')?.value || '0', 10),
+    minutes: parseInt(parts.find(p => p.type === 'minute')?.value || '0', 10)
+  }
+}
+
+/**
+ * Get day of week in Toronto timezone (0 = Sunday, 6 = Saturday)
+ */
+function getTorontoDayOfWeek(): number {
+  const now = new Date()
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Toronto',
+    weekday: 'long'
+  })
+  
+  const weekday = formatter.format(now)
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  return dayNames.indexOf(weekday)
+}
+
+/**
+ * Get date components in Toronto timezone
+ */
+function getTorontoDateComponents(date: Date): { year: number; month: number; day: number } {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Toronto',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric'
+  })
+  
+  const parts = formatter.formatToParts(date)
+  return {
+    year: parseInt(parts.find(p => p.type === 'year')?.value || '0', 10),
+    month: parseInt(parts.find(p => p.type === 'month')?.value || '0', 10),
+    day: parseInt(parts.find(p => p.type === 'day')?.value || '0', 10)
+  }
+}
+
+/**
+ * Extract time portion from ISO string and convert to Toronto timezone (e.g., "21:00:00" -> "9:00 PM" in Toronto)
+ * Converts UTC time from database to Toronto timezone for display
+ */
+function extractTimeFromISO(isoString: string): string {
+  const date = new Date(isoString)
+  
+  if (isNaN(date.getTime())) {
+    return ''
+  }
+  
+  // Format time in Toronto timezone
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Toronto',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  })
+  
+  return formatter.format(date)
+}
+
+/**
  * Format date and time for display with time included (e.g., "DECEMBER 5, 2025 at 8:00 PM")
+ * All times are displayed in Toronto timezone
  */
 export function formatEventDateWithTime(startsAt?: string, endsAt?: string): string {
   if (!startsAt) {
     return 'Invalid date'
   }
 
-  const start = new Date(startsAt)
-  
-  if (isNaN(start.getTime())) {
+  const startParts = parseISOString(startsAt)
+  if (!startParts) {
     return 'Invalid date'
   }
   
-  const dateStr = start.toLocaleDateString('en-US', { 
-    month: 'long', 
-    day: 'numeric', 
-    year: 'numeric' 
-  }).toUpperCase()
-  
-  const startTime = start.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  })
+  const dateStr = formatDateUTC(startParts.year, startParts.month, startParts.day, true)
+  const startTime = extractTimeFromISO(startsAt)
   
   if (endsAt) {
-    const end = new Date(endsAt)
-    if (!isNaN(end.getTime())) {
-      const endTime = end.toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit', 
-        hour12: true 
-      })
+    const endTime = extractTimeFromISO(endsAt)
       
-      // If same day, show date once with time range
-      if (start.toDateString() === end.toDateString()) {
-        return `${dateStr} · ${startTime} - ${endTime}`
-      } else {
-        // Different days
-        const endDateStr = end.toLocaleDateString('en-US', { 
-          month: 'long', 
-          day: 'numeric', 
-          year: 'numeric' 
-        }).toUpperCase()
-        return `${dateStr} · ${startTime} → ${endDateStr} · ${endTime}`
+    if (endTime) {
+      const endParts = parseISOString(endsAt)
+      if (endParts) {
+        // If same day, show date once with time range
+        if (startParts.year === endParts.year && startParts.month === endParts.month && startParts.day === endParts.day) {
+          return `${dateStr} · ${startTime} - ${endTime}`
+        } else {
+          // Different days
+          const endDateStr = formatDateUTC(endParts.year, endParts.month, endParts.day, true)
+          return `${dateStr} · ${startTime} → ${endDateStr} · ${endTime}`
+        }
       }
     }
   }
@@ -353,80 +462,60 @@ export function formatEventDateWithTime(startsAt?: string, endsAt?: string): str
 /**
  * Format weekly event date and time for display
  * Calculates the next occurrence of the specified day of week and displays it with the actual date
- * For weekly events, times are stored with placeholder dates, so we extract the time portion
+ * All times are displayed in Toronto timezone
  */
 export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const dayName = dayNames[dayOfWeek] || 'Unknown'
 
-  // Calculate the next occurrence date
-  const today = new Date()
-  const currentDay = today.getDay()
+  // Calculate the next occurrence date using Toronto timezone
+  const currentDay = getTorontoDayOfWeek()
   
   // Calculate days until next occurrence
   let daysUntilNext = (dayOfWeek - currentDay + 7) % 7
   
-  // If it's today, check if the time has passed
+  // If it's today, check if the time has passed in Toronto timezone
   if (daysUntilNext === 0 && startsAt) {
-    const start = new Date(startsAt)
-    if (!isNaN(start.getTime())) {
-      const startHours = start.getHours()
-      const startMinutes = start.getMinutes()
-      const now = new Date()
-      const currentHours = now.getHours()
-      const currentMinutes = now.getMinutes()
+    const startParts = parseISOString(startsAt)
+    if (startParts) {
+      const torontoNow = getTorontoNowComponents()
       
-      // If the event time has already passed today, show next week's occurrence
-      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+      // If the event time has already passed today in Toronto, show next week's occurrence
+      if (torontoNow.hours > startParts.hours || (torontoNow.hours === startParts.hours && torontoNow.minutes >= startParts.minutes)) {
         daysUntilNext = 7
       }
     }
   }
   
-  // If daysUntilNext is 0, it means it's today and time hasn't passed, so use 0
-  // Otherwise, use the calculated days
-  const nextDate = new Date(today)
-  nextDate.setDate(today.getDate() + daysUntilNext)
+  // Calculate next date in Toronto timezone
+  const torontoNow = getTorontoNowComponents()
+  // Create a date object for the next occurrence in Toronto timezone
+  const nextDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day + daysUntilNext)
   
-  // Format date as "DayName Month Day" (e.g., "Thursday Dec 18")
-  const monthName = nextDate.toLocaleDateString('en-US', { month: 'short' })
-  const dayNumber = nextDate.getDate()
-  const dateStr = `${dayName} ${monthName} ${dayNumber}`
+  // Format date as "DayName Month Day" (e.g., "Thursday Dec 18") in Toronto timezone
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const nextDateParts = getTorontoDateComponents(nextDate)
+  const monthName = monthNames[nextDateParts.month - 1]
+  const dateStr = `${dayName} ${monthName} ${nextDateParts.day}`
 
   if (!startsAt) {
     return dateStr
   }
 
-  const start = new Date(startsAt)
-  
-  if (isNaN(start.getTime())) {
+  // Extract time in Toronto timezone
+  const startTime = extractTimeFromISO(startsAt)
+  if (!startTime) {
     return dateStr
   }
-
-  // Extract time from the Date object using local time methods
-  // This will show the time as it appears in the database timezone context
-  // For weekly events stored with placeholder dates, this preserves the original time entry
-  const startHours = start.getHours()
-  const startMinutes = start.getMinutes()
-  const startHour12 = startHours % 12 || 12
-  const startAmPm = startHours >= 12 ? 'PM' : 'AM'
-  const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
 
   if (!endsAt) {
     return `${dateStr} · ${startTime}`
   }
 
-  const end = new Date(endsAt)
-  
-  if (isNaN(end.getTime())) {
+  const endTime = extractTimeFromISO(endsAt)
+  if (!endTime) {
     return `${dateStr} · ${startTime}`
   }
-
-  const endHours = end.getHours()
-  const endMinutes = end.getMinutes()
-  const endHour12 = endHours % 12 || 12
-  const endAmPm = endHours >= 12 ? 'PM' : 'AM'
-  const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
 
   if (startTime === endTime) {
     return `${dateStr} · ${startTime}`
@@ -438,80 +527,60 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
 /**
  * Format weekly event date and time for display (past occurrence)
  * Calculates the last occurrence of the specified day of week and displays it with the actual date
- * For weekly events, times are stored with placeholder dates, so we extract the time portion
+ * All times are displayed in Toronto timezone
  */
 export function formatWeeklyEventDatePast(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const dayName = dayNames[dayOfWeek] || 'Unknown'
 
-  // Calculate the last occurrence date
-  const today = new Date()
-  const currentDay = today.getDay()
+  // Calculate the last occurrence date using Toronto timezone
+  const currentDay = getTorontoDayOfWeek()
   
   // Calculate days since last occurrence
   let daysSinceLast = (currentDay - dayOfWeek + 7) % 7
   
-  // If it's today, check if the time has passed
+  // If it's today, check if the time has passed in Toronto timezone
   if (daysSinceLast === 0 && startsAt) {
-    const start = new Date(startsAt)
-    if (!isNaN(start.getTime())) {
-      const startHours = start.getHours()
-      const startMinutes = start.getMinutes()
-      const now = new Date()
-      const currentHours = now.getHours()
-      const currentMinutes = now.getMinutes()
+    const startParts = parseISOString(startsAt)
+    if (startParts) {
+      const torontoNow = getTorontoNowComponents()
       
-      // If the event time has already passed today, show last week's occurrence
-      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+      // If the event time has already passed today in Toronto, show last week's occurrence
+      if (torontoNow.hours > startParts.hours || (torontoNow.hours === startParts.hours && torontoNow.minutes >= startParts.minutes)) {
         daysSinceLast = 7
       }
     }
   }
   
-  // If daysSinceLast is 0, it means it's today and time hasn't passed, so use 0
-  // Otherwise, use the calculated days (going backwards)
-  const lastDate = new Date(today)
-  lastDate.setDate(today.getDate() - daysSinceLast)
+  // Calculate last date in Toronto timezone
+  const torontoNow = getTorontoNowComponents()
+  // Create a date object for the last occurrence in Toronto timezone
+  const lastDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day - daysSinceLast)
   
-  // Format date as "DayName Month Day" (e.g., "Thursday Dec 18")
-  const monthName = lastDate.toLocaleDateString('en-US', { month: 'short' })
-  const dayNumber = lastDate.getDate()
-  const dateStr = `${dayName} ${monthName} ${dayNumber}`
+  // Format date as "DayName Month Day" (e.g., "Thursday Dec 18") in Toronto timezone
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const lastDateParts = getTorontoDateComponents(lastDate)
+  const monthName = monthNames[lastDateParts.month - 1]
+  const dateStr = `${dayName} ${monthName} ${lastDateParts.day}`
 
   if (!startsAt) {
     return dateStr
   }
 
-  const start = new Date(startsAt)
-  
-  if (isNaN(start.getTime())) {
+  // Extract time in Toronto timezone
+  const startTime = extractTimeFromISO(startsAt)
+  if (!startTime) {
     return dateStr
   }
-
-  // Extract time from the Date object using local time methods
-  // This will show the time as it appears in the database timezone context
-  // For weekly events stored with placeholder dates, this preserves the original time entry
-  const startHours = start.getHours()
-  const startMinutes = start.getMinutes()
-  const startHour12 = startHours % 12 || 12
-  const startAmPm = startHours >= 12 ? 'PM' : 'AM'
-  const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
 
   if (!endsAt) {
     return `${dateStr} · ${startTime}`
   }
 
-  const end = new Date(endsAt)
-  
-  if (isNaN(end.getTime())) {
+  const endTime = extractTimeFromISO(endsAt)
+  if (!endTime) {
     return `${dateStr} · ${startTime}`
   }
-
-  const endHours = end.getHours()
-  const endMinutes = end.getMinutes()
-  const endHour12 = endHours % 12 || 12
-  const endAmPm = endHours >= 12 ? 'PM' : 'AM'
-  const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
 
   if (startTime === endTime) {
     return `${dateStr} · ${startTime}`
@@ -524,79 +593,55 @@ export function formatWeeklyEventDatePast(dayOfWeek: number, startsAt?: string, 
  * Format weekly event date and time for display with uppercase date format
  * Calculates the next occurrence of the specified day of week and displays it with uppercase date
  * Used for home page display
+ * All times are displayed in Toronto timezone
  */
 export function formatWeeklyEventDateUppercase(dayOfWeek: number, startsAt?: string, endsAt?: string): string {
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  const dayName = dayNames[dayOfWeek] || 'Unknown'
-
-  // Calculate the next occurrence date
-  const today = new Date()
-  const currentDay = today.getDay()
+  // Calculate the next occurrence date using Toronto timezone
+  const currentDay = getTorontoDayOfWeek()
   
   // Calculate days until next occurrence
   let daysUntilNext = (dayOfWeek - currentDay + 7) % 7
   
-  // If it's today, check if the time has passed
+  // If it's today, check if the time has passed in Toronto timezone
   if (daysUntilNext === 0 && startsAt) {
-    const start = new Date(startsAt)
-    if (!isNaN(start.getTime())) {
-      const startHours = start.getHours()
-      const startMinutes = start.getMinutes()
-      const now = new Date()
-      const currentHours = now.getHours()
-      const currentMinutes = now.getMinutes()
+    const startParts = parseISOString(startsAt)
+    if (startParts) {
+      const torontoNow = getTorontoNowComponents()
       
-      // If the event time has already passed today, show next week's occurrence
-      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+      // If the event time has already passed today in Toronto, show next week's occurrence
+      if (torontoNow.hours > startParts.hours || (torontoNow.hours === startParts.hours && torontoNow.minutes >= startParts.minutes)) {
         daysUntilNext = 7
       }
     }
   }
   
-  // If daysUntilNext is 0, it means it's today and time hasn't passed, so use 0
-  // Otherwise, use the calculated days
-  const nextDate = new Date(today)
-  nextDate.setDate(today.getDate() + daysUntilNext)
+  // Calculate next date in Toronto timezone
+  const torontoNow = getTorontoNowComponents()
+  // Create a date object for the next occurrence in Toronto timezone
+  const nextDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day + daysUntilNext)
   
-  // Format date as "MONTH DAY, YEAR" in uppercase (e.g., "DECEMBER 18, 2025")
-  const dateStr = nextDate.toLocaleDateString('en-US', { 
-    month: 'long', 
-    day: 'numeric', 
-    year: 'numeric' 
-  }).toUpperCase()
+  // Format date as "MONTH DAY, YEAR" in uppercase (e.g., "DECEMBER 18, 2025") in Toronto timezone
+  const nextDateParts = getTorontoDateComponents(nextDate)
+  const dateStr = formatDateUTC(nextDateParts.year, nextDateParts.month, nextDateParts.day, true)
 
   if (!startsAt) {
     return dateStr
   }
 
-  const start = new Date(startsAt)
-  
-  if (isNaN(start.getTime())) {
+  // Extract time in Toronto timezone
+  const startTime = extractTimeFromISO(startsAt)
+  if (!startTime) {
     return dateStr
   }
-
-  // Extract time from the Date object using local time methods
-  const startHours = start.getHours()
-  const startMinutes = start.getMinutes()
-  const startHour12 = startHours % 12 || 12
-  const startAmPm = startHours >= 12 ? 'PM' : 'AM'
-  const startTime = `${startHour12}:${startMinutes.toString().padStart(2, '0')} ${startAmPm}`
 
   if (!endsAt) {
     return `${dateStr} · ${startTime}`
   }
 
-  const end = new Date(endsAt)
-  
-  if (isNaN(end.getTime())) {
+  const endTime = extractTimeFromISO(endsAt)
+  if (!endTime) {
     return `${dateStr} · ${startTime}`
   }
-
-  const endHours = end.getHours()
-  const endMinutes = end.getMinutes()
-  const endHour12 = endHours % 12 || 12
-  const endAmPm = endHours >= 12 ? 'PM' : 'AM'
-  const endTime = `${endHour12}:${endMinutes.toString().padStart(2, '0')} ${endAmPm}`
 
   if (startTime === endTime) {
     return `${dateStr} · ${startTime}`
@@ -610,28 +655,26 @@ export function formatWeeklyEventDateUppercase(dayOfWeek: number, startsAt?: str
  * Returns true if the last occurrence date/time is in the past
  */
 export function hasPastOccurrence(dayOfWeek: number, startsAt?: string, endsAt?: string): boolean {
+  // endsAt parameter is kept for API consistency but not used in this function
+  void endsAt
   if (dayOfWeek === undefined || dayOfWeek === null) {
     return false
   }
 
-  const today = new Date()
-  const currentDay = today.getDay()
+  // Use Toronto timezone for day of week calculation
+  const currentDay = getTorontoDayOfWeek()
   
   // Calculate days since last occurrence
-  let daysSinceLast = (currentDay - dayOfWeek + 7) % 7
+  const daysSinceLast = (currentDay - dayOfWeek + 7) % 7
   
-  // If it's today, check if the time has passed
+  // If it's today, check if the time has passed in Toronto timezone
   if (daysSinceLast === 0 && startsAt) {
-    const start = new Date(startsAt)
-    if (!isNaN(start.getTime())) {
-      const startHours = start.getHours()
-      const startMinutes = start.getMinutes()
-      const now = new Date()
-      const currentHours = now.getHours()
-      const currentMinutes = now.getMinutes()
+    const startParts = parseISOString(startsAt)
+    if (startParts) {
+      const torontoNow = getTorontoNowComponents()
       
-      // If the event time has already passed today, it's in the past
-      if (currentHours > startHours || (currentHours === startHours && currentMinutes >= startMinutes)) {
+      // If the event time has already passed today in Toronto, it's in the past
+      if (torontoNow.hours > startParts.hours || (torontoNow.hours === startParts.hours && torontoNow.minutes >= startParts.minutes)) {
         return true
       }
       // If time hasn't passed today, check if there was a previous occurrence
@@ -794,27 +837,35 @@ export async function getWeeklyEventsForBusiness(businessSlug: string): Promise<
 
 /**
  * Format date and time for display
+ * All times are displayed in Toronto timezone
  */
 export function formatEventDateTime(startsAt: string, endsAt: string): string {
-  const start = new Date(startsAt)
-  const end = new Date(endsAt)
+  const startParts = parseISOString(startsAt)
+  const endParts = parseISOString(endsAt)
   
   // Check for invalid dates
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+  if (!startParts || !endParts) {
     return 'Invalid date'
   }
   
-  const startDate = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  const startTime = start.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
-  const endTime = end.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const startDate = `${monthNames[startParts.month - 1]} ${startParts.day}, ${startParts.year}`
+  
+  // Extract time in Toronto timezone
+  const startTime = extractTimeFromISO(startsAt)
+  const endTime = extractTimeFromISO(endsAt)
+  
+  if (!startTime || !endTime) {
+    return 'Invalid date'
+  }
   
   // If same day
-  if (start.toDateString() === end.toDateString()) {
+  if (startParts.year === endParts.year && startParts.month === endParts.month && startParts.day === endParts.day) {
     return `${startDate} · ${startTime} - ${endTime}`
   }
   
   // Different days
-  const endDate = end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  const endDate = `${monthNames[endParts.month - 1]} ${endParts.day}, ${endParts.year}`
   return `${startDate} · ${startTime} → ${endDate} · ${endTime}`
 }
 
