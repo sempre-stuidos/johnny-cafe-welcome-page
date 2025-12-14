@@ -82,11 +82,13 @@ export default function HomeHero() {
               "flex flex-col relative",
               "gap-4 md:gap-0 md:justify-between",
               "w-full md:w-[60%]",
-              "py-4 md:py-6",
+              "h-full md:h-auto",
+              "justify-between md:justify-start",
+              "py-8 md:py-6",
               "order-1"
             )}
           >
-            <div className="hero-title-section mt-2 md:mt-6">
+            <div className="hero-title-section mt-12 md:mt-6">
               <h3>478 PARLIAMENT ST</h3>
 
               {/* Hero Title Image - Day/Night */}
@@ -123,10 +125,12 @@ export default function HomeHero() {
             <div
               className={cn(
                 "flex flex-col gap-2 md:gap-0 md:justify-between",
-                "relative"
+                "relative",
+                "flex-1 md:flex-none",
+                "justify-center md:justify-start"
               )}
             >
-              <h4 className="max-w-[380px] mb-[33px]">
+              <h4 className="max-w-[380px] mb-[33px] md:mb-[33px]">
                 {theme === "day"
                   ? "Have brunch at one of the oldest Restaurants in Cabbagetown"
                   : "Have dinner at one of the oldest Restaurants in Cabbagetown"}
@@ -156,7 +160,8 @@ export default function HomeHero() {
               className={cn(
                 "btn-reservation",
                 "flex items-center gap-2",
-                "mt-4 md:mt-8 mb-4"
+                "mt-4 md:mt-8",
+                "mb-0 md:mb-4"
               )}
               onClick={handleReservationClick}
             >
@@ -177,7 +182,7 @@ export default function HomeHero() {
           {/* Image - Bottom on mobile, Right on desktop */}
           <div
             className={cn(
-              "flex items-end justify-center md:justify-end",
+              "hidden md:flex items-end justify-center md:justify-end",
               "w-full md:w-[60%]",
               "flex-1 md:flex-none",
               "order-2",
