@@ -1728,9 +1728,9 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   transition: all 0.49s cubic-bezier(0.6, 0.1, 0.1, 1.6);
 }
 
-/* Day Theme - Dark green bars */
+/* Day Theme - Light cream bars to contrast with dark green nav */
 [data-theme="day"] .menu-toggle-part {
-  background: var(--theme-text-dark-green);
+  background: var(--theme-text-light-cream);
 }
 
 /* Night Theme - Light cream bars */

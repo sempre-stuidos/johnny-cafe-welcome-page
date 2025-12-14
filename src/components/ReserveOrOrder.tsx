@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { ExternalLinkIcon } from "@/components/icons";
@@ -14,7 +15,7 @@ export default function ReserveOrOrder() {
     <section
       className={cn(
         "relative",
-        "w-full h-auto min-h-[600px]",
+        "w-full h-auto",
         "transition-colors duration-300",
         "bg-about-section",
         "z-30"
@@ -56,30 +57,50 @@ export default function ReserveOrOrder() {
         ref={contentRef}
         className={cn(
           "relative z-20",
-          "h-full w-full",
-          "px-4 md:px-8 py-12 md:py-16"
+          "w-full",
+          "px-4 md:px-8"
         )}
         data-animate="section"
       >
         <div
           className={cn(
-            "flex flex-col",
-            "h-full w-full max-w-[1200px]",
-            "mx-auto gap-8 md:gap-12",
-            "items-center"
+            "flex flex-row",
+            "w-full max-w-[1200px]",
+            "mx-auto",
+            "items-stretch",
+            "justify-center lg:justify-between"
           )}
         >
-          {/* Main Title */}
+          {/* Left Decoration */}
+          <div className="hidden lg:flex flex-shrink-0 items-stretch">
+            <Image
+              src="/assets/imgs/reserve-left.svg"
+              alt=""
+              width={202}
+              height={403}
+              className="w-auto h-full object-cover"
+            />
+          </div>
+
+          {/* Center Content */}
+          <div
+            className={cn(
+              "flex flex-col",
+              "w-full lg:max-w-[700px]",
+              "gap-6 md:gap-8",
+              "items-center justify-center",
+              "py-12 md:py-16"
+            )}
+          >
           <h2 className="section-heading text-center">
             Reserve Your Table
           </h2>
 
-          {/* Top Buttons - Reservation & Menu */}
           <div
             className={cn(
               "flex flex-col md:flex-row",
-              "gap-4 md:gap-6",
-              "w-full max-w-[900px]"
+              "gap-3 md:gap-4",
+              "w-full"
             )}
           >
             {/* Book a Reservation Button - Outlined */}
@@ -87,7 +108,7 @@ export default function ReserveOrOrder() {
               href="/reservations"
               className={cn(
                 "flex-1",
-                "px-8 py-6",
+                "px-6 py-4",
                 "text-center",
                 "border-2",
                 "hover:shadow-lg",
@@ -103,7 +124,7 @@ export default function ReserveOrOrder() {
               href="/menu"
               className={cn(
                 "flex-1",
-                "px-8 py-6",
+                "px-6 py-4",
                 "text-center",
                 "border-2",
                 "hover:shadow-lg",
@@ -116,7 +137,7 @@ export default function ReserveOrOrder() {
           </div>
 
           {/* Divider with "ORDER ONLINE" */}
-          <div className="w-full max-w-[900px] flex items-center gap-4">
+          <div className="w-full flex items-center gap-3">
             <div
               className={cn(
                 "flex-1",
@@ -157,63 +178,78 @@ export default function ReserveOrOrder() {
           <div
             className={cn(
               "flex flex-col md:flex-row",
-              "gap-4 md:gap-6",
-              "w-full max-w-[900px]"
+              "gap-3 md:gap-4",
+              "w-full"
             )}
           >
             {/* Johnny G's App */}
             <a
-              href="#"
+              href="https://orders.foodme.mobi/dt/johnnyg/cafebychef/main"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
                 "flex-1",
-                "px-6 py-4",
-                "flex items-center justify-center gap-3",
+                "px-3 py-3",
+                "flex items-center justify-center gap-2",
                 "border-2",
                 "reserve-delivery-btn",
+                "whitespace-nowrap",
                 theme === "day" ? "reserve-delivery-btn-day" : "reserve-delivery-btn-night"
               )}
             >
-              <span>Johnny G&apos;s App</span>
+              <span className="truncate">Johnny G&apos;s App</span>
               <ExternalLinkIcon />
             </a>
 
             {/* Uber Eats */}
             <a
-              href="#"
+              href="https://www.ubereats.com/ca/store/johnnygs-dinner/sFEVnqQnQC-pxds9rvJxmA?srsltid=AfmBOoq35N2EM8wjwa663vP75C7PWDur71CmZuC7VYdg5v3ZOnAVpDWH"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
                 "flex-1",
-                "px-6 py-4",
-                "flex items-center justify-center gap-3",
+                "px-3 py-3",
+                "flex items-center justify-center gap-2",
                 "border-2",
                 "reserve-delivery-btn",
+                "whitespace-nowrap",
                 theme === "day" ? "reserve-delivery-btn-day" : "reserve-delivery-btn-night"
               )}
             >
-              <span>Uber Eats</span>
+              <span className="truncate">Uber Eats</span>
               <ExternalLinkIcon />
             </a>
 
             {/* DoorDash */}
             <a
-              href="#"
+              href="https://www.doordash.com/store/johnnyg's-toronto-790913/1120083/?srsltid=AfmBOoohwMeikKsZ7umuJtoK8r5feKxJp1lF85oFHHafJl1qoNQTqAyh"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
                 "flex-1",
-                "px-6 py-4",
-                "flex items-center justify-center gap-3",
+                "px-3 py-3",
+                "flex items-center justify-center gap-2",
                 "border-2",
                 "reserve-delivery-btn",
+                "whitespace-nowrap",
                 theme === "day" ? "reserve-delivery-btn-day" : "reserve-delivery-btn-night"
               )}
             >
-              <span>DoorDash</span>
+              <span className="truncate">DoorDash</span>
               <ExternalLinkIcon />
             </a>
+          </div>
+          </div>
+
+          {/* Right Decoration */}
+          <div className="hidden lg:flex flex-shrink-0 items-stretch">
+            <Image
+              src="/assets/imgs/reserve-right.svg"
+              alt=""
+              width={202}
+              height={403}
+              className="w-auto h-full object-cover"
+            />
           </div>
         </div>
       </div>

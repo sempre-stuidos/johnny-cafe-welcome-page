@@ -76,8 +76,10 @@ export default function ArtistsSignUp() {
               Interested in performing?
             </h2>
 
-            <Link
-              href="mailto:johnnygs478@gmail.com?subject=Artist Application"
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdGx9l69A8nT6c-qzPBprkym5R9v-qDq3T9BFTinCPXmT_I4A/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer"
               className={cn(
                 "btn-reservation",
                 "flex items-center gap-2"
@@ -94,7 +96,7 @@ export default function ArtistsSignUp() {
                   "w-5 h-5"
                 )}
               />
-            </Link>
+            </a>
           </div>
 
           <div

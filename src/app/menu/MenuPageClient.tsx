@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { cn, getCategoryDisplayTitle } from "@/lib/utils";
 import MenuHeader from "@/components/menu/MenuHeader";
 import CategorySection, { MenuItemData } from "@/components/menu/CategorySection";
+import ReserveOrOrder from "@/components/ReserveOrOrder";
 import gsap from "gsap";
 
 interface MenuPageClientProps {
@@ -129,6 +130,7 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories, lat
   ];
 
   return (
+    <>
     <section
       ref={sectionRef}
       className={cn(
@@ -265,6 +267,9 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories, lat
         </div>
       </div>
     </section>
+    
+    <ReserveOrOrder />
+    </>
   );
 }
 

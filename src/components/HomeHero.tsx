@@ -23,7 +23,7 @@ export default function HomeHero() {
     <section
       className={cn(
         "relative",
-        "w-full md:h-auto",
+        "w-full md:min-h-[600px]",
         "overflow-hidden",
         "z-10",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
@@ -181,14 +181,14 @@ export default function HomeHero() {
               "w-full md:w-[60%]",
               "flex-1 md:flex-none",
               "order-2",
-              "pb-4 md:mt-8 md:pb-0"
+              "md:mt-8 md:pb-0"
             )}
           >
             <div
               className={cn(
                 "hero-frame",
                 "w-full h-full",
-                "min-h-[300px] max-w-[597px] max-h-[668px]"
+                "min-h-[300px] max-w-[597px] "
               )}
             >
               <Image
