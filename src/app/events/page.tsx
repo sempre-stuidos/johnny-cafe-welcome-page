@@ -4,6 +4,10 @@ import { getWeeklyEventsForBusiness, formatWeeklyEventDate, formatEventDateWithT
 import { resolveBusinessSlug } from "@/lib/business-utils";
 import EventsClient from "./EventsClient";
 
+// Force dynamic rendering to prevent Next.js from caching this page
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function EventsPage() {
   // Get business slug from environment or use default
   const businessSlug = resolveBusinessSlug(

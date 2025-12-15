@@ -16,6 +16,54 @@ interface EventsClientProps {
 
 type EventTab = 'weekly' | 'past' | 'gallery';
 
+/**
+ * Compare two events arrays to detect differences
+ * Returns true if events are different, false if they're the same
+ */
+function compareEvents(events1: EventItemData[], events2: EventItemData[]): boolean {
+  // Different number of events means they're different
+  if (events1.length !== events2.length) {
+    return true;
+  }
+
+  // Create maps for easier comparison
+  const map1 = new Map(events1.map((e, i) => [i, e]));
+  const map2 = new Map(events2.map((e, i) => [i, e]));
+
+  // Compare each event
+  for (let i = 0; i < events1.length; i++) {
+    const event1 = events1[i];
+    const event2 = events2[i];
+
+    // Compare key properties
+    if (
+      event1.name !== event2.name ||
+      event1.description !== event2.description ||
+      event1.image !== event2.image ||
+      event1.date !== event2.date
+    ) {
+      return true;
+    }
+
+    // Compare bands
+    const bands1 = event1.bands || [];
+    const bands2 = event2.bands || [];
+    
+    if (bands1.length !== bands2.length) {
+      return true;
+    }
+
+    // Compare band IDs and names
+    for (let j = 0; j < bands1.length; j++) {
+      if (bands1[j].id !== bands2[j].id || bands1[j].name !== bands2[j].name) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 export default function EventsClient({ events: initialEvents }: EventsClientProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<EventTab>('weekly');
@@ -26,6 +74,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   const [businessId, setBusinessId] = useState<string | null>(null);
   const [hasFetchedInitial, setHasFetchedInitial] = useState(false);
   const hasUsedInitialEvents = useRef(false);
+  const hasCheckedForUpdates = useRef(false);
 
   // Get business slug and fetch business ID
   useEffect(() => {
@@ -50,6 +99,52 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
 
     fetchBusinessId();
   }, []);
+
+  // Background fetch on mount to check for updates (runs once)
+  useEffect(() => {
+    if (hasCheckedForUpdates.current || activeTab !== 'weekly') return;
+    
+    const checkForUpdates = async () => {
+      hasCheckedForUpdates.current = true;
+      
+      const businessSlug = resolveBusinessSlug(
+        undefined,
+        process.env.NEXT_PUBLIC_BUSINESS_SLUG,
+        'johnny-gs-brunch'
+      );
+
+      try {
+        // Fetch fresh events in the background
+        const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=weekly`, {
+          cache: 'no-store' // Ensure we get fresh data
+        });
+        
+        if (!response.ok) {
+          return; // Silently fail, keep initial events
+        }
+        
+        const data = await response.json();
+        
+        if (data.events && Array.isArray(data.events)) {
+          // Compare with initial events
+          if (compareEvents(initialEvents, data.events)) {
+            // Events have changed, update the UI
+            setEvents(data.events);
+            setHasFetchedInitial(true);
+          }
+          // If events are the same, no update needed (no re-render)
+        }
+      } catch (error) {
+        console.error('Error checking for event updates:', error);
+        // Silently fail, keep showing initial events
+      }
+    };
+
+    // Only check for updates if we have initial events
+    if (initialEvents.length > 0) {
+      checkForUpdates();
+    }
+  }, [initialEvents, activeTab]);
 
   // Fetch events or gallery images based on active tab
   useEffect(() => {

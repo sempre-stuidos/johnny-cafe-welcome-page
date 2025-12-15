@@ -76,7 +76,12 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ events })
+    const response = NextResponse.json({ events })
+    // Add no-cache headers to ensure fresh data on every request
+    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+    return response
   } catch (error) {
     console.error('Error fetching events:', error)
     return NextResponse.json(
