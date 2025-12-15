@@ -460,6 +460,49 @@ export function formatEventDateWithTime(startsAt?: string, endsAt?: string): str
 }
 
 /**
+ * Get the current/next instance date for a weekly event in YYYY-MM-DD format
+ * Uses the same logic as formatWeeklyEventDate but returns the date string instead of formatted display
+ * All calculations use Toronto timezone
+ */
+export function getCurrentInstanceDate(dayOfWeek: number, startsAt?: string): string | null {
+  if (dayOfWeek === undefined || dayOfWeek === null || dayOfWeek < 0 || dayOfWeek > 6) {
+    return null
+  }
+
+  // Calculate the next occurrence date using Toronto timezone
+  const currentDay = getTorontoDayOfWeek()
+  
+  // Calculate days until next occurrence
+  let daysUntilNext = (dayOfWeek - currentDay + 7) % 7
+  
+  // If it's today, check if the event time has passed in Toronto timezone
+  if (daysUntilNext === 0 && startsAt) {
+    const startParts = parseISOString(startsAt)
+    if (startParts) {
+      const torontoNow = getTorontoNowComponents()
+      
+      // If the event time has already passed today in Toronto, show next week's occurrence
+      if (torontoNow.hours > startParts.hours || (torontoNow.hours === startParts.hours && torontoNow.minutes >= startParts.minutes)) {
+        daysUntilNext = 7
+      }
+    }
+  }
+  
+  // Calculate next date in Toronto timezone
+  const torontoNow = getTorontoNowComponents()
+  // Create a date object for the next occurrence in Toronto timezone
+  const nextDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day + daysUntilNext)
+  
+  // Get date components in Toronto timezone and format as YYYY-MM-DD
+  const nextDateParts = getTorontoDateComponents(nextDate)
+  const year = nextDateParts.year
+  const month = String(nextDateParts.month).padStart(2, '0')
+  const day = String(nextDateParts.day).padStart(2, '0')
+  
+  return `${year}-${month}-${day}`
+}
+
+/**
  * Format weekly event date and time for display
  * Calculates the next occurrence of the specified day of week and displays it with the actual date
  * All times are displayed in Toronto timezone
@@ -698,6 +741,58 @@ export function hasPastOccurrence(dayOfWeek: number, startsAt?: string, endsAt?:
 }
 
 /**
+ * Fetch bands for a specific event instance
+ */
+async function fetchBandsForInstance(instanceId: string): Promise<Band[]> {
+  try {
+    const supabase = supabaseAdmin
+    
+    const { data: instanceBands, error } = await supabase
+      .from('event_instance_bands')
+      .select(`
+        order,
+        band:bands(id, name, description, image_url)
+      `)
+      .eq('instance_id', instanceId)
+      .order('order', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching instance bands:', error)
+      return []
+    }
+
+    if (!instanceBands) {
+      return []
+    }
+
+    // Extract bands from the nested relationship
+    const bands: Band[] = []
+    
+    for (const instanceBand of instanceBands) {
+      // The nested relationship is aliased as 'band' in the query
+      // Supabase returns it as an object, not an array
+      const bandData = (instanceBand as unknown as { band: Band | null }).band
+      
+      if (bandData && typeof bandData === 'object' && 'id' in bandData && 'name' in bandData) {
+        const band: Band = {
+          id: bandData.id,
+          name: bandData.name,
+          description: bandData.description,
+          image_url: bandData.image_url,
+        }
+        
+        bands.push(band)
+      }
+    }
+
+    return bands
+  } catch (error) {
+    console.error('Error in fetchBandsForInstance:', error)
+    return []
+  }
+}
+
+/**
  * Fetch bands for a list of events
  */
 async function fetchBandsForEvents(eventIds: string[]): Promise<Record<string, Band[]>> {
@@ -824,11 +919,56 @@ export async function getWeeklyEventsForBusiness(businessSlug: string): Promise<
     const eventIds = liveWeeklyEvents.map(e => e.id)
     const bandsByEventId = await fetchBandsForEvents(eventIds)
 
-    // Attach bands to events
-    return liveWeeklyEvents.map(event => ({
-      ...event,
-      bands: bandsByEventId[event.id] || []
-    }))
+    // For each event, fetch current instance and apply instance data if available
+    const eventsWithInstanceData = await Promise.all(
+      liveWeeklyEvents.map(async (event) => {
+        // Calculate current instance date
+        const instanceDate = getCurrentInstanceDate(event.day_of_week || 0, event.starts_at)
+        
+        if (!instanceDate) {
+          // No valid instance date, use event defaults
+          return {
+            ...event,
+            bands: bandsByEventId[event.id] || []
+          }
+        }
+
+        // Fetch instance for this date
+        const { data: instance, error: instanceError } = await supabase
+          .from('event_instances')
+          .select('id, custom_description, custom_image_url')
+          .eq('event_id', event.id)
+          .eq('instance_date', instanceDate)
+          .single()
+
+        if (instanceError || !instance) {
+          // Instance not found, use event defaults
+          return {
+            ...event,
+            bands: bandsByEventId[event.id] || []
+          }
+        }
+
+        // Instance found - apply instance data with fallbacks to event defaults
+        const description = instance.custom_description || event.description || event.short_description || ''
+        const image_url = instance.custom_image_url || event.image_url
+        
+        // Fetch instance bands
+        const instanceBands = await fetchBandsForInstance(instance.id)
+        
+        // Use instance bands if available, otherwise use event bands
+        const bands = instanceBands.length > 0 ? instanceBands : (bandsByEventId[event.id] || [])
+
+        return {
+          ...event,
+          description,
+          image_url,
+          bands
+        }
+      })
+    )
+
+    return eventsWithInstanceData
   } catch (error) {
     console.error('Error in getWeeklyEventsForBusiness:', error)
     return []

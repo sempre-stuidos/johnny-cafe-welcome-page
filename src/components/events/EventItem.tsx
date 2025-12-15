@@ -54,7 +54,7 @@ export default function EventItem({ event }: EventItemProps) {
           {event.bands && event.bands.length > 0 && (
             <div className="flex flex-col gap-2 md:gap-3 mt-6 md:mt-12">
               <span className="text-event-date">
-                ARTIST LINE UP
+                {event.bands.length === 1 ? "FEATURED ARTIST" : "ARTIST LINE UP"}
               </span>
               <div className="flex flex-col gap-1">
                 {event.bands.map((band) => (
