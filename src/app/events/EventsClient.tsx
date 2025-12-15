@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { EventItemData } from "@/components/events/EventItem";
@@ -24,6 +24,8 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [galleryLoading, setGalleryLoading] = useState(false);
   const [businessId, setBusinessId] = useState<string | null>(null);
+  const [hasFetchedInitial, setHasFetchedInitial] = useState(false);
+  const hasUsedInitialEvents = useRef(false);
 
   // Get business slug and fetch business ID
   useEffect(() => {
@@ -93,16 +95,38 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
         }
         
         const data = await response.json();
-        setEvents(data.events || []);
+        // Only update events if we got valid data
+        if (data.events && Array.isArray(data.events)) {
+          setEvents(data.events);
+          setHasFetchedInitial(true);
+        }
+        // If fetch fails or returns no data, keep existing events (don't clear them)
       } catch (error) {
         console.error('Error fetching events:', error);
-        setEvents([]);
+        // Don't clear events on error - keep existing events
+        // Only clear if we've already fetched before (user switched tabs)
+        if (hasFetchedInitial) {
+          setEvents([]);
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
+    // For weekly tab on initial mount, skip fetch if we have initial events
+    // This preserves the server-rendered initial events
+    const shouldSkipFetch = activeTab === 'weekly' && !hasUsedInitialEvents.current && initialEvents.length > 0;
+    
+    if (shouldSkipFetch) {
+      // Mark that we've used initial events (using ref so it persists across re-renders)
+      hasUsedInitialEvents.current = true;
+      setHasFetchedInitial(true);
+      // Don't fetch - use initial events
+      // But still set up real-time subscription below
+    } else {
+      // Fetch events for past tab or when switching tabs
+      fetchEvents();
+    }
 
     // Set up real-time subscription (only for event tabs, not gallery)
     // TypeScript knows activeTab is 'weekly' | 'past' here

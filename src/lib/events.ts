@@ -460,6 +460,53 @@ export function formatEventDateWithTime(startsAt?: string, endsAt?: string): str
 }
 
 /**
+ * Helper function to add days to a date and handle month/year rollover
+ * All calculations are done using date components directly to avoid timezone issues
+ * This ensures consistent results regardless of server timezone
+ */
+function addDaysToTorontoDate(year: number, month: number, day: number, daysToAdd: number): { year: number; month: number; day: number } {
+  // Calculate the target date by adding days directly to the day component
+  // and handling month/year rollover manually
+  let targetYear = year
+  let targetMonth = month
+  let targetDay = day + daysToAdd
+  
+  // Days in each month (non-leap year)
+  const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  
+  // Handle negative days (going backwards)
+  while (targetDay < 1) {
+    targetMonth--
+    if (targetMonth < 1) {
+      targetMonth = 12
+      targetYear--
+    }
+    const daysInPrevMonth = targetMonth === 2 && isLeapYear(targetYear) ? 29 : daysInMonth[targetMonth - 1]
+    targetDay += daysInPrevMonth
+  }
+  
+  // Handle positive days (going forwards)
+  while (targetDay > (targetMonth === 2 && isLeapYear(targetYear) ? 29 : daysInMonth[targetMonth - 1])) {
+    const daysInCurrentMonth = targetMonth === 2 && isLeapYear(targetYear) ? 29 : daysInMonth[targetMonth - 1]
+    targetDay -= daysInCurrentMonth
+    targetMonth++
+    if (targetMonth > 12) {
+      targetMonth = 1
+      targetYear++
+    }
+  }
+  
+  return { year: targetYear, month: targetMonth, day: targetDay }
+}
+
+/**
+ * Check if a year is a leap year
+ */
+function isLeapYear(year: number): boolean {
+  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)
+}
+
+/**
  * Get the current/next instance date for a weekly event in YYYY-MM-DD format
  * Uses the same logic as formatWeeklyEventDate but returns the date string instead of formatted display
  * All calculations use Toronto timezone
@@ -488,16 +535,14 @@ export function getCurrentInstanceDate(dayOfWeek: number, startsAt?: string): st
     }
   }
   
-  // Calculate next date in Toronto timezone
+  // Calculate next date components directly in Toronto timezone
   const torontoNow = getTorontoNowComponents()
-  // Create a date object for the next occurrence in Toronto timezone
-  const nextDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day + daysUntilNext)
+  const targetDate = addDaysToTorontoDate(torontoNow.year, torontoNow.month, torontoNow.day, daysUntilNext)
   
-  // Get date components in Toronto timezone and format as YYYY-MM-DD
-  const nextDateParts = getTorontoDateComponents(nextDate)
-  const year = nextDateParts.year
-  const month = String(nextDateParts.month).padStart(2, '0')
-  const day = String(nextDateParts.day).padStart(2, '0')
+  // Format as YYYY-MM-DD
+  const year = targetDate.year
+  const month = String(targetDate.month).padStart(2, '0')
+  const day = String(targetDate.day).padStart(2, '0')
   
   return `${year}-${month}-${day}`
 }
@@ -532,12 +577,10 @@ export function formatWeeklyEventDate(dayOfWeek: number, startsAt?: string, ends
   
   // Calculate next date in Toronto timezone
   const torontoNow = getTorontoNowComponents()
-  // Create a date object for the next occurrence in Toronto timezone
-  const nextDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day + daysUntilNext)
+  const nextDateParts = addDaysToTorontoDate(torontoNow.year, torontoNow.month, torontoNow.day, daysUntilNext)
   
   // Format date as "DayName Month Day" (e.g., "Thursday Dec 18") in Toronto timezone
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const nextDateParts = getTorontoDateComponents(nextDate)
   const monthName = monthNames[nextDateParts.month - 1]
   const dateStr = `${dayName} ${monthName} ${nextDateParts.day}`
 
@@ -597,12 +640,10 @@ export function formatWeeklyEventDatePast(dayOfWeek: number, startsAt?: string, 
   
   // Calculate last date in Toronto timezone
   const torontoNow = getTorontoNowComponents()
-  // Create a date object for the last occurrence in Toronto timezone
-  const lastDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day - daysSinceLast)
+  const lastDateParts = addDaysToTorontoDate(torontoNow.year, torontoNow.month, torontoNow.day, -daysSinceLast)
   
   // Format date as "DayName Month Day" (e.g., "Thursday Dec 18") in Toronto timezone
   const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const lastDateParts = getTorontoDateComponents(lastDate)
   const monthName = monthNames[lastDateParts.month - 1]
   const dateStr = `${dayName} ${monthName} ${lastDateParts.day}`
 
@@ -660,11 +701,9 @@ export function formatWeeklyEventDateUppercase(dayOfWeek: number, startsAt?: str
   
   // Calculate next date in Toronto timezone
   const torontoNow = getTorontoNowComponents()
-  // Create a date object for the next occurrence in Toronto timezone
-  const nextDate = new Date(torontoNow.year, torontoNow.month - 1, torontoNow.day + daysUntilNext)
+  const nextDateParts = addDaysToTorontoDate(torontoNow.year, torontoNow.month, torontoNow.day, daysUntilNext)
   
   // Format date as "MONTH DAY, YEAR" in uppercase (e.g., "DECEMBER 18, 2025") in Toronto timezone
-  const nextDateParts = getTorontoDateComponents(nextDate)
   const dateStr = formatDateUTC(nextDateParts.year, nextDateParts.month, nextDateParts.day, true)
 
   if (!startsAt) {
@@ -928,8 +967,8 @@ export async function getWeeklyEventsForBusiness(businessSlug: string): Promise<
         if (!instanceDate) {
           // No valid instance date, use event defaults
           return {
-            ...event,
-            bands: bandsByEventId[event.id] || []
+      ...event,
+      bands: bandsByEventId[event.id] || []
           }
         }
 
