@@ -338,9 +338,10 @@ code, pre {
     transform: translateY(-10px);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  opacity: 1;
+  transform: translateY(0);
+}
+
 }
 
 .animate-fade-in {
@@ -660,6 +661,22 @@ code, pre {
   color: #FAF2DD;
 }
 
+.hero-jazz-text {
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 100%;
+  color: var(--theme-accent);
+}
+
+.hero-now-playing {
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
 .footer-meal-time {
   font-family: var(--font-amoret-sans);
   font-size: 14px;
@@ -714,6 +731,19 @@ code, pre {
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+/* Section Subheading - Smaller section titles */
+.section-subheading {
+  font-family: var(--font-hornbill-trial);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 110%;
+  letter-spacing: 0%;
+  color: var(--about-title);
+  transition: color 0.3s ease;
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
 /* Menu Item Name */
 .menu-item-name {
   font-family: var(--font-hornbill-trial);
@@ -735,12 +765,12 @@ code, pre {
 /* Event Name */
 .event-name {
   font-family: var(--font-hornbill-trial);
-  font-size: clamp(var(--font-size-lg), 4vw, var(--font-size-3xl));
+  font-size: 32px;
   color: var(--theme-text-light-cream);
   font-weight: 700;
-  line-height: var(--line-height-tight);
+  line-height: 110%;
+  letter-spacing: 0%;
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-normal);
   transition: color 0.3s ease;
   font-feature-settings: "lnum", "tnum";
   font-variant-numeric: lining-nums tabular-nums;
@@ -793,18 +823,18 @@ code, pre {
 }
 
 .text-event-date {
-  font-family: var(--font-amoret-sans);
-  font-size: var(--font-size-lg);
+  font-family: var(--font-gayathri);
+  font-size: 20px;
   color: var(--theme-accent);
   font-weight: 700;
-  line-height: var(--line-height-tight);
+  line-height: 100%;
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
 }
 
 .text-event-description {
   font-family: var(--font-geist-sans);
-  font-size: var(--font-size-sm);
+  font-size: 16px;
   color: var(--theme-text-light-cream);
   font-weight: 400;
   line-height: var(--line-height-relaxed);
@@ -1777,4 +1807,62 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   transform: rotate(-45deg);
   width: 23px !important;
   top: calc(50% - (1.5px)) !important;
+}
+
+/* Artist Card Styles */
+.artist-card-bg {
+  background-color: #FAF2DD;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="night"] .artist-card-bg {
+  background-color: #022414;
+}
+
+.artist-name {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  color: #B29738;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.artist-bio {
+  font-family: var(--font-gayathri);
+  font-weight: 100;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: var(--theme-text-body);
+  transition: color 0.3s ease;
+}
+
+[data-theme="night"] .artist-bio {
+  color: #FFFFFF;
+}
+
+/* Events Tab Navigation */
+.events-tab {
+  font-family: var(--font-pinyon-script);
+  font-size: clamp(var(--font-size-xl), 6vw, var(--font-size-3xl));
+  color: var(--theme-text-primary);
+  line-height: var(--line-height-normal);
+  font-weight: 400;
+  font-style: normal;
+  transition: all 0.3s ease;
+}
+
+.events-tab-active {
+  font-weight: 600;
+}
+
+/* Artist Slider - Equal Height Cards */
+.artist-slider .swiper-wrapper {
+  align-items: stretch;
+}
+
+.artist-slider .swiper-slide {
+  height: auto;
+  display: flex;
 }
