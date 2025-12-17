@@ -117,14 +117,14 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
                 fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ArtistsSignUp.tsx:114',message:'Rendering band slide',data:{index,totalBands:bands.length,bandId:band.id,bandName:band.name},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
                 // #endregion
                 return (
-                <SwiperSlide key={band.id}>
+                <SwiperSlide key={band.id} style={{ minWidth: '302px' }}>
                   <div
                     className={cn(
                       "artist-card-bg",
                       "flex flex-col",
                       "h-full",
                       "rounded-lg",
-                        "border-2 border-solid border-theme-accent",
+                      "border-2 border-solid border-theme-accent",
                       "overflow-hidden"
                     )}
                   >
@@ -137,6 +137,7 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
                         "border-2 border-solid border-theme-accent",
                         "transition-colors duration-300"
                       )}
+                      style={{ width: '100%' }}
                     >
                       <Image
                         src={band.image_url || "/assets/imgs/artist-1.png"}
