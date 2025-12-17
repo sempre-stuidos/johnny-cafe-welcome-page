@@ -1112,3 +1112,61 @@ export async function getEventGalleryImagesForBusiness(businessSlug: string): Pr
   }
 }
 
+/**
+ * Get all bands for a business by slug
+ * Returns all bands associated with the business
+ */
+export async function getBandsForBusiness(businessSlug: string): Promise<Band[]> {
+  try {
+    // Use admin client to bypass RLS for public landing pages
+    const supabase = supabaseAdmin
+    
+    // First get business by slug
+    const { data: businesses, error: businessError } = await supabase
+      .from('businesses')
+      .select('id, name, slug')
+      .eq('slug', businessSlug)
+      .limit(1)
+
+    if (businessError || !businesses || businesses.length === 0) {
+      console.error('Error fetching business:', businessError)
+      return []
+    }
+
+    const business = businesses[0]
+
+    // Get all bands for this business
+    const { data, error } = await supabase
+      .from('bands')
+      .select('*')
+      .eq('org_id', business.id)
+      .order('name', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching bands:', error)
+      return []
+    }
+
+    if (!data) {
+      return []
+    }
+
+    // Transform to Band interface
+    const transformedBands = data.map(band => ({
+      id: band.id,
+      name: band.name,
+      description: band.description || undefined,
+      image_url: band.image_url || undefined,
+    }))
+    
+    // #region agent log
+    fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'events.ts:1155',message:'getBandsForBusiness result',data:{businessSlug,businessId:business.id,rawBandsCount:data.length,transformedBandsCount:transformedBands.length,bands:transformedBands.map(b=>({id:b.id,name:b.name}))},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
+    
+    return transformedBands
+  } catch (error) {
+    console.error('Error in getBandsForBusiness:', error)
+    return []
+  }
+}
+

@@ -9,9 +9,11 @@ import { supabase } from "@/lib/supabase-client";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 import EventsVibe from "@/components/events/EventsVibe";
 import ArtistsSignUp from "@/components/events/ArtistsSignUp";
+import { Band } from "@/lib/events";
 
 interface EventsClientProps {
   events: EventItemData[];
+  bands?: Band[];
 }
 
 type EventTab = 'weekly' | 'past' | 'gallery';
@@ -64,7 +66,7 @@ function compareEvents(events1: EventItemData[], events2: EventItemData[]): bool
   return false;
 }
 
-export default function EventsClient({ events: initialEvents }: EventsClientProps) {
+export default function EventsClient({ events: initialEvents, bands }: EventsClientProps) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<EventTab>('weekly');
   const [events, setEvents] = useState<EventItemData[]>(initialEvents);
@@ -355,7 +357,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
       <EventsVibe />
 
       {/* Artists Highlights + Sign Up Section */}
-      <ArtistsSignUp />
+      <ArtistsSignUp bands={bands} />
     </>
   );
 }

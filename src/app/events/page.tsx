@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import EventItem, { EventItemData } from "@/components/events/EventItem";
-import { getWeeklyEventsForBusiness, formatWeeklyEventDate, formatEventDateWithTime } from "@/lib/events";
+import { getWeeklyEventsForBusiness, formatWeeklyEventDate, formatEventDateWithTime, getBandsForBusiness, Band } from "@/lib/events";
 import { resolveBusinessSlug } from "@/lib/business-utils";
 import EventsClient from "./EventsClient";
 
@@ -18,6 +18,13 @@ export default async function EventsPage() {
   
   // Fetch weekly events from database (default tab)
   const dbEvents = await getWeeklyEventsForBusiness(businessSlug);
+  
+  // Fetch bands for the business
+  const bands = await getBandsForBusiness(businessSlug);
+  
+  // #region agent log
+  fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'page.tsx:22',message:'EventsPage bands fetched',data:{businessSlug,bandsCount:bands.length,bands:bands.map(b=>({id:b.id,name:b.name}))},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+  // #endregion
   
   // Map database events to EventItemData format
   const events: EventItemData[] = dbEvents.map(event => {
@@ -39,5 +46,5 @@ export default async function EventsPage() {
     }
   });
 
-  return <EventsClient events={events} />;
+  return <EventsClient events={events} bands={bands} />;
 }

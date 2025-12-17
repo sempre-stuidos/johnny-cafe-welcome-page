@@ -6,28 +6,21 @@ import { Autoplay } from "swiper/modules";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/lib/animations/hooks";
+import { Band } from "@/lib/events";
 
 import "swiper/css";
 
-// TODO: Move to CMS
-const DUMMY_ARTISTS = [
-  {
-    id: 1,
-    name: "Third Hand",
-    image: "/assets/imgs/artist-1.png",
-    bio: "Toronto-based jazz ensemble turning heads with their gritty, organ-driven sound blending soul-jazz grooves with modern funk and improv. Regulars at Johnny G's, they've built a reputation for tight ensemble playing and late-night sets that keep audiences locked in.",
-  },
-  {
-    id: 2,
-    name: "The Sean Stanley Trio",
-    image: "/assets/imgs/artist-2.png",
-    bio: "A fixture on Toronto's club circuit, this trio delivers soulful improvisation with deep pocket rhythms. Known for their engaging performances at Johnny G's, they blend classic jazz traditions with contemporary energy that resonates long after the final note.",
-  },
-];
+interface ArtistsSignUpProps {
+  bands?: Band[];
+}
 
-export default function ArtistsSignUp() {
+export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
   const { theme } = useTheme();
   const contentRef = useScrollReveal();
+
+  // #region agent log
+  fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ArtistsSignUp.tsx:17',message:'ArtistsSignUp received bands',data:{bandsCount:bands?.length||0,bands:bands?.map(b=>({id:b.id,name:b.name}))||[],hasBands:!!bands},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+  // #endregion
 
   return (
     <section
@@ -77,7 +70,7 @@ export default function ArtistsSignUp() {
           "absolute right-0 top-0",
           "w-[60%] h-full",
           "pointer-events-none",
-          "z-20"
+          "z-30"
         )}
       >
         <Image
@@ -105,6 +98,7 @@ export default function ArtistsSignUp() {
             modules={[Autoplay]}
             spaceBetween={24}
             slidesPerView={1}
+            loop={false}
             autoplay={{
               delay: 5000,
               disableOnInteraction: false,
@@ -121,51 +115,58 @@ export default function ArtistsSignUp() {
             }}
             className="artist-slider"
           >
-            {DUMMY_ARTISTS.map((artist) => (
-              <SwiperSlide key={artist.id}>
-                <div
-                  className={cn(
-                    "artist-card-bg",
-                    "flex flex-col",
-                    "h-full",
-                    "rounded-lg",
-                    "overflow-hidden"
-                  )}
-                >
-                  {/* Artist Image */}
+            {bands && bands.length > 0 ? (
+              bands.map((band, index) => {
+                // #region agent log
+                fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ArtistsSignUp.tsx:114',message:'Rendering band slide',data:{index,totalBands:bands.length,bandId:band.id,bandName:band.name},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+                // #endregion
+                return (
+                <SwiperSlide key={band.id}>
                   <div
                     className={cn(
-                      "relative",
-                      "w-full aspect-square",
-                      "overflow-hidden",
-                      "border-2 border-solid border-theme-accent",
-                      "transition-colors duration-300"
+                      "artist-card-bg",
+                      "flex flex-col",
+                      "h-full",
+                      "rounded-lg",
+                      "overflow-hidden"
                     )}
                   >
-                    <Image
-                      src={artist.image}
-                      alt={artist.name}
-                      fill
-                      className="object-cover grayscale"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
+                    {/* Artist Image */}
+                    <div
+                      className={cn(
+                        "relative",
+                        "w-full aspect-square",
+                        "overflow-hidden",
+                        "border-2 border-solid border-theme-accent",
+                        "transition-colors duration-300"
+                      )}
+                    >
+                      <Image
+                        src={band.image_url || "/assets/imgs/artist-1.png"}
+                        alt={band.name}
+                        fill
+                        className="object-cover grayscale"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </div>
 
-                  {/* Text Content */}
-                  <div className="p-6 border-2 border-t-0 border-solid border-theme-accent">
-                    {/* Artist Name */}
-                    <h3 className="artist-name mb-4 uppercase">
-                      {artist.name}
-                    </h3>
+                    {/* Text Content */}
+                    <div className="p-6 border-2 border-t-0 border-solid border-theme-accent">
+                      {/* Artist Name */}
+                      <h3 className="artist-name mb-4 uppercase">
+                        {band.name}
+                      </h3>
 
-                    {/* Artist Bio */}
-                    <p className="artist-bio">
-                      {artist.bio}
-                    </p>
+                      {/* Artist Bio */}
+                      <p className="artist-bio">
+                        {band.description || ""}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+                );
+              })
+            ) : null}
         </Swiper>
       </div>
 
