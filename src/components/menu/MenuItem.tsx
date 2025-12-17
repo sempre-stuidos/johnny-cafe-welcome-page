@@ -116,7 +116,7 @@ function renderMenuItemName(name: string): ReactElement {
     
     // Add the styled number with the same font as prices
     parts.push(
-      <span key={match.index} style={{ fontFamily: "var(--font-geist-sans)" }}>
+      <span key={match.index} className="menu-item-number">
         {match[0]}
       </span>
     );
@@ -141,9 +141,9 @@ export default function MenuItem({ name, price, description }: MenuItemProps) {
   const { theme } = useTheme();
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 w-full">
       {/* Title and Price Row */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4 w-full">
         <h6
           className={cn(
             "menu-item-name flex-1",

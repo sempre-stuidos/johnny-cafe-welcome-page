@@ -129,6 +129,7 @@ export default function ArtistsSignUp() {
                     "flex flex-col",
                     "h-full",
                     "rounded-lg",
+                    "border-2 border-solid border-theme-accent",
                     "overflow-hidden"
                   )}
                 >
@@ -152,7 +153,7 @@ export default function ArtistsSignUp() {
                   </div>
 
                   {/* Text Content */}
-                  <div className="p-6 border-2 border-t-0 border-solid border-theme-accent">
+                  <div className="p-6 flex-grow">
                     {/* Artist Name */}
                     <h3 className="artist-name mb-4 uppercase">
                       {artist.name}

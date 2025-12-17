@@ -20,24 +20,15 @@ export default function CategorySection({ title, items, children }: CategorySect
   const { theme } = useTheme();
 
   return (
-    <div className="flex flex-col gap-6 md:gap-8 mb-8 md:mb-12">
+    <div className="flex flex-col gap-6 md:gap-8 mb-8 md:mb-12 w-full">
       {/* Category Heading */}
-      <h5
-        style={{
-          color: theme === "day" ? "var(--theme-accent)" : "var(--theme-accent)",
-          fontFamily: "var(--font-geist-sans)",
-          fontSize: "var(--font-size-xl)",
-          textTransform: "uppercase",
-          fontWeight: 500,
-          letterSpacing: "var(--letter-spacing-wide)",
-        }}
-      >
+      <h5 className="menu-category-heading">
         {title}
       </h5>
 
-      {/* Menu Items Container - Two Column Layout */}
+      {/* Menu Items Container - Full Width Single Column */}
       {items && items.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-y-6 gap-x-[192px]">
+        <div className="grid grid-cols-1 gap-y-6 w-full">
           {items.map((item, index) => (
             <MenuItem
               key={index}

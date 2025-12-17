@@ -199,17 +199,17 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories, lat
             "flex flex-col",
             "w-full max-w-[1200px] gap-8",
             "mx-auto",
-            "px-4 md:px-8",
+            "md:px-8",
             "py-8 md:py-12"
           )}
         >
           <MenuHeader activeMenu={activeMenu} onMenuChange={handleMenuChange} />
           
           {/* Menu Content with fade animation */}
-          <div ref={contentRef}>
+          <div ref={contentRef} className="w-full">
             {/* Brunch Menu Sections */}
             {activeMenu === "brunch" && (
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-8 w-full">
                 {brunchCategoryOrder.map((categorySlug) => {
                   const items = brunchCategories[categorySlug];
                   if (!items || items.length === 0) {
@@ -228,7 +228,7 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories, lat
             
             {/* Dinner Menu Sections */}
             {activeMenu === "dinner" && (
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-8 w-full">
                 {dinnerCategoryOrder.map((categorySlug) => {
                   const items = dinnerCategories[categorySlug];
                   if (!items || items.length === 0) {
@@ -247,7 +247,7 @@ export default function MenuPageClient({ brunchCategories, dinnerCategories, lat
             
             {/* Late Night Menu Sections */}
             {activeMenu === "late-night" && (
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-8 w-full">
                 {lateNightCategoryOrder.map((categorySlug) => {
                   const items = lateNightCategories[categorySlug];
                   if (!items || items.length === 0) {

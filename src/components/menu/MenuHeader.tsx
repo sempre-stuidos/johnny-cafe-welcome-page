@@ -63,31 +63,24 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
   }, [activeMenu]);
 
   return (
-    <div ref={headerRef} className="flex flex-col gap-4 md:gap-6">
+    <div ref={headerRef} className="flex flex-col gap-4 md:gap-6 w-full">
       {/* MENU Heading */}
-
       <h4
-        style={{
-          fontSize: "clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl))",
-          color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--color-theme-accent)",
-          fontWeight: 700,
-          lineHeight: "var(--line-height-tight)",
-        }}
-        className="uppercase"
+        className={cn(
+          "menu-page-heading",
+          theme === "day" ? "menu-page-heading-day" : "menu-page-heading-night"
+        )}
       >
         MENU
       </h4>
 
-      <div className="flex flex-col gap-1 md:gap-2">
+      <div className="flex flex-col gap-1 md:gap-2 w-full">
         {/* Brunch and Dinner with Star */}
-        <div className="flex items-start gap-6 md:gap-8 relative">
+        <div className="flex justify-between gap-2 md:gap-8 relative w-full">
           {/* Star Icon - animated with GSAP */}
           <div
             ref={starRef}
-            className="absolute -top-1 z-10"
-            style={{
-              left: "70px"
-            }}
+            className="absolute -top-[16px] md:-top-1 z-10 left-[70px]"
           >
             <svg
               width="20"
@@ -99,54 +92,39 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               <path
                 d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
                 fill={theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)"}
-                />
+              />
             </svg>
           </div>
-          <div className="flex items-center gap-8 md:gap-24">
+          <div className="flex justify-between gap-3 md:gap-24 w-full">
             <p
               ref={brunchRef}
-              style={{
-                fontFamily: "var(--font-pinyon-script)",
-                fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
-                  color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
-                lineHeight: "var(--line-height-normal)",
-                fontWeight: activeMenu === "brunch" ? 600 : 400,
-                fontStyle: "normal",
-                transition: "font-weight 0.3s ease"
-              }}
-              className="cursor-pointer"
+              className={cn(
+                "menu-tab-item cursor-pointer",
+                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night",
+                activeMenu === "brunch" ? "font-semibold" : "font-normal"
+              )}
               onClick={() => onMenuChange("brunch")}
             >
               Brunch
             </p>
             <p
               ref={dinnerRef}
-              style={{
-                fontFamily: "var(--font-pinyon-script)",
-                fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
-                  color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
-                  lineHeight: "var(--line-height-normal)",
-                fontWeight: activeMenu === "dinner" ? 600 : 400,
-                fontStyle: "normal",
-                transition: "font-weight 0.3s ease"
-              }}
-              className="cursor-pointer"
+              className={cn(
+                "menu-tab-item cursor-pointer",
+                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night",
+                activeMenu === "dinner" ? "font-semibold" : "font-normal"
+              )}
               onClick={() => onMenuChange("dinner")}
             >
               Dinner
             </p>
             <p
               ref={lateNightRef}
-              style={{
-                fontFamily: "var(--font-pinyon-script)",
-                fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
-                  color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
-                  lineHeight: "var(--line-height-normal)",
-                fontWeight: activeMenu === "late-night" ? 600 : 400,
-                fontStyle: "normal",
-                transition: "font-weight 0.3s ease"
-              }}
-              className="cursor-pointer"
+              className={cn(
+                "menu-tab-item cursor-pointer",
+                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night",
+                activeMenu === "late-night" ? "font-semibold" : "font-normal"
+              )}
               onClick={() => onMenuChange("late-night")}
             >
               Late Night
@@ -155,14 +133,8 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
         </div>
 
         {/* Horizontal Separator Line */}
-        <div
-          className="w-full h-[1px]"
-          style={{
-            backgroundColor: "var(--theme-text-dark-green)",
-          }}
-        />
+        <div className="menu-separator w-full h-[1px]" />
       </div>
-
     </div>
   );
 }

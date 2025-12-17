@@ -112,7 +112,7 @@ export const metadata: Metadata = {
     "contact:region": "ON",
     "contact:postal_code": "M5A 2L3",
     "contact:country_name": "Canada",
-    "restaurant:hours": "Breakfast: 7:00am - 4:00pm | Dinner: 4:00pm - 10:00pm",
+    "restaurant:hours": "Brunch: 7:00 AM – 4:00 PM | Dinner: Tuesday–Sunday 4:30 PM – 9:00 PM | Live Jazz: Thursday–Saturday 9:00 PM – 12:00 AM",
   },
 };
 
