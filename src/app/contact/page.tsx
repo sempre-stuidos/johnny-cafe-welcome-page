@@ -43,7 +43,7 @@ export default function ContactPage() {
       <div className="relative z-20 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-20">
         <div className="flex flex-col md:flex-row gap-8 md:gap-12">
           {/* Left Side - Contact Information */}
-          <div className="w-full md:w-[55%] flex flex-col gap-8">
+          <div className="w-full md:w-[50%] flex flex-col gap-8">
             {/* Header with Star Below */}
             <div className="flex flex-col gap-4">
               <h1 className="section-heading">
@@ -138,14 +138,17 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Right Side - Google Maps Placeholder */}
-          <div className="w-full md:w-[45%] min-h-[500px] md:min-h-0">
-            <div className="bg-theme-secondary border-2 border-[#B29738] w-full h-full md:h-[calc(100vh-160px)] rounded-lg transition-colors duration-300">
-              {/* Placeholder for Google Maps Widget */}
-              <div className="w-full h-full flex items-center justify-center">
-                <p className="text-center transition-colors duration-300 opacity-50 contact-info-link">
-                  Google Maps Widget
-                </p>
+          {/* Right Side - Map Image */}
+          <div className="w-full md:w-[50%] min-h-[500px] md:min-h-0">
+            <div className="bg-theme-secondary  w-full h-full md:h-[calc(100vh-160px)] transition-colors duration-300 overflow-hidden relative">
+              <div className="w-full h-full relative">
+                <Image
+                  src="/map-vector.svg"
+                  alt="Restaurant location map"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             </div>
           </div>
