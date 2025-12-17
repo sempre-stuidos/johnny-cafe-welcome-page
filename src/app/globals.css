@@ -683,6 +683,43 @@ code, pre {
   color: #FAF2DD;
 }
 
+/* Desktop Navigation Links - footer-meal-time styles with white text */
+.nav-desktop-link {
+  font-family: var(--font-amoret-sans);
+  font-size: 14px;
+  color: #FFFFFF;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-desktop-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: #B29738;
+  transition: width 0.3s ease;
+}
+
+.nav-desktop-link:hover {
+  color: #B29738;
+}
+
+.nav-desktop-link:hover::after {
+  width: 100%;
+}
+
+.nav-desktop-link-active {
+  color: #B29738;
+}
+
+.nav-desktop-link-active::after {
+  width: 0 !important;
+  display: none;
+}
+
 .footer-contact {
   font-family: var(--font-gayathri);
   font-weight: 700;

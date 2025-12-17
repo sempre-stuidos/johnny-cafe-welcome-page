@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLenis } from "@/contexts/LenisContext";
 import { cn } from "@/lib/utils";
@@ -10,12 +11,16 @@ import { navLinks } from "@/data/navigation";
 import { usePageLoadAnimation } from "@/lib/animations/hooks";
 import Banner from "@/components/Banner";
 import MenuToggle from "@/components/MenuToggle";
+import gsap from "gsap";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
   const { stop, start } = useLenis();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const starRef = useRef<HTMLDivElement>(null);
+  const linkRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -35,6 +40,73 @@ export default function Nav() {
   usePageLoadAnimation('[data-animate="nav-links"]', "nav-links", navRef);
   usePageLoadAnimation('[data-animate="nav-toggle"]', "nav-toggle", navRef);
 
+  // Animate star position when pathname changes or window resizes
+  useEffect(() => {
+    if (!starRef.current) return;
+
+    const updateStarPosition = () => {
+      if (!starRef.current) return;
+
+      const activeLink = navLinks.find(link => {
+        if (link.href === "/") {
+          return pathname === "/";
+        }
+        return pathname.startsWith(link.href);
+      });
+
+      if (!activeLink) {
+        // Hide star if no active link
+        gsap.set(starRef.current, { opacity: 0, immediateRender: true });
+        return;
+      }
+
+      const linkElement = linkRefs.current.get(activeLink.href);
+      if (!linkElement) {
+        return;
+      }
+
+      const linkRect = linkElement.getBoundingClientRect();
+      const containerRect = linkElement.parentElement?.getBoundingClientRect();
+      
+      if (!containerRect) return;
+
+      // Calculate position relative to the parent container
+      const leftPosition = linkRect.left - containerRect.left + linkRect.width / 2 - 10;
+
+      // Animate smoothly like MenuHeader - just animate directly without setting initial state
+      gsap.to(starRef.current, {
+        left: leftPosition,
+        opacity: 1,
+        duration: 0.6,
+        ease: "power2.inOut",
+        rotate: 90,
+        overwrite: "auto"
+      });
+    };
+
+    // Wait for page load animation to complete (nav-links: delay 0.15s + duration 0.4s = ~0.55s)
+    // Add extra buffer to ensure refs are ready
+    const timeoutId = setTimeout(updateStarPosition, 1000);
+    
+    // Also try on next frame in case refs aren't ready
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(updateStarPosition, 500);
+      });
+    });
+
+    // Handle window resize to keep star positioned correctly
+    const handleResize = () => {
+      setTimeout(updateStarPosition, 100);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [pathname]);
+
   return (
     <>
       <nav
@@ -48,7 +120,7 @@ export default function Nav() {
         {/* Banner - Above navigation content */}
         <Banner />
         
-        <div className="max-w-[1200px] mx-auto px-4 md:px-8">
+        <div className="max-w-[1300px] mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
             <Link
@@ -66,18 +138,53 @@ export default function Nav() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex items-center space-x-8 pt-2" data-animate="nav-links">
+            <div className="hidden md:flex items-center space-x-8 md:space-x-10 lg:space-x-12 pt-2 relative" data-animate="nav-links">
+              {/* Star Icon - animated with GSAP */}
+              <div
+                ref={starRef}
+                className="absolute -top-[16px] md:-top-1 z-10 left-[70px] pointer-events-none"
+                style={{ bottom: '100px' }}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 38 38"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
+                    fill="#B29738"
+                  />
+                </svg>
+              </div>
               {navLinks
-                .filter((link) => !["/gallery", "/contact"].includes(link.href))
-                .map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="nav-link"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                .filter((link) => link.href !== "/gallery")
+                .map((link) => {
+                  const isActive = link.href === "/" 
+                    ? pathname === "/" 
+                    : pathname.startsWith(link.href);
+                  
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      ref={(el) => {
+                        if (el) {
+                          linkRefs.current.set(link.href, el);
+                        } else {
+                          linkRefs.current.delete(link.href);
+                        }
+                      }}
+                      className={cn(
+                        "nav-desktop-link",
+                        isActive && "nav-desktop-link-active"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
             </div>
 
             {/* Right side - Theme Toggle + Mobile Menu Button */}
