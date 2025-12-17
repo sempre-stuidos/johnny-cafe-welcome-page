@@ -67,7 +67,7 @@ export default function Footer() {
           )}
         >
           {/* Main Footer Content */}
-          <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-stretch justify-between">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-24 items-stretch justify-between">
             {/* Left: Logo & Social */}
             <div className="flex flex-col justify-between">
               <Image
@@ -103,7 +103,7 @@ export default function Footer() {
             </div>
 
             {/* Right: Contact Info with Star */}
-            <div className="flex items-center gap-4 md:gap-6 flex-1">
+            <div className="flex justify-between gap-4 md:gap-6">
               {/* Star Icon */}
               <div className="hidden md:flex items-center justify-center flex-shrink-0">
                 <svg
@@ -122,28 +122,38 @@ export default function Footer() {
               </div>
 
               {/* Contact Info */}
-              <div className="flex flex-col gap-8 flex-1">
+              <div className="flex flex-col gap-8">
                 {/* Hours - Monday to Sunday */}
                 <div className="flex items-start gap-5">
                   <CalendarIcon className="flex-shrink-0" />
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-3">
                     <p className="transition-colors duration-300 footer-days">
-                      MONDAY - SUNDAY
+                      MON-SUN
                     </p>
                     <div className="flex flex-col xl:flex-row gap-1 xl:gap-4">
                       <p className="transition-colors duration-300 footer-meal-label">
                         Brunch{" "}
                         <span className="footer-meal-time">
-                          7AM - 4PM
-                        </span>
-                      </p>
-                      <p className="transition-colors duration-300 footer-meal-label">
-                        Dinner{" "}
-                        <span className="footer-meal-time">
-                          4:30PM - 10PM
+                          7:00 AM – 4:00 PM
                         </span>
                       </p>
                     </div>
+                  </div>
+                </div>
+
+                {/* Dinner - Tuesday to Sunday */}
+                <div className="flex items-start gap-5">
+                  <CalendarIcon className="flex-shrink-0" />
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-3">
+                    <p className="transition-colors duration-300 footer-days">
+                      TUE-SUN
+                    </p>
+                    <p className="transition-colors duration-300 footer-meal-label">
+                      Dinner{" "}
+                      <span className="footer-meal-time">
+                        4:30 PM – 9:00 PM
+                      </span>
+                    </p>
                   </div>
                 </div>
 
@@ -152,7 +162,7 @@ export default function Footer() {
                   <CalendarIcon className="flex-shrink-0" />
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-3">
                     <p className="transition-colors duration-300 footer-days">
-                      THURSDAY - SATURDAY
+                      THU-SAT
                     </p>
                     <p className="transition-colors duration-300 footer-meal-label">
                       Jazz{" "}

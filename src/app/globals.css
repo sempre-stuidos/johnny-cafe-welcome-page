@@ -1866,3 +1866,92 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   height: auto;
   display: flex;
 }
+
+/* Overlay Classes */
+.overlay-day {
+  background-color: rgba(255, 255, 255, 0.70);
+}
+
+.overlay-night {
+  background-color: rgba(1, 26, 12, 0.75);
+}
+
+/* Menu Header Styles */
+.menu-page-heading {
+  font-size: clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl));
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+}
+
+.menu-page-heading-day {
+  color: var(--theme-text-dark-green);
+}
+
+.menu-page-heading-night {
+  color: var(--color-theme-accent);
+}
+
+.menu-tab-item {
+  font-family: var(--font-pinyon-script);
+  font-size: clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl));
+  line-height: var(--line-height-normal);
+  font-style: normal;
+  transition: font-weight 0.3s ease;
+}
+
+.menu-tab-item-day {
+  color: var(--theme-text-dark-green);
+}
+
+.menu-tab-item-night {
+  color: var(--theme-text-light-cream);
+}
+
+.menu-separator {
+  background-color: var(--theme-text-dark-green);
+}
+
+.menu-category-heading {
+  color: var(--theme-accent);
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.menu-item-number {
+  font-family: var(--font-geist-sans);
+}
+
+/* Contact Page Font Classes */
+.contact-days-heading {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--theme-text-body);
+  text-transform: uppercase;
+}
+
+.contact-meal-label {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: var(--theme-text-body);
+}
+
+.contact-meal-time {
+  font-family: var(--font-gayathri);
+  font-weight: 100;
+  font-size: 18px;
+  color: var(--theme-text-body);
+}
+
+.contact-info-link {
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-lg);
+  color: var(--theme-text-body);
+  text-decoration: none;
+}

@@ -18,10 +18,6 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
   const { theme } = useTheme();
   const contentRef = useScrollReveal();
 
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ArtistsSignUp.tsx:17',message:'ArtistsSignUp received bands',data:{bandsCount:bands?.length||0,bands:bands?.map(b=>({id:b.id,name:b.name}))||[],hasBands:!!bands},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-  // #endregion
-
   return (
     <section
       className={cn(
@@ -128,6 +124,7 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
                       "flex flex-col",
                       "h-full",
                       "rounded-lg",
+                        "border-2 border-solid border-theme-accent",
                       "overflow-hidden"
                     )}
                   >
@@ -151,7 +148,7 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
                     </div>
 
                     {/* Text Content */}
-                    <div className="p-6 border-2 border-t-0 border-solid border-theme-accent">
+                    <div className="p-6 flex-grow">
                       {/* Artist Name */}
                       <h3 className="artist-name mb-4 uppercase">
                         {band.name}
