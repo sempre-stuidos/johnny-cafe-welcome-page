@@ -28,10 +28,15 @@ function getSenderName(): string {
 }
 
 /**
- * Get the recipient email address
+ * Get the recipient email addresses
  */
-function getRecipientEmail(): string {
-  return process.env.RECIPIENT_EMAIL || 'jacacanada@gmail.com'
+function getRecipientEmails(): string[] {
+  // If RECIPIENT_EMAIL is set, use it (for backward compatibility)
+  if (process.env.RECIPIENT_EMAIL) {
+    return [process.env.RECIPIENT_EMAIL]
+  }
+  // Default to both email addresses
+  return ['johnnygs478@gmail.com', 'jacacanada@gmail.com']
 }
 
 /**
@@ -181,8 +186,8 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
     const senderEmail = getSenderEmail()
     const senderName = getSenderName()
     
-    // Get recipient email
-    const recipientEmail = getRecipientEmail()
+    // Get recipient emails
+    const recipientEmails = getRecipientEmails()
     
     // Get the template ID
     const templateId = getReservationEmailTemplateId()
@@ -202,12 +207,10 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
       name: senderName,
       email: senderEmail,
     }
-    sendSmtpEmail.to = [
-      {
-        email: recipientEmail,
-        name: 'Johnny Cafe',
-      },
-    ]
+    sendSmtpEmail.to = recipientEmails.map(email => ({
+      email: email,
+      name: 'Johnny Cafe',
+    }))
     
     // Use Brevo template if template ID is configured
     if (templateId) {
