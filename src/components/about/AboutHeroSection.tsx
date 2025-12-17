@@ -12,9 +12,8 @@ export default function AboutHeroSection() {
   // Page load animation - triggers after nav completes
   usePageLoadAnimation('[data-animate="hero-content"]', "hero");
 
-  const heroContent = content.aboutPage.hero;
   const storyContent = content.aboutPage.story;
-  const secondSection = content.aboutPage.secondSection;
+
 
   return (
     <section
@@ -61,26 +60,12 @@ export default function AboutHeroSection() {
       <div
         className={cn(
           "relative z-20",
-          "h-full w-full",
-          "px-4 md:px-8 py-8 md:py-8 pb-12"
+          "h-full w-full ",
+          "px-4 md:px-8 pt-32 py-8 pb-0 "
         )}
         data-animate="hero-content"
       >
         <div className="flex flex-col w-full max-w-[1200px] mx-auto gap-6 md:gap-8">
-          {/* Centered Header Section */}
-          <div className="flex flex-col items-start justify-center text-center py-4 md:py-8">
-            <h4
-                style={{
-                  fontSize: "clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl))",
-                  color: theme === "day" ? "var(--theme-text-light-cream)" : "var(--color-theme-accent)",
-                  fontWeight: 700,
-                  lineHeight: "var(--line-height-tight)",
-                }}
-                className="uppercase"
-            >
-            About Us
-            </h4>
-          </div>
 
           {/* Image Left / Text Right Section */}
           <div
@@ -90,60 +75,57 @@ export default function AboutHeroSection() {
                   "gap-4 md:gap-8"
               )}
           >
-            {/* Image - Right on desktop, Bottom on mobile */}
-            <div
-                className={cn(
-                    "flex items-center justify-center",
-                "w-full md:w-[50%]",
-                "order-2"
-              )}
-            >
+              {/* Image - Bottom on mobile, Right on desktop */}
               <div
-                className={cn(
-                  "relative",
-                  "w-full",
-                  "h-[600px]",
-                  "max-w-[500px]",
-                  "rounded-lg",
-                  "overflow-hidden",
-                  "border-2 border-[#B29738]"
-                )}
+                  className={cn(
+                      "hidden md:flex items-end justify-center md:justify-end",
+                      "w-full md:w-[55%]",
+                      "flex-1 md:flex-none",
+                      "order-2",
+                      "pb-0"
+                  )}
               >
-                <Image
-                  src={storyContent.image}
-                  alt={storyContent.title}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+                  <div
+                      className={cn(
+                          "hero-frame",
+                          "w-full",
+                          "min-h-[300px] max-w-[597px]",
+                          "h-[calc(100%-50px)]"
+                      )}
+                  >
+                      <Image
+                          src={storyContent.image}
+                          alt={storyContent.title}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                      />
+                  </div>
               </div>
-            </div>
 
             {/* Text Content - Left on desktop, Top on mobile */}
             <div
                 className={cn(
                     "flex flex-col",
                     "gap-4 md:gap-6",
-                    "w-full md:w-[50%]",
+                    "w-full md:w-[55%]",
                     "py-4 md:py-6",
                     "order-1"
                 )}
             >
-              <p
-                  style={{
-                    fontFamily: "var(--font-pinyon-script)",
-                    fontSize: "clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl))",
-                    color: theme === "day" ? "var(--theme-text-light-cream)" : "var(--theme-text-light-cream)",
-                    lineHeight: "var(--line-height-normal)",
-                    fontWeight: 400,
-                    fontStyle: "normal",
-                    transition: "font-weight 0.3s ease"
-                  }}
+              <Image
+                  src="/about-us-title.svg"
+                  alt={storyContent.title}
+                  width={600}
+                  height={600}
                   className="cursor-pointer"
-              >
-                {storyContent.title}
-
-              </p>
+                  style={{
+                    width: "clamp(var(--font-size-8xl), 8vw, var(--font-size-9xl))",
+                    height: "180px",
+                    transition: "opacity 0.3s ease"
+                  }}
+                  unoptimized
+              />
 
               {storyContent.paragraphs.map((paragraph, index) => (
                   <p

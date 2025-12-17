@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import content from "@/data/content.json";
 import { useScrollReveal } from "@/lib/animations/hooks";
+import OwnerCard from "./OwnerCard";
 
 export default function AboutContentSection() {
   const { theme } = useTheme();
@@ -67,102 +68,83 @@ export default function AboutContentSection() {
           className={cn(
             "flex flex-col",
             "h-full w-full max-w-[1200px]",
-            "mx-auto gap-4 md:gap-6",
-            "items-center"
+            "mx-auto gap-8 md:gap-12"
           )}
         >
-          {/* Centered Header */}
-          <div className="text-center">
-            <h2
-              className={cn(
-                "text-4xl md:text-5xl",
-                "font-pinyon-script",
-                "font-normal",
-                "text-[#B29738]",
-                "mb-6"
-              )}
-              style={{ fontFamily: "var(--font-pinyon-script)",
-                color: theme === "day" ? "var(--about-text)" : "var(--theme-text-light-cream)"
-            }}
-            >
-              {secondSection.title}
-            </h2>
+          {/* Header Section with decorative image */}
+          <div
+            className={cn(
+              "relative",
+              "flex flex-col md:flex-row",
+              "w-full",
+              "items-start"
+            )}
+          >
+            {/* Left-aligned Header */}
+            <div className="text-left flex-1">
+              <h2 className="section-heading">
+                {secondSection.title}
+              </h2>
 
-            {/* Centered Text */}
-            <div className="text-center max-w-4xl">
-              <p
-                  className={cn(
-                      "text-lg md:text-xl",
-                      "about-paragraph",
-                      "font-gayathri",
-                      "font-normal",
-                      "leading-relaxed"
-                  )}
-                  style={{ fontFamily: "var(--font-gayathri)",
-                    color: theme === "day" ? "var(--about-text)" : "var(--theme-text-light-cream)",
-              }}
-              >
-                {secondSection.text}
-              </p>
+              {/* Left-aligned Text */}
+              <div className="text-left max-w-xl mt-4">
+                <p
+                    className={cn(
+                        "text-lg",
+                        "font-normal",
+                        "leading-relaxed"
+                    )}
+                    style={{
+                      fontFamily: "var(--font-hornbill-trial)",
+                      fontSize: 32,
+                      fontWeight: "lighter",
+                      color: theme === "day" ? "var(--about-title)" : "var(--about-title)",
+                }}
+                >
+                  {secondSection.text}
+                </p>
+              </div>
+            </div>
+
+            {/* Decorative Image - Right side */}
+            <div
+              className={cn(
+                "hidden md:block",
+                "absolute right-0 top-0 bottom-0",
+                "w-auto h-full",
+                "pointer-events-none"
+              )}
+            >
+              <Image
+                src="/assets/imgs/events-decor.svg"
+                alt="Decorative element"
+                width={300}
+                height={400}
+                className={cn(
+                  "object-cover",
+                  "h-full w-auto"
+                )}
+                unoptimized
+              />
             </div>
           </div>
 
-
-
-          {/* Two Images Side-by-Side */}
+          {/* Owner Sections */}
           <div
             className={cn(
-              "grid grid-cols-1 md:grid-cols-2",
-              "gap-8 md:gap-12",
+              "flex flex-col",
               "w-full",
-              "max-w-7xl",
-              "mt-4"
+              "gap-8 md:gap-12"
             )}
           >
-            {secondSection.images.map((image, index) => (
-              <div
+            {secondSection.owners?.map((owner, index) => (
+              <OwnerCard
                 key={index}
-                className={cn(
-                  "flex flex-col",
-                  "gap-4"
-                )}
-              >
-                <div
-                  className={cn(
-                    "relative",
-                    "w-full",
-                    "max-w-[500px]",
-                    "mx-auto",
-                    "aspect-square",
-                    "rounded-lg",
-                    "overflow-hidden",
-                    "border-2 border-[#B29738]"
-                  )}
-                >
-                  <Image
-                    src={typeof image === 'string' ? image : image.url}
-                    alt={`${secondSection.title} - Image ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                </div>
-                <p
-                  className={cn(
-                    "text-base md:text-lg",
-                    "font-gayathri",
-                    "font-normal",
-                    "leading-relaxed",
-                    "text-center"
-                  )}
-                  style={{
-                    fontFamily: "var(--font-gayathri)",
-                    color: theme === "day" ? "var(--theme-text-body)" : "var(--theme-text-light-cream)",
-                  }}
-                >
-                  {typeof image === 'string' ? '' : image.description}
-                </p>
-              </div>
+                name={owner.name}
+                role={owner.role}
+                image={owner.image}
+                description={owner.description}
+              />
             ))}
           </div>
         </div>

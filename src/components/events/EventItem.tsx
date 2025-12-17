@@ -23,9 +23,9 @@ export default function EventItem({ event }: EventItemProps) {
   return (
     <div className="flex flex-col gap-4 md:gap-8">
       {/* Event Content - Two Column Layout */}
-      <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+      <div className="flex flex-col md:flex-row md:justify-between w-full gap-4 md:gap-8">
         {/* Left Column - Event Details */}
-        <div className="flex flex-col gap-3 md:gap-6 flex-1">
+        <div className="flex flex-col gap-3 md:gap-6 flex-1 max-w-[561px]">
 
             <div className="flex flex-col gap-2 md:gap-4">
                 {/* Date with Star Icon */}
@@ -33,7 +33,7 @@ export default function EventItem({ event }: EventItemProps) {
                     <StarIcon
                         fill= "#B29738"
                     />
-                    <span className="text-event-date">
+                    <span className="text-event-date break-words">
                       {event.date}
                     </span>
                 </div>

@@ -96,14 +96,14 @@ function formatDescription(description: string): ReactElement {
 }
 
 /**
- * Renders menu item name with numbers in parentheses styled with Amoret Sans font
+ * Renders menu item name with numbers styled with the same font as prices (Geist Sans)
  */
 function renderMenuItemName(name: string): ReactElement {
   // Remove emojis from name first
   const cleanedName = removeEmojis(name);
   
-  // Match patterns like "(4)" or "(123)" - numbers in parentheses
-  const regex = /(\((\d+)\))/g;
+  // Match any sequence of digits (numbers) in the name
+  const regex = /(\d+)/g;
   const parts: (string | ReactElement)[] = [];
   let lastIndex = 0;
   let match;
@@ -114,9 +114,9 @@ function renderMenuItemName(name: string): ReactElement {
       parts.push(cleanedName.substring(lastIndex, match.index));
     }
     
-    // Add the styled number in parentheses
+    // Add the styled number with the same font as prices
     parts.push(
-      <span key={match.index} style={{ fontFamily: "var(--font-amoret-sans)" }}>
+      <span key={match.index} style={{ fontFamily: "var(--font-geist-sans)" }}>
         {match[0]}
       </span>
     );

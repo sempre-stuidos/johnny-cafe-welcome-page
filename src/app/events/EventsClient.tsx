@@ -48,7 +48,7 @@ function compareEvents(events1: EventItemData[], events2: EventItemData[]): bool
     // Compare bands
     const bands1 = event1.bands || [];
     const bands2 = event2.bands || [];
-    
+
     if (bands1.length !== bands2.length) {
       return true;
     }
@@ -74,7 +74,31 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   const [businessId, setBusinessId] = useState<string | null>(null);
   const [hasFetchedInitial, setHasFetchedInitial] = useState(false);
   const hasUsedInitialEvents = useRef(false);
-  const hasCheckedForUpdates = useRef(false);
+    const hasCheckedForUpdates = useRef(false);
+    const [bgTileCount, setBgTileCount] = useState(90);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Calculate needed background tiles based on content height
+  useEffect(() => {
+    const updateTileCount = () => {
+      if (sectionRef.current) {
+        const sectionHeight = sectionRef.current.scrollHeight;
+        // Each tile is minimum 400px tall, 3 columns per row
+        // Add extra 50% buffer to ensure we never run out
+        const rowsNeeded = Math.ceil((sectionHeight / 400) * 1.5);
+        const tilesNeeded = rowsNeeded * 3; // 3 columns
+        setBgTileCount(Math.max(90, tilesNeeded)); // Minimum 90 tiles
+      }
+    };
+
+    // Update on mount and when content changes
+    updateTileCount();
+
+    // Small delay to ensure content is rendered
+    const timer = setTimeout(updateTileCount, 100);
+
+    return () => clearTimeout(timer);
+  }, [activeTab, events, galleryImages]);
 
   // Get business slug and fetch business ID
   useEffect(() => {
@@ -103,10 +127,10 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   // Background fetch on mount to check for updates (runs once)
   useEffect(() => {
     if (hasCheckedForUpdates.current || activeTab !== 'weekly') return;
-    
+
     const checkForUpdates = async () => {
       hasCheckedForUpdates.current = true;
-      
+
       const businessSlug = resolveBusinessSlug(
         undefined,
         process.env.NEXT_PUBLIC_BUSINESS_SLUG,
@@ -118,13 +142,13 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
         const response = await fetch(`/api/events?businessSlug=${encodeURIComponent(businessSlug)}&type=weekly`, {
           cache: 'no-store' // Ensure we get fresh data
         });
-        
+
         if (!response.ok) {
           return; // Silently fail, keep initial events
         }
-        
+
         const data = await response.json();
-        
+
         if (data.events && Array.isArray(data.events)) {
           // Compare with initial events
           if (compareEvents(initialEvents, data.events)) {
@@ -266,6 +290,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
   return (
     <>
       <section
+        ref={sectionRef}
         className={cn(
           "relative",
           "w-full min-h-screen md:min-h-[668px]",
@@ -273,23 +298,29 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
           theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
         )}
       >
-        {/* Background Image - 6 tiles grid (3x2) with overlap */}
+        {/* Background Image - Tiled grid with no seams */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div
             className={cn(
-              "grid grid-cols-3 grid-rows-2 gap-0",
-              "w-[calc(100%+6px)] h-[calc(100%+4px)]",
+              "grid grid-cols-3 gap-0",
+              "w-[calc(100%+6px)]",
               "-ml-[3px] -mt-[2px]"
             )}
+            style={{
+              gridAutoRows: "minmax(400px, auto)"
+            }}
           >
-            {[...Array(6)].map((_, i) => (
+            {[...Array(bgTileCount)].map((_, i) => (
               <div
                 key={i}
                 className={cn(
                   "bg-[url('/assets/imgs/bg.png')]",
-                  "bg-center bg-[length:calc(100%+2px)_calc(100%+2px)]",
+                  "bg-center bg-cover",
                   "-m-px"
                 )}
+                style={{
+                  minHeight: "400px"
+                }}
               />
             ))}
           </div>
@@ -323,7 +354,7 @@ export default function EventsClient({ events: initialEvents }: EventsClientProp
       {/* Jazz Night Vibe Section */}
       <EventsVibe />
 
-      {/* Artists Sign Up Section */}
+      {/* Artists Highlights + Sign Up Section */}
       <ArtistsSignUp />
     </>
   );

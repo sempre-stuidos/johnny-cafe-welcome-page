@@ -117,22 +117,34 @@
       "image": "https://lh3.googleusercontent.com/p/AF1QipNFn5UiY4SZxe5YBvdJGCxQGf5XdHsW8Eef6nvh=s1360-w1360-h1020-rw",
       "paragraphs": [
         "Since 1985, Johnny G's has been the heartbeat of jazz in the city. Named after the legendary saxophonist Johnny Griffin, our intimate venue has played host to countless unforgettable performances, from local talent to internationally acclaimed artists.",
-        "What started as a small basement club has evolved into a cherished institution where the spirit of jazz thrives every night.",
-        "We believe that jazz isn't just music—it's a conversation, a feeling, a moment suspended in time.",
+        "What started as a small basement club has evolved into a cherished institution where the spirit of jazz thrives every night.We believe that jazz isn't just music—it's a conversation, a feeling, a moment suspended in time.",
         "Our commitment to preserving the vintage charm while embracing modern comforts means you'll experience the best of both worlds: a curated cocktail menu, an acoustically perfect listening room, and an atmosphere that honors the rich history of jazz."
       ]
     },
     "secondSection": {
       "title": "Meet the Owners",
       "text": "Two friends, one vision: to keep the spirit of jazz alive and thriving for generations to come.",
-      "images": [
+      "owners": [
         {
-          "url": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347834634-IMG-2624--1-.JPG",
-          "description": "Our head chef brings over 30 years of culinary expertise, crafting each dish with passion and precision."
+          "name": "Dinesh Sharma",
+          "role": "OWNER",
+          "image": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347834634-IMG-2624--1-.JPG",
+          "description": [
+            "Dinesh Sharma is the owner of Johnny G’s and a highly respected chef and hospitality leader with decades of international experience. Over the course of his career, Dinesh has opened and led more than 60 restaurants across the Greater Toronto Area, playing a key role in shaping successful concepts from the ground up",
+            "He has served as Head Chef in five-star hotels in India where he refined his craft across diverse cuisines and cultures. His approach to food is driven by precision, creativity, and a deep respect for ingredients — blending global flavors with timeless technique.",
+            "At Johnny G’s, Dinesh brings his passion for food and hospitality to a neighbourhood setting, combining world-class culinary standards with warmth, soul, and accessibility. His vision is to create food that tells a story and a space that people return to not just for meals, but for moments"
+          ]
         },
         {
-          "url": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347796375-0205C9D0-6629-4ED3-A688-965A49B8B1D4.JPG",
-          "description": "Our creative and operations manager curates the overall guest experience, blending seamless hospitality with a carefully crafted jazz atmosphere."
+          "name": "Vivek",
+          "role": "PARTNER",
+          "image": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347796375-0205C9D0-6629-4ED3-A688-965A49B8B1D4.JPG",
+          "description": [
+            "Vivek is the partner behind the creative direction and guest experience at Johnny G’s, bringing a deeply personal and hands-on vision to the space.",
+            "Inspired by the soul of New Orleans jazz culture, Vivek personally shaped the artistic identity of Johnny G’s  from the visual art and design details to the mood, lighting, and flow of the room. Every element was intentionally created to echo the warmth, rhythm, and intimacy of classic jazz bars, while still feeling rooted in the Cabbagetown community.",
+            "With a lifelong connection to music and a strong belief that art and hospitality are inseparable, Vivek curates the live jazz programming and overall atmosphere, working closely with musicians and guests to create nights that feel authentic and alive.",
+            "For Vivek, Johnny G’s is more than a restaurant. It is a cultural space  where food, music, art, and people meet, and where every visit carries a sense of story, soul, and connection."
+          ]
         }
       ]
     }

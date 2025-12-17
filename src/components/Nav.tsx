@@ -48,7 +48,7 @@ export default function Nav() {
         {/* Banner - Above navigation content */}
         <Banner />
         
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
             <Link

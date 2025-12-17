@@ -136,16 +136,7 @@ export default function HomeHero() {
                   : "Have dinner at one of the oldest Restaurants in Cabbagetown"}
               </h4>
 
-              <div
-                className={cn(
-                  "hero-hours-section",
-                  "flex flex-col gap-1 mt-2 md:mt-0"
-                )}
-              >
-                <h5>MONDAY - SUNDAY</h5>
-
-                <h5>{theme === "day" ? "7AM - 4PM" : "7PM - 12AM"}</h5>
-              </div>
+              {/* <h4 className="hero-now-playing max-w-[380px] p-2">Now playing <span className="hero-jazz-text">Jazz</span></h4> */}
 
               <Image
                 src="/star-vector.svg"

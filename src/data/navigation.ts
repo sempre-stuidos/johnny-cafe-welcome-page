@@ -1,8 +1,8 @@
 export const navLinks = [
-  { href: "/", label: "Johnny G's" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "Johnny G's" },
   { href: "/menu", label: "Menu" },
-  { href: "/events", label: "Events" },
+  { href: "/events", label: "Live Jazz" },
   { href: "/reservations", label: "Reservations" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
