@@ -15,9 +15,10 @@ export interface EventItemData {
 
 interface EventItemProps {
   event: EventItemData;
+  onBandClick?: (bandId: string) => void;
 }
 
-export default function EventItem({ event }: EventItemProps) {
+export default function EventItem({ event, onBandClick }: EventItemProps) {
   const { theme } = useTheme();
 
   return (
@@ -58,9 +59,19 @@ export default function EventItem({ event }: EventItemProps) {
               </span>
               <div className="flex flex-col gap-1">
                 {event.bands.map((band) => (
-                  <p key={band.id} className="text-event-description">
+                  <button
+                    key={band.id}
+                    onClick={() => onBandClick?.(band.id)}
+                    className={cn(
+                      "text-event-description",
+                      "text-left",
+                      "cursor-pointer",
+                      "hover:opacity-80",
+                      "transition-opacity duration-200"
+                    )}
+                  >
                     {band.name}
-                  </p>
+                  </button>
                 ))}
               </div>
             </div>

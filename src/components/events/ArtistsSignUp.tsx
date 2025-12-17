@@ -3,23 +3,78 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/lib/animations/hooks";
 import { Band } from "@/lib/events";
+import { useEffect, useRef } from "react";
 
 import "swiper/css";
 
 interface ArtistsSignUpProps {
   bands?: Band[];
+  selectedBandId?: string | null;
 }
 
-export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
+export default function ArtistsSignUp({ bands, selectedBandId }: ArtistsSignUpProps) {
   const { theme } = useTheme();
   const contentRef = useScrollReveal();
+  const swiperRef = useRef<SwiperType | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  // Handle scroll and swiper navigation when selectedBandId changes
+  useEffect(() => {
+    if (!selectedBandId || !bands || bands.length === 0) return;
+
+    // Find the index of the band with matching ID
+    const bandIndex = bands.findIndex(band => band.id === selectedBandId);
+    if (bandIndex === -1) return;
+
+    // Scroll to the section
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Wait a bit for scroll to start, then navigate swiper
+    const timeoutId = setTimeout(() => {
+      if (swiperRef.current) {
+        const windowWidth = window.innerWidth;
+        let targetIndex = bandIndex;
+
+        // Handle responsive behavior
+        if (windowWidth >= 1024) {
+          // Desktop: Ensure clicked band is one of the 3 visible cards
+          // Prefer showing it as the leftmost or center card
+          if (bandIndex > 0 && bandIndex < bands.length - 1) {
+            // If not at the start or end, show it as center card
+            targetIndex = Math.max(0, bandIndex - 1);
+          } else if (bandIndex === bands.length - 1 && bands.length > 3) {
+            // If it's the last card and there are more than 3, show it as the rightmost
+            targetIndex = Math.max(0, bands.length - 3);
+          }
+        } else if (windowWidth >= 640) {
+          // Tablet: Ensure clicked band is one of the 2 visible cards
+          // Prefer showing it as the left card
+          if (bandIndex > 0 && bandIndex < bands.length - 1) {
+            targetIndex = Math.max(0, bandIndex);
+          } else if (bandIndex === bands.length - 1 && bands.length > 2) {
+            targetIndex = Math.max(0, bands.length - 2);
+          }
+        }
+        // Mobile: Show clicked band as the active centered card (no adjustment needed)
+
+        swiperRef.current.slideTo(targetIndex, 500);
+      }
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [selectedBandId, bands]);
 
   return (
     <section
+      ref={sectionRef}
+      id="artists-signup-section"
       className={cn(
         "relative",
         "w-full h-auto",
@@ -110,12 +165,12 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
               },
             }}
             className="artist-slider"
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+            }}
           >
             {bands && bands.length > 0 ? (
-              bands.map((band, index) => {
-                // #region agent log
-                fetch('http://127.0.0.1:7243/ingest/b4650fe2-a582-445d-9687-1805655edfff',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'ArtistsSignUp.tsx:114',message:'Rendering band slide',data:{index,totalBands:bands.length,bandId:band.id,bandName:band.name},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-                // #endregion
+              bands.map((band) => {
                 return (
                 <SwiperSlide key={band.id} className="min-w-[302px]">
                   <div
@@ -123,6 +178,7 @@ export default function ArtistsSignUp({ bands }: ArtistsSignUpProps) {
                       "artist-card-bg",
                       "flex flex-col",
                       "h-full",
+                      "w-full",
                       "border-2 border-solid border-theme-accent",
                       "overflow-hidden"
                     )}

@@ -79,6 +79,11 @@ export default function EventsClient({ events: initialEvents, bands }: EventsCli
     const hasCheckedForUpdates = useRef(false);
     const [bgTileCount, setBgTileCount] = useState(90);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [selectedBandId, setSelectedBandId] = useState<string | null>(null);
+
+  const handleBandClick = (bandId: string) => {
+    setSelectedBandId(bandId);
+  };
 
   // Calculate needed background tiles based on content height
   useEffect(() => {
@@ -346,6 +351,7 @@ export default function EventsClient({ events: initialEvents, bands }: EventsCli
               }
               loading={loading}
               galleryLoading={galleryLoading}
+              onBandClick={handleBandClick}
           />
       </section>
 
@@ -353,7 +359,7 @@ export default function EventsClient({ events: initialEvents, bands }: EventsCli
       <EventsVibe />
 
       {/* Artists Highlights + Sign Up Section */}
-      <ArtistsSignUp bands={bands} />
+      <ArtistsSignUp bands={bands} selectedBandId={selectedBandId} />
     </>
   );
 }

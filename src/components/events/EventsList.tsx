@@ -7,11 +7,11 @@ import LazyGalleryImage from "./LazyGalleryImage";
 
 type EventTab = 'weekly' | 'past' | 'gallery';
 
-export interface GalleryImage {
+export type GalleryImage = {
   id: string;
   url: string;
   name?: string;
-}
+};
 
 interface EventsListProps {
   activeTab: EventTab;
@@ -21,9 +21,10 @@ interface EventsListProps {
   emptyMessage?: string;
   loading?: boolean;
   galleryLoading?: boolean;
+  onBandClick?: (bandId: string) => void;
 }
 
-export default function EventsList({
+function EventsList({
   activeTab,
   onTabChange,
   events,
@@ -31,6 +32,7 @@ export default function EventsList({
   emptyMessage = "No events at this time. Check back soon!",
   loading = false,
   galleryLoading = false,
+  onBandClick,
 }: EventsListProps) {
   const { theme } = useTheme();
   return (
@@ -141,7 +143,7 @@ export default function EventsList({
           ) : (
             events.map((event, index) => (
               <div key={index} className="flex flex-col gap-6 md:gap-12 max-w-[1200px] w-full">
-                <EventItem event={event} />
+                <EventItem event={event} onBandClick={onBandClick} />
 
                 {/* Divider between events and after last event */}
                 <div className="flex justify-center">
@@ -156,3 +158,4 @@ export default function EventsList({
   );
 }
 
+export default EventsList;
