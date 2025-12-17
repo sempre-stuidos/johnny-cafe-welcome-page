@@ -306,11 +306,9 @@ export default function EventsClient({ events: initialEvents, bands }: EventsCli
             className={cn(
               "grid grid-cols-3 gap-0",
               "w-[calc(100%+6px)]",
-              "-ml-[3px] -mt-[2px]"
+              "-ml-[3px] -mt-[2px]",
+              "auto-rows-[minmax(400px,auto)]"
             )}
-            style={{
-              gridAutoRows: "minmax(400px, auto)"
-            }}
           >
             {[...Array(bgTileCount)].map((_, i) => (
               <div
@@ -318,11 +316,9 @@ export default function EventsClient({ events: initialEvents, bands }: EventsCli
                 className={cn(
                   "bg-[url('/assets/imgs/bg.png')]",
                   "bg-center bg-cover",
-                  "-m-px"
+                  "-m-px",
+                  "min-h-[400px]"
                 )}
-                style={{
-                  minHeight: "400px"
-                }}
               />
             ))}
           </div>
