@@ -68,7 +68,7 @@ export async function getMenusForBusiness(businessSlug: string) {
 /**
  * Get categories for a menu
  */
-export async function getMenuCategories(menuId: number, menuType?: string) {
+export async function getMenuCategories(menuId: string | number, menuType?: string) {
   try {
     let query = supabaseAdmin
       .from('menu_categories')
@@ -151,6 +151,31 @@ function mapCategorySlugToKey(slug: string): string {
 
 
 /**
+ * Helper function to determine menu type from menu name
+ * Supports flexible matching for breakfast/brunch variations
+ */
+function getMenuTypeFromName(menuName: string): 'brunch' | 'dinner' | 'late-night' | null {
+  const nameLower = menuName.toLowerCase().trim()
+  
+  // Brunch/Breakfast variations
+  if (nameLower === 'breakfast' || nameLower === 'brunch' || nameLower.includes('brunch')) {
+    return 'brunch'
+  }
+  
+  // Dinner
+  if (nameLower === 'dinner') {
+    return 'dinner'
+  }
+  
+  // Late Night variations
+  if (nameLower === 'late night' || nameLower === 'late-night' || nameLower.includes('late')) {
+    return 'late-night'
+  }
+  
+  return null
+}
+
+/**
  * Get complete menu data structure for a business
  * Returns data in the format expected by the menu page
  */
@@ -164,6 +189,13 @@ export async function getMenuDataForBusiness(businessSlug: string): Promise<Menu
     }
 
     for (const menu of menus) {
+      const menuType = getMenuTypeFromName(menu.name)
+      
+      // Skip menus that don't match known types
+      if (!menuType || (menuType !== 'brunch' && menuType !== 'dinner')) {
+        continue
+      }
+      
       const categories = await getMenuCategories(menu.id)
       
       for (const category of categories) {
@@ -175,13 +207,13 @@ export async function getMenuDataForBusiness(businessSlug: string): Promise<Menu
 
         const categoryKey = mapCategorySlugToKey(category.slug)
         
-        // Determine if this is a brunch or dinner category based on menu name
-        if (menu.name.toLowerCase() === 'breakfast' || menu.name.toLowerCase() === 'brunch') {
+        // Assign to appropriate menu type based on menu name
+        if (menuType === 'brunch') {
           // Type-safe dynamic key assignment
           if (categoryKey in menuData.brunch) {
             (menuData.brunch as Record<string, MenuItemData[]>)[categoryKey] = items
           }
-        } else if (menu.name.toLowerCase() === 'dinner') {
+        } else if (menuType === 'dinner') {
           // Type-safe dynamic key assignment
           if (categoryKey in menuData.dinner) {
             (menuData.dinner as Record<string, MenuItemData[]>)[categoryKey] = items
@@ -202,6 +234,7 @@ export async function getMenuDataForBusiness(businessSlug: string): Promise<Menu
 
 /**
  * Get menu items grouped by category for a specific menu type (brunch/dinner/late-night)
+ * Uses UUID relationships and flexible menu name matching instead of hardcoded names
  */
 export async function getMenuItemsByType(
   businessSlug: string,
@@ -210,25 +243,32 @@ export async function getMenuItemsByType(
   try {
     const menus = await getMenusForBusiness(businessSlug)
     
-    // Find the appropriate menu (Breakfast for brunch, Dinner for dinner, Late Night for late-night)
-    let menuName: string
-    if (menuType === 'brunch') {
-      menuName = 'Breakfast'
-    } else if (menuType === 'dinner') {
-      menuName = 'Dinner'
-    } else {
-      menuName = 'Late Night'
+    if (!menus || menus.length === 0) {
+      return {}
     }
     
-    const menu = menus.find(m => m.name.toLowerCase() === menuName.toLowerCase())
+    // Find the appropriate menu using flexible name matching
+    // This supports variations like "Breakfast", "Brunch", "Late Night", "Late-Night", etc.
+    const menu = menus.find(m => {
+      const menuTypeFromName = getMenuTypeFromName(m.name)
+      return menuTypeFromName === menuType
+    })
     
     if (!menu) {
+      console.warn(`No menu found for type "${menuType}" in business "${businessSlug}"`)
       return {}
     }
 
+    // Use menu UUID to fetch categories via relationship
     const categories = await getMenuCategories(menu.id)
+    
+    if (!categories || categories.length === 0) {
+      return {}
+    }
+    
     const result: Record<string, MenuItemData[]> = {}
 
+    // Fetch items for each category using category ID relationship
     for (const category of categories) {
       const items = await getMenuItemsByCategory(category.id)
       
