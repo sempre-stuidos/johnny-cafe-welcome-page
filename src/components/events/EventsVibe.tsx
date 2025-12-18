@@ -52,14 +52,15 @@ export default function EventsVibe() {
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="flex flex-col gap-6 py-16 md:py-24 px-4 sm:px-6 lg:px-8">
             <h2 className="events-vibe-title">
-              Jazz Night at Johnny G&apos;s
+              Jazz Night at Johnny G&apos;s: Toronto&apos;s East End Gem
             </h2>
 
             <div className="flex flex-col gap-4">
               <p className="about-paragraph">
+              Experience live jazz every Thursday through Saturday at Johnny G&apos;s in Toronto&apos;s vibrant East End. 
               Step into our cozy Cabbagetown setting where we transform a corner into an 
               intimate "stage vibe" for live jazz, offering you a front-row seat to spectacular local talent. 
-              Enjoy our flavourful dinner menu as the smooth sounds create a perfect, sophisticated atmosphere for a special night out.
+              Enjoy our flavourful dinner menu at Johnny G&apos;s as the smooth sounds create a perfect, sophisticated atmosphere for a special night out in Toronto&apos;s jazz scene.
               </p>
             </div>
 
@@ -92,7 +93,7 @@ export default function EventsVibe() {
           <div className="relative w-full min-h-[400px] md:min-h-0">
             <Image
               src="/assets/imgs/events-scene.png"
-              alt="Jazz Night at Johnny G's - Live music performance"
+              alt="Live jazz night at Johnny G's Toronto East End venue in Cabbagetown"
               fill
               className="object-cover object-left"
               sizes="(max-width: 768px) 100vw, 50vw"
