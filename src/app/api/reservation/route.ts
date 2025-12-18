@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sendReservationEmail } from '@/lib/email'
+import { sendReservationEmail, sendReservationConfirmationEmail } from '@/lib/email'
 import { supabaseAdmin } from '@/lib/supabase'
 
 /**
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get business ID first (needed for email recipients and database save)
+    // Get business ID (needed for database save and email recipients)
     let businessId: string | null = null
     try {
       const { data: business, error: businessError } = await supabaseAdmin
@@ -71,88 +71,93 @@ export async function POST(request: NextRequest) {
 
       if (businessError || !business) {
         console.error('Error finding business:', businessError)
-        // Continue without business ID - will use fallback email or no email
+        // Log error but continue - will try to save anyway
       } else {
         businessId = business.id
       }
     } catch (dbError) {
       console.error('Error fetching business:', dbError)
-      // Continue without business ID
+      // Log error but continue - will try to save anyway
     }
 
-    // Send email via Brevo (with businessId for recipient lookup)
-    const emailResult = await sendReservationEmail({
-      partySize,
-      date,
-      time,
-      email,
-      phone,
-    }, businessId || undefined)
+    // Extract customer name from email
+    const customerName = extractCustomerNameFromEmail(email)
 
-    // Note: Email sending failure is not critical - reservation will still be saved
-    if (!emailResult.success) {
-      console.warn('Email sending failed:', emailResult.error)
-      // Continue to save reservation anyway
-    }
-
-    // Save reservation to database
+    // Save reservation to database first
+    // If businessId is not found, try to save anyway (database may handle it)
     try {
       if (!businessId) {
-        // Try to get business ID again if we didn't get it earlier
+        // Try one more time to get business ID
         const { data: business, error: businessError } = await supabaseAdmin
           .from('businesses')
           .select('id')
           .eq('slug', 'johnny-gs-brunch')
           .single()
 
-        if (businessError || !business) {
-          console.error('Error finding business for database save:', businessError)
-          return NextResponse.json({
-            success: true,
-            message: 'Reservation request submitted successfully (email sent, database save skipped)'
-          })
+        if (!businessError && business) {
+          businessId = business.id
         }
-        businessId = business.id
       }
 
-      // Extract customer name from email
-      const customerName = extractCustomerNameFromEmail(email)
+      // Only attempt to save if we have a businessId (required by database)
+      if (businessId) {
+        const { error: insertError } = await supabaseAdmin
+          .from('reservations')
+          .insert({
+            org_id: businessId,
+            customer_name: customerName,
+            customer_email: email,
+            customer_phone: phone,
+            reservation_date: date,
+            reservation_time: time,
+            party_size: partySizeNum,
+            status: 'pending',
+          })
 
-      // Insert reservation into database
-      const { error: insertError } = await supabaseAdmin
-        .from('reservations')
-        .insert({
-          org_id: businessId,
-          customer_name: customerName,
-          customer_email: email,
-          customer_phone: phone,
-          reservation_date: date,
-          reservation_time: time,
-          party_size: partySizeNum,
-          status: 'pending',
-        })
-
-      if (insertError) {
-        console.error('Error saving reservation to database:', insertError)
-        // Continue - email was sent successfully, database save failed
-        return NextResponse.json({
-          success: true,
-          message: 'Reservation request submitted successfully (email sent, database save failed)'
-        })
+        if (insertError) {
+          console.error('Error saving reservation to database:', insertError)
+          // Continue anyway - emails will still be sent
+        }
+      } else {
+        console.warn('Business ID not found - reservation not saved to database, but emails will be sent')
       }
-
-      return NextResponse.json({
-        success: true,
-        message: 'Reservation request submitted successfully'
-      })
     } catch (dbError) {
       console.error('Error in database operation:', dbError)
-      // Continue - email was sent successfully
-      return NextResponse.json({
-        success: true,
-        message: 'Reservation request submitted successfully (email sent, database save skipped)'
-      })
+      // Continue anyway - emails will still be sent
     }
+
+    // Return success response immediately (don't wait for emails)
+    // Send emails asynchronously in the background
+    Promise.all([
+      // Send reservation request email to client (restaurant)
+      sendReservationEmail({
+        partySize,
+        date,
+        time,
+        email,
+        phone,
+      }, businessId || undefined).catch((error) => {
+        console.error('Error sending reservation request email to client:', error)
+      }),
+      // Send automatic confirmation email to customer
+      sendReservationConfirmationEmail({
+        customerEmail: email,
+        customerName: customerName,
+        reservationDate: date,
+        reservationTime: time,
+        partySize: partySizeNum,
+      }).catch((error) => {
+        console.error('Error sending confirmation email to customer:', error)
+      })
+    ]).catch((error) => {
+      // Log any unexpected errors, but don't affect the response
+      console.error('Error in background email sending:', error)
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Reservation request submitted successfully'
+    })
   } catch (error) {
     return NextResponse.json(
       { success: false, error: 'Failed to process reservation request' },
