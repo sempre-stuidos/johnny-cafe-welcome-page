@@ -60,28 +60,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send email via Brevo
-    const emailResult = await sendReservationEmail({
-      partySize,
-      date,
-      time,
-      email,
-      phone,
-    })
-
-    if (!emailResult.success) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: emailResult.error || 'Failed to send reservation email' 
-        },
-        { status: 500 }
-      )
-    }
-
-    // After email is sent successfully, save to database
+    // Get business ID first (needed for email recipients and database save)
+    let businessId: string | null = null
     try {
-      // Get business ID for "Johnny G's Brunch" by slug
       const { data: business, error: businessError } = await supabaseAdmin
         .from('businesses')
         .select('id')
@@ -90,11 +71,48 @@ export async function POST(request: NextRequest) {
 
       if (businessError || !business) {
         console.error('Error finding business:', businessError)
-        // Continue without saving to DB - email was sent successfully
-        return NextResponse.json({
-          success: true,
-          message: 'Reservation request submitted successfully (email sent, database save skipped)'
-        })
+        // Continue without business ID - will use fallback email or no email
+      } else {
+        businessId = business.id
+      }
+    } catch (dbError) {
+      console.error('Error fetching business:', dbError)
+      // Continue without business ID
+    }
+
+    // Send email via Brevo (with businessId for recipient lookup)
+    const emailResult = await sendReservationEmail({
+      partySize,
+      date,
+      time,
+      email,
+      phone,
+    }, businessId || undefined)
+
+    // Note: Email sending failure is not critical - reservation will still be saved
+    if (!emailResult.success) {
+      console.warn('Email sending failed:', emailResult.error)
+      // Continue to save reservation anyway
+    }
+
+    // Save reservation to database
+    try {
+      if (!businessId) {
+        // Try to get business ID again if we didn't get it earlier
+        const { data: business, error: businessError } = await supabaseAdmin
+          .from('businesses')
+          .select('id')
+          .eq('slug', 'johnny-gs-brunch')
+          .single()
+
+        if (businessError || !business) {
+          console.error('Error finding business for database save:', businessError)
+          return NextResponse.json({
+            success: true,
+            message: 'Reservation request submitted successfully (email sent, database save skipped)'
+          })
+        }
+        businessId = business.id
       }
 
       // Extract customer name from email
@@ -104,7 +122,7 @@ export async function POST(request: NextRequest) {
       const { error: insertError } = await supabaseAdmin
         .from('reservations')
         .insert({
-          org_id: business.id,
+          org_id: businessId,
           customer_name: customerName,
           customer_email: email,
           customer_phone: phone,

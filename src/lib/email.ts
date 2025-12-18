@@ -4,6 +4,7 @@
  */
 
 import { TransactionalEmailsApi, SendSmtpEmail } from '@getbrevo/brevo'
+import { supabaseAdmin } from './supabase'
 
 interface ReservationEmailParams {
   partySize: string
@@ -28,15 +29,36 @@ function getSenderName(): string {
 }
 
 /**
- * Get the recipient email addresses
+ * Get the recipient email addresses from reservation_settings table
+ * Falls back to RECIPIENT_EMAIL env var if no settings found
  */
-function getRecipientEmails(): string[] {
-  // If RECIPIENT_EMAIL is set, use it (for backward compatibility)
+async function getRecipientEmails(businessId?: string): Promise<string[]> {
+  // If businessId is provided, query reservation_settings table
+  if (businessId) {
+    try {
+      const { data, error } = await supabaseAdmin
+        .from('reservation_settings')
+        .select('email_recipients')
+        .eq('business_id', businessId)
+        .single()
+
+      if (!error && data && data.email_recipients && data.email_recipients.length > 0) {
+        return data.email_recipients
+      }
+    } catch (error) {
+      console.error('Error fetching reservation settings:', error)
+      // Fall through to env var fallback
+    }
+  }
+
+  // Fall back to RECIPIENT_EMAIL env var if provided (for backward compatibility)
   if (process.env.RECIPIENT_EMAIL) {
     return [process.env.RECIPIENT_EMAIL]
   }
-  // Default to both email addresses
-  return ['johnnygs478@gmail.com', 'jacacanada@gmail.com']
+
+  // No recipients found - return empty array
+  // Email won't be sent, but reservation will still be saved
+  return []
 }
 
 /**
@@ -133,7 +155,7 @@ This is an automated message from Johnny Cafe reservation system.
 /**
  * Send reservation email using Brevo
  */
-export async function sendReservationEmail(params: ReservationEmailParams): Promise<{ success: boolean; error?: string }> {
+export async function sendReservationEmail(params: ReservationEmailParams, businessId?: string): Promise<{ success: boolean; error?: string }> {
   try {
     const { partySize, date, time, email, phone } = params
     
@@ -186,8 +208,15 @@ export async function sendReservationEmail(params: ReservationEmailParams): Prom
     const senderEmail = getSenderEmail()
     const senderName = getSenderName()
     
-    // Get recipient emails
-    const recipientEmails = getRecipientEmails()
+    // Get recipient emails from reservation_settings or fallback
+    const recipientEmails = await getRecipientEmails(businessId)
+    
+    // If no recipients found, log warning but don't fail
+    if (recipientEmails.length === 0) {
+      console.warn('No email recipients found for reservation. Email will not be sent, but reservation will be saved.')
+      // Return success since reservation will still be saved
+      return { success: true }
+    }
     
     // Get the template ID
     const templateId = getReservationEmailTemplateId()
