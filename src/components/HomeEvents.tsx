@@ -211,6 +211,10 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
             <p className="text-about">
               {content.events.description}
             </p>
+            
+            <p className="text-about">
+              Johnny G&apos;s is located in Toronto&apos;s vibrant East End, proud to be Cabbagetown&apos;s premier destination for live jazz and exceptional dining.
+            </p>
 
             {/* Event Posters */}
             {displayEvents.length > 0 && (
@@ -225,7 +229,7 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
                       {event.image ? (
                         <Image
                           src={event.image}
-                          alt={`Event on ${event.date}`}
+                          alt={`Toronto jazz night performance at Johnny G's Cabbagetown - ${event.date}`}
                           fill
                           className="object-cover"
                           unoptimized
@@ -282,7 +286,7 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
             <div className="relative w-full h-full flex items-end md:items-stretch">
               <Image
                 src="/assets/imgs/home-events.svg"
-                alt="Dinner and Jazz"
+                alt="Live jazz nights and dinner at Johnny G's Toronto East End restaurant"
                 width={700}
                 height={700}
                 className="w-full h-full object-contain object-bottom"

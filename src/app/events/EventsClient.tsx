@@ -10,6 +10,8 @@ import { resolveBusinessSlug } from "@/lib/business-utils";
 import EventsVibe from "@/components/events/EventsVibe";
 import ArtistsSignUp from "@/components/events/ArtistsSignUp";
 import { Band } from "@/lib/events";
+import { generateMusicVenueSchema, generateJazzEventSchema, generateBreadcrumbSchema } from "@/lib/structured-data";
+import Script from "next/script";
 
 interface EventsClientProps {
   events: EventItemData[];
@@ -294,8 +296,69 @@ export default function EventsClient({ events: initialEvents, bands }: EventsCli
     };
   }, [businessId, activeTab]);
 
+  // Generate structured data for SEO
+  const musicVenueSchema = generateMusicVenueSchema({
+    name: "Johnny G's",
+    description: "Intimate live jazz venue in Toronto's East End, Cabbagetown. Experience live jazz every Thursday, Friday, and Saturday night with dinner service.",
+    address: {
+      streetAddress: "478 Parliament St",
+      addressLocality: "Toronto",
+      addressRegion: "ON",
+      postalCode: "M5A 2L3",
+      addressCountry: "CA",
+    },
+    geo: {
+      latitude: 43.6621,
+      longitude: -79.3652,
+    },
+    url: "https://johnnygsrestaurant.ca",
+  });
+
+  const jazzEventSchema = generateJazzEventSchema({
+    name: "Live Jazz Night at Johnny G's",
+    description: "Experience intimate live jazz performances every Thursday, Friday, and Saturday night in Toronto's East End. Featuring talented local musicians in a cozy Cabbagetown setting with full dinner service.",
+    location: {
+      name: "Johnny G's",
+      address: {
+        streetAddress: "478 Parliament St",
+        addressLocality: "Toronto",
+        addressRegion: "ON",
+        postalCode: "M5A 2L3",
+        addressCountry: "CA",
+      },
+    },
+    url: "https://johnnygsrestaurant.ca",
+    startTime: "21:00",
+    endTime: "00:00",
+    days: ["Thursday", "Friday", "Saturday"],
+    imageUrl: "https://johnnygsrestaurant.ca/assets/imgs/events-scene.png",
+    performerName: "Local Toronto Jazz Artists",
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: "https://johnnygsrestaurant.ca" },
+    { name: "Events", url: "https://johnnygsrestaurant.ca/events" },
+  ]);
+
   return (
     <>
+      {/* Structured Data for SEO */}
+      <Script
+        id="music-venue-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(musicVenueSchema) }}
+      />
+      <Script
+        id="jazz-event-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jazzEventSchema) }}
+      />
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <section
         ref={sectionRef}
         className={cn(

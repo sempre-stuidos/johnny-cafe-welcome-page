@@ -976,6 +976,7 @@ code, pre {
 
 .react-datepicker__tab-loop {
   position: absolute;
+  z-index: 99999;
 }
 
 .react-datepicker-popper .react-datepicker {
@@ -1367,6 +1368,40 @@ code, pre {
   color: var(--theme-text-light-cream);
 }
 
+/* Custom Select Dropdown - matching DatePicker design */
+.custom-select-dropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-select-option {
+  color: #334D2D;
+  background-color: #FAF2DD;
+  cursor: pointer;
+}
+
+.custom-select-option:hover {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.custom-select-option-selected {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
 .reservation-submit-button {
   font-size: clamp(var(--font-size-xs), 2.5vw, var(--font-size-sm));
   height: 44px;
@@ -1397,19 +1432,7 @@ code, pre {
   background-color: rgba(1, 26, 12, 0.70);
 }
 
-.private-events-icon-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.private-events-icon {
-  stroke: #B29738;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
-}
 
 /* Testimonials Styles */
 .testimonials-swiper {

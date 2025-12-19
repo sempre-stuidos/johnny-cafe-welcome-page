@@ -72,8 +72,8 @@
     ]
   },
   "events": {
-    "title": "Dinner and Jazz",
-    "description": "Join us every [day of the week] for an evening that feeds both your appetite and your soul. As the sun sets, Johnny G's transforms into an intimate jazz venue where talented local musicians set the perfect backdrop for an unforgettable dining experience.",
+    "title": "Live Jazz Nights at Johnny G's",
+    "description": "Join us every Thursday through Saturday for an evening that feeds both your appetite and your soul. Experience Toronto's best East End jazz as Johnny G's transforms into an intimate Cabbagetown jazz venue where talented local musicians set the perfect backdrop for an unforgettable dining experience.",
     "upcomingEvents": [
       {
         "image": "/home/jazz-frame.jpg",
@@ -123,7 +123,7 @@
     },
     "secondSection": {
       "title": "Meet the Owners",
-      "text": "Two friends, one vision: to keep the spirit of jazz alive and thriving for generations to come.",
+      "text": "Two friends, one vision: to keep the spirit of jazz alive and thriving in Toronto's East End for generations to come.",
       "owners": [
         {
           "name": "Dinesh Sharma",

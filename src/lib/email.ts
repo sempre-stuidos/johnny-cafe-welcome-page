@@ -8,6 +8,7 @@ import { supabaseAdmin } from './supabase'
 
 interface ReservationEmailParams {
   partySize: string
+  mealType: string
   date: string
   time: string
   email: string
@@ -80,7 +81,7 @@ function getReservationEmailTemplateId(): number | null {
  * Generate HTML email template for reservation
  */
 function generateReservationEmailHTML(params: ReservationEmailParams): string {
-  const { partySize, date, time, email, phone } = params
+  const { partySize, mealType, date, time, email, phone } = params
   
   // Format date for display
   const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
@@ -89,6 +90,9 @@ function generateReservationEmailHTML(params: ReservationEmailParams): string {
     month: 'long',
     day: 'numeric'
   }) : date
+  
+  // Format meal type for display
+  const formattedMealType = mealType === 'brunch' ? 'Brunch' : mealType === 'dinner' ? 'Dinner' : 'Jazz'
   
   return `
 <!DOCTYPE html>
@@ -108,6 +112,7 @@ function generateReservationEmailHTML(params: ReservationEmailParams): string {
     
     <div style="background-color: #f9f9f9; padding: 20px; border-radius: 6px; margin: 20px 0;">
       <p style="margin: 10px 0;"><strong>Party Size:</strong> ${partySize}</p>
+      <p style="margin: 10px 0;"><strong>Meal Type:</strong> ${formattedMealType}</p>
       <p style="margin: 10px 0;"><strong>Date:</strong> ${formattedDate}</p>
       <p style="margin: 10px 0;"><strong>Time:</strong> ${time}</p>
       <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #334D2D; text-decoration: none;">${email}</a></p>
@@ -127,7 +132,7 @@ function generateReservationEmailHTML(params: ReservationEmailParams): string {
  * Generate plain text email template for reservation
  */
 function generateReservationEmailText(params: ReservationEmailParams): string {
-  const { partySize, date, time, email, phone } = params
+  const { partySize, mealType, date, time, email, phone } = params
   
   // Format date for display
   const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
@@ -137,12 +142,16 @@ function generateReservationEmailText(params: ReservationEmailParams): string {
     day: 'numeric'
   }) : date
   
+  // Format meal type for display
+  const formattedMealType = mealType === 'brunch' ? 'Brunch' : mealType === 'dinner' ? 'Dinner' : 'Jazz'
+  
   return `
 New Reservation Request
 
 You have received a new reservation request:
 
 Party Size: ${partySize}
+Meal Type: ${formattedMealType}
 Date: ${formattedDate}
 Time: ${time}
 Email: ${email}
@@ -157,10 +166,10 @@ This is an automated message from Johnny Cafe reservation system.
  */
 export async function sendReservationEmail(params: ReservationEmailParams, businessId?: string): Promise<{ success: boolean; error?: string }> {
   try {
-    const { partySize, date, time, email, phone } = params
+    const { partySize, mealType, date, time, email, phone } = params
     
     // Validate required parameters
-    if (!partySize || !date || !time || !email || !phone) {
+    if (!partySize || !mealType || !date || !time || !email || !phone) {
       return {
         success: false,
         error: 'All reservation fields are required'
@@ -241,6 +250,9 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
       name: 'Johnny Cafe',
     }))
     
+    // Format meal type for display
+    const formattedMealType = params.mealType === 'brunch' ? 'Brunch' : params.mealType === 'dinner' ? 'Dinner' : 'Jazz'
+    
     // Use Brevo template if template ID is configured
     if (templateId) {
       sendSmtpEmail.templateId = templateId
@@ -248,6 +260,7 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
       // Set template parameters for reservation email
       sendSmtpEmail.params = {
         partySize: partySize,
+        mealType: formattedMealType,
         date: formattedDate,
         time: time,
         email: email,

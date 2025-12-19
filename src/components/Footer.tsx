@@ -164,12 +164,15 @@ export default function Footer() {
                     <p className="transition-colors duration-300 footer-days">
                       THU-SAT
                     </p>
-                    <p className="transition-colors duration-300 footer-meal-label">
-                      Jazz{" "}
+                    <a 
+                      href="/events"
+                      className="transition-colors duration-300 footer-meal-label hover:opacity-80"
+                    >
+                      Live Jazz{" "}
                       <span className="footer-meal-time">
                         8PM till Late
                       </span>
-                    </p>
+                    </a>
                   </div>
                 </div>
 
