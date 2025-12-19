@@ -1,0 +1,159 @@
+# Johnny G's Restaurant - Project Context for Layout & Styling
+
+## CRITICAL STYLING RULES
+
+### Hybrid Styling Approach (MANDATORY)
+
+**Vanilla CSS (CSS Variables) - USE FOR:**
+- Theme colors: `var(--theme-bg-primary)`, `var(--theme-text-body)`, `var(--theme-accent)`
+- Typography: `var(--font-fjalla-one)`, `var(--font-size-3xl)`, `var(--line-height-tight)`
+- Any property that needs GSAP animation or theme switching
+
+**Tailwind CSS - USE FOR:**
+- Layout: `flex`, `grid`, `block`, `relative`, `absolute`
+- Spacing: `p-4`, `m-6`, `gap-8`, `space-x-4`
+- Sizing: `w-full`, `h-screen`, `max-w-4xl`
+- Responsive: `md:flex`, `lg:grid`, `sm:text-lg`
+- Borders: `border`, `rounded-lg`, `border-2`
+- Shadows: `shadow-lg`, `shadow-xl`
+
+### NEVER USE:
+- ❌ Tailwind color classes for theme colors (`bg-white`, `text-black`, `dark:bg-gray-900`)
+- ❌ Hardcoded colors for theme-aware elements (`#ffffff`, `#000000`)
+- ❌ Tailwind typography classes for theme typography (`text-3xl`, `font-bold`)
+
+## Component Structure Pattern
+
+```tsx
+// ✅ CORRECT PATTERN
+<div
+  className="flex flex-col gap-4 p-6 max-w-4xl mx-auto"  // Tailwind: layout
+  style={{
+    backgroundColor: 'var(--theme-bg-primary)',          // Vanilla CSS: color
+    color: 'var(--theme-text-body)',                    // Vanilla CSS: color
+    fontFamily: 'var(--font-fjalla-one)',               // Vanilla CSS: typography
+    fontSize: 'var(--font-size-2xl)'                    // Vanilla CSS: typography
+  }}
+>
+```
+
+## Theme Colors (CSS Variables)
+
+**Day Theme:**
+- `--theme-bg-nav: #334D2D`
+- `--theme-bg-primary: #ffffff`
+- `--theme-bg-secondary: #f5f5f5`
+- `--theme-text-primary: #FFFFFF`
+- `--theme-text-body: #171717`
+- `--theme-accent: #B29738`
+
+**Night Theme:**
+- `--theme-bg-nav: #011A0C`
+- `--theme-bg-primary: #011A0C`
+- `--theme-bg-secondary: #022414`
+- `--theme-text-primary: #FFFFFF`
+- `--theme-text-body: #FFFFFF`
+- `--theme-accent: #B29738`
+
+## Typography (CSS Variables)
+
+**Font Families:**
+- `var(--font-geist-sans)` - Body text
+- `var(--font-geist-mono)` - Code/monospace
+- `var(--font-yellowtail)` - Decorative (use `.text-decorative` class)
+- `var(--font-fjalla-one)` - Headings (h1-h6 auto-styled)
+
+**Font Sizes:** `--font-size-xs` to `--font-size-8xl`
+**Line Heights:** `--line-height-tight` to `--line-height-loose`
+**Letter Spacing:** `--letter-spacing-tighter` to `--letter-spacing-widest`
+
+## Animation-Ready Structure
+
+**Always include:**
+- `ref` attributes for GSAP targeting
+- `data-animate` attributes for easy selection
+- CSS variables for animatable properties
+- Don't set initial `transform` or `opacity` in styles (let GSAP handle it)
+
+```tsx
+<div
+  ref={containerRef}
+  data-animate="container"
+  className="flex flex-col gap-4"
+  style={{
+    backgroundColor: 'var(--theme-bg-primary)',
+    color: 'var(--theme-text-body)'
+  }}
+>
+```
+
+## Theme Context Usage
+
+```tsx
+"use client";
+import { useTheme } from "@/contexts/ThemeContext";
+
+const { theme, toggleTheme } = useTheme();
+// theme: "day" | "night"
+```
+
+## Utility Functions
+
+```tsx
+import { cn } from "@/lib/utils";
+
+// Use for Tailwind classes only
+<div className={cn("flex", condition && "md:flex-row")}>
+```
+
+## File Structure
+
+- Components: `src/components/`
+- Pages: `src/app/[page-name]/page.tsx`
+- Contexts: `src/contexts/`
+- Utilities: `src/lib/utils.ts`
+- Data: `src/data/`
+
+## Key Reminders
+
+1. **Always use CSS variables** for theme colors and typography
+2. **Use Tailwind** only for layout, spacing, and utilities
+3. **Add transitions** for theme-aware elements: `transition-colors duration-300`
+4. **Mark client components** with `"use client"` when using hooks
+5. **Structure for animation** with refs and data attributes
+6. **Mobile-first** responsive design with Tailwind breakpoints
+
+## Common Patterns
+
+**Theme-Aware Container:**
+```tsx
+<main 
+  className="min-h-screen p-8 transition-colors duration-300"
+  style={{ backgroundColor: 'var(--theme-bg-primary)' }}
+>
+```
+
+**Decorative Heading:**
+```tsx
+<h1 
+  className="text-decorative"
+  style={{
+    fontSize: 'var(--font-size-6xl)',
+    color: 'var(--theme-accent)'
+  }}
+>
+```
+
+**Themed Card:**
+```tsx
+<div 
+  className="p-6 rounded-lg transition-colors duration-300"
+  style={{
+    backgroundColor: 'var(--theme-bg-secondary)',
+    color: 'var(--theme-text-body)'
+  }}
+>
+```
+
+For complete documentation, see `DOCUMENTATION.md`.
+

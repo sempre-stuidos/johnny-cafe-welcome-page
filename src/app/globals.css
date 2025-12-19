@@ -1,28 +1,2034 @@
 @import "tailwindcss";
 
+/* Theme Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Day Theme (Default) */
+  --theme-bg-nav: #334D2D;
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f5f5f5;
+  --theme-text-primary: #FFFFFF;
+  --theme-text-body: #171717;
+  --theme-accent: #B29738;
+  
+  /* New Color Variables */
+  --theme-text-light-cream: #FAF2DD;
+  --theme-bg-light-cream: #FAF2DD;
+  --theme-text-dark-green: #334D2D;
+  
+  /* About Section Variables */
+  --about-bg: #FAF2DD;
+  --about-title: #334D2D;
+  --about-text: #011A0C;
+}
+
+[data-theme="night"] {
+  /* Night Theme */
+  --theme-bg-nav: #011A0C;
+  --theme-bg-primary: #011A0C;
+  --theme-bg-secondary: #022414;
+  --theme-text-primary: #FFFFFF;
+  --theme-text-body: #FFFFFF;
+  --theme-accent: #B29738;
+  
+  /* About Section Variables */
+  --about-bg: #334D2D;
+  --about-title: #FAF2DD;
+  --about-text: #FFFFFF;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Colors */
+  --color-theme-bg-nav: var(--theme-bg-nav);
+  --color-theme-bg-primary: var(--theme-bg-primary);
+  --color-theme-bg-secondary: var(--theme-bg-secondary);
+  --color-theme-text-primary: var(--theme-text-primary);
+  --color-theme-text-body: var(--theme-text-body);
+  --color-theme-accent: var(--theme-accent);
+
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-yellowtail: var(--font-yellowtail);
-  --font-fjalla-one: var(--font-fjalla-one);
+  --font-decorative: var(--font-yellowtail);
+  --font-heading: var(--font-fjalla-one);
+  --font-hornbill-trial: var(--font-hornbill-trial), system-ui, -apple-system, sans-serif;
+  --font-pinyon-script: var(--font-pinyon-script);
+  --font-amoret-sans: var(--font-amoret-sans);
+  --font-gayathri: var(--font-gayathri), system-ui, -apple-system, sans-serif;
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  --font-size-5xl: 3rem;        /* 48px */
+  --font-size-6xl: 3.75rem;     /* 60px */
+  --font-size-7xl: 4.5rem;      /* 72px */
+  --font-size-8xl: 6rem;        /* 96px */
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--theme-bg-primary);
+  color: var(--theme-text-body);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Typography Styles - Default */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-fjalla-one), sans-serif;
+  font-weight: 400;
+  line-height: var(--line-height-tight);
+}
+
+h1 {
+  font-size: var(--font-size-5xl);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h2 {
+  font-size: var(--font-size-4xl);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h3 {
+  font-size: var(--font-size-3xl);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+h4 {
+  font-size: var(--font-size-2xl);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+h5 {
+  font-size: var(--font-size-xl);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+h6 {
+  font-size: var(--font-size-lg);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Typography System Specific Styles */
+h1 {
+  font-family: var(--font-hornbill-trial);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 48px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--theme-text-light-cream);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+h2 {
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--theme-text-light-cream);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+h3 {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+  color: var(--theme-text-light-cream);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+h4 {
+  font-family: var(--font-hornbill-trial);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 28px;
+  line-height: 110%;
+  letter-spacing: 0%;
+  color: var(--theme-text-light-cream);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+h5 {
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 0%;
+  color: var(--theme-text-light-cream);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+h6 {
+  font-family: var(--font-hornbill-trial);
+  font-size: var(--font-size-lg);
+  letter-spacing: var(--letter-spacing-normal);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Desktop typography sizes */
+@media (min-width: 768px) {
+  h1 {
+    font-size: 83px;
+  }
+  
+  h2 {
+    font-size: 82.48px;
+  }
+  
+  h3 {
+    font-size: 17.31px;
+  }
+  
+  h4 {
+    font-size: 42px;
+  }
+  
+  h5 {
+    font-size: 16px;
+  }
+}
+
+p {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: var(--theme-text-dark-green);
+}
+
+span {
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+/* Decorative Text (for logo, special headings) */
+.text-decorative {
+  font-family: var(--font-yellowtail), cursive;
+}
+
+/* Body Text */
+p, li, span {
+  line-height: var(--line-height-relaxed);
+}
+
+/* Code/Mono */
+code, pre {
+  font-family: var(--font-geist-mono), monospace;
+}
+
+/* Utility Classes for Theme Colors */
+.bg-theme-nav {
+  background-color: var(--theme-bg-nav);
+}
+
+.bg-theme-primary {
+  background-color: var(--theme-bg-primary);
+}
+
+.bg-theme-secondary {
+  background-color: var(--theme-bg-secondary);
+}
+
+.text-theme-primary {
+  color: var(--theme-text-primary);
+}
+
+.text-theme-body {
+  color: var(--theme-text-body);
+}
+
+.text-theme-accent {
+  color: var(--theme-accent);
+}
+
+.border-theme-accent {
+  border-color: var(--theme-accent);
+}
+
+/* Typography System - Dark Mode Variants */
+[data-theme="night"] h5[data-monday-sunday] {
+  color: #FFFFFF !important;
+}
+
+[data-theme="night"] span[data-reservation] {
+  color: #FAF2DD !important;
+}
+
+[data-theme="night"] p[data-paragraph] {
+  color: #FFFFFF !important;
+}
+
+[data-theme="night"] p[data-welcome] {
+  color: #FFFFFF !important;
+}
+
+[data-theme="night"] h3[data-heading] {
+  color: #FAF2DD !important;
+}
+
+/* Dark mode section background */
+[data-theme="night"] section[data-section-two] {
+  background-color: #334D2D !important;
+}
+
+/* Element Name Copy Tooltip */
+.typography-element {
+  position: relative;
+  cursor: pointer;
+  transition: outline 0.2s ease;
+  user-select: none;
+}
+
+.typography-element:hover {
+  outline: 2px dashed rgba(0, 0, 0, 0.4);
+  outline-offset: 2px;
+  cursor: pointer;
+}
+
+[data-theme="night"] .typography-element:hover {
+  outline: 2px dashed rgba(255, 255, 255, 0.4);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Reusable Utility Classes */
+.text-stroke-dark-green {
+  -webkit-text-stroke: 2px #334D2D;
+}
+
+[data-theme="night"] .text-stroke-dark-green {
+  -webkit-text-stroke: unset;
+}
+
+/* Hero Frame - Frame container for image */
+.hero-frame {
+  background-color: transparent;
+  border: 2px solid #B29738;
+  border-top-left-radius: 999px;
+  border-top-right-radius: 999px;
+  position: relative;
+}
+
+.hero-frame img {
+  border-radius: 999px 999px 0 0;
+}
+
+
+/* Mobile: stack vertically */
+.hero-brunch-title {
+  position: relative;
+  z-index: 10;
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 50px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-shadow: 2px 2px 4px rgba(1, 26, 12, 0.5);
+}
+
+.est-1975-text {
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18.9px;
+  line-height: 100%;
+  color: var(--theme-text-light-cream);
+}
+
+/* Desktop: larger font */
+@media (min-width: 768px) {
+  .hero-brunch-title {
+    font-size: 82.48px;
+  }
+}
+
+.hero-star-decoration {
+  position: absolute;
+  right: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Reservation Button */
+.btn-reservation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 303px;
+  height: 56px;
+  gap: 16px;
+  padding: 20px 32px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #B29738;
+  background-color: #FAF2DD;
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  color: #334D2D;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-reservation:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+.btn-reservation:hover .btn-reservation-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+[data-theme="night"] .btn-reservation:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+  width: 60px;
+  height: 32px;
+  border-radius: 16px;
+  border: 2px solid #2a3f24;
+  background-color: #FAF2DD;
+  padding: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.theme-toggle-knob {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #334D2D;
+  border: 1px solid #FAF2DD;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark Mode Styles */
+[data-theme="night"] .hero-title-section,
+[data-theme="night"] .hero-title-section h1,
+[data-theme="night"] .hero-title-section h2,
+[data-theme="night"] .hero-title-section h3,
+[data-theme="night"] .hero-title-section p {
+  color: #B29738;
+}
+
+[data-theme="night"] .btn-reservation {
+  background-color: #011A0C;
+}
+
+[data-theme="night"] .btn-reservation,
+[data-theme="night"] .btn-reservation * {
+  color: #FAF2DD;
+}
+
+[data-theme="night"] .btn-reservation-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+[data-theme="night"] .btn-reservation:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+[data-theme="night"] .theme-toggle-knob {
+  background-color: #B29738;
+}
+
+/* Navigation Links */
+.nav-link {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+  color: var(--theme-text-light-cream);
+  height: 25px;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: #B29738;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #B29738;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Menu Image Frame - Square with Gold Border */
+.menu-image-frame {
+  background-color: transparent;
+  border: 3px solid #B29738;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.menu-image-frame img {
+  object-fit: cover;
+}
+
+/* Swiper Slider Styles */
+.menu-swiper {
+  padding-bottom: 50px !important;
+}
+
+.menu-swiper .swiper-pagination {
+  bottom: 10px !important;
+}
+
+.menu-swiper .swiper-pagination-bullet {
+  background-color: #B29738;
+  opacity: 0.4;
+  width: 10px;
+  height: 10px;
+  transition: all 0.3s ease;
+}
+
+.menu-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  width: 10px;
+  height: 10px;
+}
+
+/* Menu Button */
+.btn-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 260px;
+  height: 56px;
+  gap: 16px;
+  padding: 20px 32px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #334D2D;
+  background-color: #FAF2DD;
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  color: #334D2D;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-menu:hover {
+  background-color: #B29738;
+  border-color: #B29738;
+  color: #FAF2DD;
+}
+
+.btn-menu:hover .btn-menu-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+.btn-menu-arrow {
+  filter: brightness(0) saturate(100%) invert(26%) sepia(12%) saturate(1200%) hue-rotate(75deg) brightness(95%) contrast(90%);
+  transition: filter 0.3s ease;
+}
+
+/* Night Theme Styles for Menu Button */
+[data-theme="night"] .btn-menu {
+  border-color: #B29738;
+  background-color: #011A0C;
+  color: #FAF2DD;
+}
+
+[data-theme="night"] .btn-menu-arrow {
+  filter: brightness(0) saturate(100%) invert(94%) sepia(8%) saturate(1000%) hue-rotate(10deg) brightness(105%) contrast(95%);
+}
+
+[data-theme="night"] .btn-menu:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+/* Footer Styles */
+.footer-bg {
+  background-color: #334D2D;
+}
+
+[data-theme="night"] .footer-bg {
+  background-color: #011A0C;
+}
+
+.footer-overlay {
+  background-color: rgba(51, 77, 45, 0.85);
+}
+
+[data-theme="night"] .footer-overlay {
+  background-color: rgba(1, 26, 12, 0.90);
+}
+
+.footer-text-cream {
+  color: #FAF2DD;
+}
+
+.footer-days {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FAF2DD;
+}
+
+.footer-meal-label {
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 100%;
+  color: #FAF2DD;
+}
+
+.hero-jazz-text {
+  font-family: var(--font-pinyon-script);
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 100%;
+  color: var(--theme-accent);
+}
+
+.hero-now-playing {
+  font-family: var(--font-amoret-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.footer-meal-time {
+  font-family: var(--font-amoret-sans);
+  font-size: 14px;
+  color: #FAF2DD;
+}
+
+/* Desktop Navigation Links - footer-meal-time styles with white text */
+.nav-desktop-link {
+  font-family: var(--font-amoret-sans);
+  font-size: 14px;
+  color: #FFFFFF;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-desktop-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: #B29738;
+  transition: width 0.3s ease;
+}
+
+.nav-desktop-link:hover {
+  color: #B29738;
+}
+
+.nav-desktop-link:hover::after {
+  width: 100%;
+}
+
+.nav-desktop-link-active {
+  color: #B29738;
+}
+
+.nav-desktop-link-active::after {
+  width: 0 !important;
+  display: none;
+}
+
+.footer-contact {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FAF2DD;
+}
+
+.footer-social-icon {
+  color: #B29738;
+}
+
+.footer-star-fill {
+  fill: #B29738;
+}
+
+/* Banner Styles */
+.banner-text {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  color: var(--theme-text-light-cream);
+  transition: color 0.3s ease;
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.banner-separator {
+  color: var(--theme-accent);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* Section Heading - Used for large section titles */
+.section-heading {
+  font-family: var(--font-hornbill-trial);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 110%;
+  letter-spacing: 0%;
+  color: var(--about-title);
+  transition: color 0.3s ease;
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Section Subheading - Smaller section titles */
+.section-subheading {
+  font-family: var(--font-hornbill-trial);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 110%;
+  letter-spacing: 0%;
+  color: var(--about-title);
+  transition: color 0.3s ease;
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Menu Item Name */
+.menu-item-name {
+  font-family: var(--font-hornbill-trial);
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+  line-height: var(--line-height-tight);
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.menu-item-name-day {
+  color: var(--theme-text-dark-green);
+}
+
+.menu-item-name-night {
+  color: var(--theme-text-light-cream);
+}
+
+/* Event Name */
+.event-name {
+  font-family: var(--font-hornbill-trial);
+  font-size: 32px;
+  color: var(--theme-text-light-cream);
+  font-weight: 700;
+  line-height: 110%;
+  letter-spacing: 0%;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  font-feature-settings: "lnum", "tnum";
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* About Section Text */
+.about-paragraph {
+  color: var(--about-text);
+  transition: color 0.3s ease;
+}
+
+[data-theme="night"] .about-paragraph {
+  color: #FFFFFF;
+}
+
+/* Section Backgrounds */
+.bg-about-section {
+  background-color: var(--about-bg);
+}
+
+.bg-menu-section-day {
+  background-color: rgba(194, 202, 168, 1);
+}
+
+.bg-menu-section-night {
+  background-color: rgba(1, 26, 12, 1);
+}
+
+/* Section Overlays */
+.overlay-about-day {
+  background-color: rgba(250, 242, 221, 0.85);
+}
+
+.overlay-about-night {
+  background-color: rgba(51, 77, 45, 0.90);
+}
+
+.overlay-menu-day {
+  background-color: rgba(194, 202, 168, 0.85);
+}
+
+.overlay-menu-night {
+  background-color: rgba(1, 26, 12, 0.90);
+}
+
+/* Text Color Classes */
+.text-about {
+  color: var(--about-text);
+  transition: color 0.3s ease;
+}
+
+.text-event-date {
+  font-family: var(--font-gayathri);
+  font-size: 20px;
+  color: var(--theme-accent);
+  font-weight: 700;
+  line-height: 100%;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.text-event-description {
+  font-family: var(--font-geist-sans);
+  font-size: 16px;
+  color: var(--theme-text-light-cream);
+  font-weight: 400;
+  line-height: var(--line-height-relaxed);
+}
+
+.text-menu-price {
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+}
+
+.text-menu-price-day {
+  color: var(--theme-text-dark-green);
+}
+
+.text-menu-price-night {
+  color: var(--theme-text-light-cream);
+}
+
+.text-menu-description {
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  line-height: var(--line-height-relaxed);
+  max-width: 438px;
+}
+
+.text-menu-description-day {
+  color: var(--theme-text-dark-green);
+}
+
+.text-menu-description-night {
+  color: var(--color-theme-accent);
+}
+
+/* Navigation Backgrounds */
+.bg-nav {
+  background-color: var(--theme-bg-nav);
+  transition: background-color 0.3s ease;
+}
+
+.bg-nav-day {
+  background-color: #334D2D;
+}
+
+.bg-nav-night {
+  background-color: #011A0C;
+}
+
+/* Theme Toggle Knob Position */
+.theme-toggle-knob-day {
+  left: 2px;
+}
+
+.theme-toggle-knob-night {
+  left: 32px;
+}
+
+/* Event Item Placeholder */
+.event-placeholder {
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="night"] .event-placeholder {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.event-placeholder-text {
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-sm);
+  color: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="night"] .event-placeholder-text {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* GSAP Animation - Prevent Flash of Content */
+/* Hide elements that will be animated until GSAP initializes them */
+[data-animate="nav-banner"],
+[data-animate="nav-logo"],
+[data-animate="nav-links"],
+[data-animate="nav-toggle"],
+[data-animate="hero-content"],
+[data-animate="section"] {
+  opacity: 0;
+}
+
+/* Once GSAP has taken control, it will override these values */
+
+/* React DatePicker Styling */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker-popper[data-placement^="bottom"] {
+  z-index: 9999;
+}
+
+.react-datepicker__tab-loop {
+  position: absolute;
+  z-index: 99999;
+}
+
+.react-datepicker-popper .react-datepicker {
+  font-family: var(--font-amoret-sans);
+  background-color: #FAF2DD;
+  border: 2px solid #B29738;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
+.react-datepicker-popper .react-datepicker__header {
+  background-color: #334D2D;
+  border-bottom: 2px solid #B29738;
+  border-radius: 6px 6px 0 0;
+  padding: 16px 0;
+}
+
+.react-datepicker-popper .react-datepicker__current-month {
+  font-family: var(--font-pinyon-script);
+  font-size: 28px;
+  color: #FAF2DD;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.react-datepicker-popper .react-datepicker__day-names {
+  margin-top: 8px;
+}
+
+.react-datepicker-popper .react-datepicker__day-name {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 14px;
+  color: #FAF2DD;
+  width: 2.5rem;
+  line-height: 2.5rem;
+  text-transform: uppercase;
+}
+
+.react-datepicker-popper .react-datepicker__month {
+  margin: 12px;
+}
+
+.react-datepicker-popper .react-datepicker__day {
+  font-family: var(--font-amoret-sans);
+  font-weight: 500;
+  width: 2.5rem;
+  line-height: 2.5rem;
+  color: #334D2D;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.react-datepicker-popper .react-datepicker__day:hover:not(.react-datepicker__day--disabled):not(.react-datepicker__day--outside-month) {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.react-datepicker-popper .react-datepicker__day--selected,
+.react-datepicker-popper .react-datepicker__day--keyboard-selected {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.react-datepicker-popper .react-datepicker__day--today {
+  font-weight: 700;
+  border: 2px solid #B29738;
+}
+
+.react-datepicker-popper .react-datepicker__day--disabled {
+  color: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.react-datepicker-popper .react-datepicker__day--disabled:hover {
+  background-color: transparent;
+  color: #CCCCCC;
+}
+
+.react-datepicker-popper .react-datepicker__day--outside-month {
+  color: #999999;
+}
+
+.react-datepicker-popper .react-datepicker__navigation {
+  top: 16px;
+}
+
+.react-datepicker-popper .react-datepicker__navigation-icon::before {
+  border-color: #FAF2DD;
+  border-width: 2px 2px 0 0;
+  height: 8px;
+  width: 8px;
+}
+
+.react-datepicker-popper .react-datepicker__navigation:hover .react-datepicker__navigation-icon::before {
+  border-color: #B29738;
+}
+
+/* Time Picker Specific Styles */
+.react-datepicker-popper .react-datepicker--time-only {
+  width: 120px;
+}
+
+.react-datepicker-popper .react-datepicker__time-container {
+  width: 120px;
+  border-left: none;
+  background-color: #FAF2DD;
+}
+
+.react-datepicker-popper .react-datepicker__header--time {
+  background-color: #334D2D;
+  padding: 12px;
+}
+
+.react-datepicker-popper .react-datepicker-time__header {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 16px;
+  color: #FAF2DD;
+  text-transform: uppercase;
+}
+
+.react-datepicker-popper .react-datepicker__time-container .react-datepicker__time {
+  background-color: #FAF2DD;
+}
+
+.react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
+  width: 120px;
+}
+
+.react-datepicker-popper .react-datepicker__time-list {
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #B29738 #FAF2DD;
+}
+
+.react-datepicker-popper .react-datepicker__time-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.react-datepicker-popper .react-datepicker__time-list::-webkit-scrollbar-track {
+  background: #FAF2DD;
+}
+
+.react-datepicker-popper .react-datepicker__time-list::-webkit-scrollbar-thumb {
+  background-color: #B29738;
+  border-radius: 4px;
+}
+
+.react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box .react-datepicker__time-list .react-datepicker__time-list-item {
+  font-family: var(--font-amoret-sans);
+  font-size: 15px;
+  color: #334D2D;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box .react-datepicker__time-list .react-datepicker__time-list-item:hover {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box .react-datepicker__time-list .react-datepicker__time-list-item--selected {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box .react-datepicker__time-list .react-datepicker__time-list-item--selected:hover {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.react-datepicker-popper .react-datepicker__time-list-item--disabled {
+  display: none;
+}
+
+/* Input field styling for datepickers */
+.react-datepicker__input-container input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #B29738;
+  background-color: transparent;
+  padding: 0 12px;
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+}
+
+.react-datepicker__input-container input:focus {
+  outline: none;
+}
+
+.reservation-datepicker input {
+  height: 40px;
+  border: 1px solid #B29738;
+  background-color: transparent;
+  padding: 0 12px;
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-base);
+}
+
+/* Reservation Form Styles */
+.reservation-label {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 17.31px;
+  line-height: 100%;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-label {
+  color: #334D2D;
+}
+
+[data-theme="night"] .reservation-label {
+  color: var(--theme-text-light-cream);
+}
+
+.reservation-input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #B29738;
+  background-color: transparent;
+  padding: 0 12px;
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-base);
+  transition: all 0.3s ease;
+}
+
+.reservation-input:focus {
+  outline: none;
+}
+
+[data-theme="day"] .reservation-input {
+  color: #334D2D;
+}
+
+[data-theme="night"] .reservation-input {
+  color: var(--theme-text-light-cream);
+}
+
+.reservation-heading {
+  font-family: var(--font-fjalla-one);
+  font-size: clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl));
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  text-transform: capitalize;
+  transition: color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-heading {
+  color: var(--theme-text-dark-green);
+}
+
+[data-theme="night"] .reservation-heading {
+  color: var(--color-theme-accent);
+}
+
+.reservation-description {
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-description {
+  color: #334D2D;
+}
+
+[data-theme="night"] .reservation-description {
+  color: var(--theme-text-light-cream);
+}
+
+.reservation-error {
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-sm);
+  color: #dc2626;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.reservation-confirmation {
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-base);
+  line-height: 150%;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-confirmation {
+  color: #334D2D;
+}
+
+[data-theme="night"] .reservation-confirmation {
+  color: var(--theme-text-light-cream);
+}
+
+.reservation-confirmation-title {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 120%;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-confirmation-title {
+  color: #334D2D;
+}
+
+[data-theme="night"] .reservation-confirmation-title {
+  color: var(--theme-text-light-cream);
+}
+
+.private-events-feature-title {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #B29738;
+}
+
+.private-events-feature-description {
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-sm);
+  transition: color 0.3s ease;
+}
+
+[data-theme="day"] .private-events-feature-description {
+  color: #334D2D;
+}
+
+[data-theme="night"] .private-events-feature-description {
+  color: var(--theme-text-light-cream);
+}
+
+.reservation-frame {
+  background-color: transparent;
+}
+
+.reservation-confirmation-container {
+  background-color: transparent;
+  top: 180px;
+  left: 0;
+  right: 0;
+  padding: 0 80px;
+}
+
+.reservation-form-container {
+  background-color: transparent;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
+
+.reservation-party-size-input {
+  width: 173px;
+  height: 40px;
+  border: 1px solid #B29738;
+  background-color: transparent;
+  padding: 0 12px;
+  font-family: var(--font-amoret-sans);
+  font-size: var(--font-size-base);
+  transition: all 0.3s ease;
+}
+
+.reservation-party-size-input:focus {
+  outline: none;
+}
+
+[data-theme="day"] .reservation-party-size-input {
+  color: #334D2D;
+}
+
+[data-theme="night"] .reservation-party-size-input {
+  color: var(--theme-text-light-cream);
+}
+
+/* Custom Select Dropdown - matching DatePicker design */
+.custom-select-dropdown {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-select-option {
+  color: #334D2D;
+  background-color: #FAF2DD;
+  cursor: pointer;
+}
+
+.custom-select-option:hover {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.custom-select-option-selected {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  font-weight: 700;
+}
+
+.reservation-submit-button {
+  font-size: clamp(var(--font-size-xs), 2.5vw, var(--font-size-sm));
+  height: 44px;
+  padding: 12px 24px;
+}
+
+.reservation-section-bg {
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-section-bg {
+  background-color: rgba(194, 202, 168, 1);
+}
+
+[data-theme="night"] .reservation-section-bg {
+  background-color: rgba(1, 26, 12, 1);
+}
+
+.reservation-overlay {
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="day"] .reservation-overlay {
+  background-color: rgba(194, 202, 168, 0.85);
+}
+
+[data-theme="night"] .reservation-overlay {
+  background-color: rgba(1, 26, 12, 0.70);
+}
+
+
+
+/* Testimonials Styles */
+.testimonials-swiper {
+  position: relative;
+}
+
+.testimonial-card {
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Navigation Arrows - Below slider on all devices */
+.testimonials-swiper {
+  padding-bottom: 100px;
+}
+
+.testimonials-button-prev,
+.testimonials-button-next {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  border: 2px solid #B29738;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  bottom: -30px;
+}
+
+.testimonials-button-prev {
+  left: 50%;
+  transform: translateX(-70px);
+}
+
+.testimonials-button-next {
+  right: 50%;
+  transform: translateX(70px);
+}
+
+/* Day Theme */
+[data-theme="day"] .testimonials-button-prev,
+[data-theme="day"] .testimonials-button-next {
+  background-color: #FAF2DD;
+  color: #334D2D;
+}
+
+[data-theme="day"] .testimonials-button-prev:hover,
+[data-theme="day"] .testimonials-button-next:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+/* Night Theme */
+[data-theme="night"] .testimonials-button-prev,
+[data-theme="night"] .testimonials-button-next {
+  background-color: #011A0C;
+  color: #FAF2DD;
+}
+
+[data-theme="night"] .testimonials-button-prev:hover,
+[data-theme="night"] .testimonials-button-next:hover {
+  background-color: #B29738;
+  color: #FAF2DD;
+}
+
+.testimonials-button-prev.swiper-button-disabled,
+.testimonials-button-next.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.react-datepicker__input-container input::placeholder {
+  opacity: 1;
+}
+
+/* Theme-aware input colors */
+[data-theme="day"] .react-datepicker__input-container input {
+  color: #334D2D;
+}
+
+[data-theme="day"] .react-datepicker__input-container input::placeholder {
+  color: #6B7F65;
+}
+
+[data-theme="night"] .react-datepicker__input-container input {
+  color: #FAF2DD;
+}
+
+[data-theme="night"] .react-datepicker__input-container input::placeholder {
+  color: #B8A97A;
+}
+
+/* Remove ugly browser autofill styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px transparent inset;
+  -webkit-text-fill-color: inherit;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-theme="day"] input:-webkit-autofill,
+[data-theme="day"] input:-webkit-autofill:hover,
+[data-theme="day"] input:-webkit-autofill:focus,
+[data-theme="day"] input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px transparent inset;
+  -webkit-text-fill-color: #334D2D;
+}
+
+[data-theme="night"] input:-webkit-autofill,
+[data-theme="night"] input:-webkit-autofill:hover,
+[data-theme="night"] input:-webkit-autofill:focus,
+[data-theme="night"] input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px transparent inset;
+  -webkit-text-fill-color: #FAF2DD;
+}
+
+/* Mobile responsive styles for datepicker */
+@media (max-width: 768px) {
+  .react-datepicker-popper .react-datepicker {
+    font-size: 12px;
+    transform: scale(0.85);
+    transform-origin: top left;
+  }
+
+  .react-datepicker-popper .react-datepicker__current-month {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .react-datepicker-popper .react-datepicker__day-name,
+  .react-datepicker-popper .react-datepicker__day {
+    width: 2rem;
+    line-height: 2rem;
+    font-size: 13px;
+  }
+
+  .react-datepicker-popper .react-datepicker__month {
+    margin: 8px;
+  }
+
+  .react-datepicker-popper .react-datepicker__header {
+    padding: 12px 0;
+  }
+
+  .react-datepicker-popper .react-datepicker__navigation {
+    top: 12px;
+  }
+
+  .react-datepicker-popper .react-datepicker--time-only {
+    width: 100px;
+  }
+
+  .react-datepicker-popper .react-datepicker__time-container {
+    width: 100px;
+  }
+
+  .react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
+    width: 100px;
+  }
+
+  .react-datepicker-popper .react-datepicker__time-list-item {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .react-datepicker-popper .react-datepicker-time__header {
+    font-size: 14px;
+  }
+
+  .react-datepicker__input-container input::placeholder {
+    font-size: 12px;
+  }
+}
+
+/* Reserve or Order Section Styles */
+.reserve-primary-btn {
+  background-color: transparent;
+  font-family: var(--font-hornbill-trial);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0%;
+  transition: all 0.3s ease;
+}
+
+.reserve-primary-btn-day {
+  border-color: #334D2D;
+  color: #334D2D;
+}
+
+.reserve-primary-btn-day:hover {
+  background-color: #334D2D;
+  color: #FAF2DD;
+  transform: translateY(-2px);
+}
+
+.reserve-primary-btn-night {
+  border-color: var(--theme-accent);
+  color: #FAF2DD;
+}
+
+.reserve-primary-btn-night:hover {
+  background-color: var(--theme-accent);
+  color: #011A0C;
+  transform: translateY(-2px);
+}
+
+.reserve-divider-line {
+  height: 1px;
+  opacity: 0.3;
+}
+
+.reserve-divider-line-day {
+  background-color: #334D2D;
+}
+
+.reserve-divider-line-night {
+  background-color: var(--theme-accent);
+}
+
+.reserve-divider-text {
+  font-family: var(--font-amoret-sans);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.reserve-divider-text-day {
+  color: #334D2D;
+}
+
+.reserve-divider-text-night {
+  color: var(--theme-accent);
+}
+
+.reserve-subtitle {
+  font-family: var(--font-amoret-sans);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.reserve-subtitle-day {
+  color: #011A0C;
+}
+
+.reserve-subtitle-night {
+  color: #FAF2DD;
+}
+
+.reserve-delivery-btn {
+  background-color: transparent;
+  font-family: var(--font-hornbill-trial);
+  font-size: 20px;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+/* Day theme delivery buttons */
+a.reserve-delivery-btn.reserve-delivery-btn-day {
+  border-color: #334D2D;
+  color: #334D2D;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-day:hover {
+  background-color: #334D2D;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Night theme delivery buttons */
+a.reserve-delivery-btn.reserve-delivery-btn-night {
+  border-color: #B29738;
+  color: #FAF2DD;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-night:hover {
+  background-color: #B29738;
+  color: #011A0C;
+  transform: translateY(-2px);
+}
+
+/* SVG Icons - Day theme */
+a.reserve-delivery-btn.reserve-delivery-btn-day svg {
+  stroke: #334D2D;
+  transition: stroke 0.3s ease;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-day:hover svg {
+  stroke: #FFFFFF;
+}
+
+/* SVG Icons - Night theme */
+a.reserve-delivery-btn.reserve-delivery-btn-night svg {
+  stroke: #FAF2DD;
+  transition: stroke 0.3s ease;
+}
+
+a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
+  stroke: #011A0C;
+}
+
+/* Events Vibe Section */
+.bg-events-vibe-day {
+  background-color: rgba(194, 202, 168, 1);
+}
+
+.bg-events-vibe-night {
+  background-color: #022414;
+}
+
+.overlay-events-vibe-day {
+  background-color: rgba(194, 202, 168, 0.85);
+}
+
+.overlay-events-vibe-night {
+  background-color: rgba(2, 36, 20, 0.85);
+}
+
+.events-vibe-title {
+  font-family: var(--font-hornbill-trial);
+  font-size: clamp(36px, 5vw, 48px);
+  line-height: 110%;
+  color: var(--about-title);
+  transition: color 0.3s ease;
+}
+
+.events-vibe-policy-box {
+  border: 2px solid var(--theme-accent);
+  background-color: transparent;
+}
+
+.events-vibe-policy-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--theme-accent);
+}
+
+.events-vibe-policy-text {
+  font-family: var(--font-amoret-sans);
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--theme-accent);
+}
+
+/* Animated Hamburger Menu Toggle */
+.menu-toggle-wrapper {
+  display: inline-block;
+}
+
+.menu-toggle-input {
+  display: none;
+}
+
+.menu-toggle-label {
+  cursor: pointer;
+  display: block;
+}
+
+.menu-toggle {
+  transition: all 0.49s;
+  position: relative;
+  width: 43px;
+  height: 43px;
+  border-radius: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle-part {
+  width: 23px; 
+  height: 3px; 
+  position: absolute;
+  right: 0;
+  margin: auto;
+  left: 0;
+  border-radius: 2px;
+  transition: all 0.49s cubic-bezier(0.6, 0.1, 0.1, 1.6);
+}
+
+/* Day Theme - Light cream bars to contrast with dark green nav */
+[data-theme="day"] .menu-toggle-part {
+  background: var(--theme-text-light-cream);
+}
+
+/* Night Theme - Light cream bars */
+[data-theme="night"] .menu-toggle-part {
+  background: var(--theme-text-light-cream);
+}
+
+.menu-toggle-part:nth-of-type(1) {
+  top: calc(50% - ((6.5px)) + -2px);
+  width: 23px;
+}
+
+.menu-toggle-part:nth-of-type(2) {
+  top: calc(50% - ((6.5px)) + 3px);
+  width: 23px;
+}
+
+.menu-toggle-part:nth-of-type(3) {
+  top: calc(50% - ((6.5px)) + 8px);
+  width: 23px;
+}
+
+/* Checked state animations */
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle {
+  transform: scale(1.11) rotate(0deg);
+}
+
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle .menu-toggle-part:nth-of-type(1) {
+  transform: rotate(45deg);
+  width: 23px !important;
+  top: calc(50% - (1.5px)) !important;
+}
+
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle .menu-toggle-part:nth-of-type(2) {
+  left: 0px !important;
+  opacity: 0;
+}
+
+.menu-toggle-input:checked + .menu-toggle-label .menu-toggle .menu-toggle-part:nth-of-type(3) {
+  transform: rotate(-45deg);
+  width: 23px !important;
+  top: calc(50% - (1.5px)) !important;
+}
+
+/* Artist Card Styles */
+.artist-card-bg {
+  background-color: #FAF2DD;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="night"] .artist-card-bg {
+  background-color: #022414;
+}
+
+.artist-name {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  color: #B29738;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.artist-bio {
+  font-family: var(--font-gayathri);
+  font-weight: 100;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.02em;
+  color: var(--theme-text-body);
+  transition: color 0.3s ease;
+}
+
+[data-theme="night"] .artist-bio {
+  color: #FFFFFF;
+}
+
+/* Events Tab Navigation */
+.events-tab {
+  font-family: var(--font-pinyon-script);
+  font-size: clamp(var(--font-size-xl), 6vw, var(--font-size-3xl));
+  color: var(--theme-text-primary);
+  line-height: var(--line-height-normal);
+  font-weight: 400;
+  font-style: normal;
+  transition: all 0.3s ease;
+}
+
+.events-tab-active {
+  font-weight: 600;
+}
+
+/* Artist Slider - Equal Height Cards */
+.artist-slider .swiper-wrapper {
+  align-items: stretch;
+}
+
+.artist-slider .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+/* Overlay Classes */
+.overlay-day {
+  background-color: rgba(255, 255, 255, 0.70);
+}
+
+.overlay-night {
+  background-color: rgba(1, 26, 12, 0.75);
+}
+
+/* Menu Header Styles */
+.menu-page-heading {
+  font-size: clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl));
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+}
+
+.menu-page-heading-day {
+  color: var(--theme-text-dark-green);
+}
+
+.menu-page-heading-night {
+  color: var(--color-theme-accent);
+}
+
+.menu-tab-item {
+  font-family: var(--font-pinyon-script);
+  font-size: clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl));
+  line-height: var(--line-height-normal);
+  font-style: normal;
+  transition: font-weight 0.3s ease;
+}
+
+.menu-tab-item-day {
+  color: var(--theme-text-dark-green);
+}
+
+.menu-tab-item-night {
+  color: var(--theme-text-light-cream);
+}
+
+.menu-separator {
+  background-color: var(--theme-text-dark-green);
+}
+
+.menu-category-heading {
+  color: var(--theme-accent);
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.menu-item-number {
+  font-family: var(--font-geist-sans);
+}
+
+/* Contact Page Font Classes */
+.contact-days-heading {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--theme-text-body);
+  text-transform: uppercase;
+}
+
+.contact-meal-label {
+  font-family: var(--font-gayathri);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 100%;
+  color: var(--theme-text-body);
+}
+
+.contact-meal-time {
+  font-family: var(--font-gayathri);
+  font-weight: 100;
+  font-size: 18px;
+  color: var(--theme-text-body);
+}
+
+.contact-info-link {
+  font-family: var(--font-geist-sans);
+  font-size: var(--font-size-lg);
+  color: var(--theme-text-body);
+  text-decoration: none;
+}
+
+/* Private Events Icons */
+.private-events-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.private-events-icon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
 }

@@ -3,6 +3,11 @@
     "name": "Johnny G's",
     "established": "1975"
   },
+  "banner": {
+    "brunch": "7 AM – 4 PM",
+    "dinner": "Tue-Sun 4:30 PM – 9 PM",
+    "jazz": "Thu-Sat 9 PM – 12 AM"
+  },
   "opening": {
     "heading": "We are",
     "highlight": "Open!",
@@ -11,11 +16,11 @@
   "hours": {
     "breakfast": {
       "title": "Breakfast",
-      "time": "7:00 AM – 4:00 PM"
+      "time": "7 AM – 4 PM"
     },
     "dinner": {
-      "title": "Dinner",
-      "time": "4:30 PM – 10:00 PM"
+      "title": "Dinner and Jazz",
+      "time": "7 PM – 12 AM"
     }
   },
   "reservations": {
@@ -48,6 +53,102 @@
   },
   "footer": {
     "tagline": "\"Where every meal tells a story\""
+  },
+  "about": {
+    "title": "The Master Behind the Menu",
+    "paragraphs": [
+      "Welcome to Johnny G's! This iconic Cabbagetown spot, established in 1975, was revitalized in November 2022 by owner and Head Chef Dinesh Sharma, who brings over 30 years of restaurant experience and a lifelong passion for vibrant cuisine.",
+      "Drawing on his expertise from opening over 20 restaurants across Canada since arriving from India in 2001, Chef Sharma ensures that every dish reflects his commitment to excellence, whether you're enjoying our classic breakfast and lunch staples or exploring the flavourful Indian, Hakka, and Momo dinner menu.",
+      "Come in and experience a blend of beloved tradition and culinary mastery that promises to make your next meal truly special."
+    ]
+  },
+  "menu": {
+    "title": "Taste Why Cabbagetown Has Loved Us for Decades",
+    "description": "Explore our carefully crafted dishes",
+    "images": [
+      "/assets/imgs/home-menu/NPCgroove-09 1.png",
+      "/assets/imgs/home-menu/NPCgroove-10 1.png",
+      "/assets/imgs/home-menu/NPCgroove-11 1.png",
+      "/assets/imgs/home-menu/NPCgroove-13 1.png"
+    ]
+  },
+  "events": {
+    "title": "Live Jazz Nights at Johnny G's",
+    "description": "Join us every Thursday through Saturday for an evening that feeds both your appetite and your soul. Experience Toronto's best East End jazz as Johnny G's transforms into an intimate Cabbagetown jazz venue where talented local musicians set the perfect backdrop for an unforgettable dining experience.",
+    "upcomingEvents": [
+      {
+        "image": "/home/jazz-frame.jpg",
+        "date": "Dec 15, 2024"
+      },
+      {
+        "image": "/home/brunch-frame-bg.jpg",
+        "date": "Dec 22, 2024"
+      }
+    ],
+    "eventsPage": {
+      "upcomingEvents": [
+        {
+          "date": "DECEMBER 5, 2025",
+          "name": "Smooth Jazz Fridays: The Aria Collective",
+          "description": "Experience an intimate night of live jazz featuring The Aria Collective, known for their soulful sax and warm lounge-style rhythms. Enjoy Chef Dinesh’s seasonal menu as the band sets the perfect mood for a cozy Friday evening. Reservations are strongly recommended.",
+          "image": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=400&h=400&fit=crop"
+        },
+        {
+          "date": "DECEMBER 12, 2025",
+          "name": "Golden Hour Jazz with The Blue Ember Trio",
+          "description": "Join us for a night of elegance and smooth melodies as The Blue Ember Trio brings their signature blend of piano, upright bass, and soft percussion. Perfect for dinner dates and holiday gatherings—pair it with one of our chef’s winter specials for the full experience.",
+          "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop"
+        },
+        {
+          "date": "DECEMBER 19, 2025",
+          "name": "Holiday Jazz Night Featuring Luna & The Velvet Keys",
+          "description": "Celebrate the season with Luna & The Velvet Keys as they perform classic jazz standards and festive holiday renditions. Expect warm vocals, timeless melodies, and an atmosphere that feels straight out of a vintage jazz lounge. Book early—our holiday events fill up fast!",
+          "image": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop"
+        }
+      ]
+    }
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "About Us",
+      "subtitle": "Where Passion Meets Melody"
+    },
+    "story": {
+      "title": "Johnny G's Story",
+      "image": "https://lh3.googleusercontent.com/p/AF1QipNFn5UiY4SZxe5YBvdJGCxQGf5XdHsW8Eef6nvh=s1360-w1360-h1020-rw",
+      "paragraphs": [
+        "Since 1985, Johnny G's has been the heartbeat of jazz in the city. Named after the legendary saxophonist Johnny Griffin, our intimate venue has played host to countless unforgettable performances, from local talent to internationally acclaimed artists.",
+        "What started as a small basement club has evolved into a cherished institution where the spirit of jazz thrives every night.We believe that jazz isn't just music—it's a conversation, a feeling, a moment suspended in time.",
+        "Our commitment to preserving the vintage charm while embracing modern comforts means you'll experience the best of both worlds: a curated cocktail menu, an acoustically perfect listening room, and an atmosphere that honors the rich history of jazz."
+      ]
+    },
+    "secondSection": {
+      "title": "Meet the Owners",
+      "text": "Two friends, one vision: to keep the spirit of jazz alive and thriving in Toronto's East End for generations to come.",
+      "owners": [
+        {
+          "name": "Dinesh Sharma",
+          "role": "OWNER",
+          "image": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347834634-IMG-2624--1-.JPG",
+          "description": [
+            "Dinesh Sharma is the owner of Johnny G’s and a highly respected chef and hospitality leader with decades of international experience. Over the course of his career, Dinesh has opened and led more than 60 restaurants across the Greater Toronto Area, playing a key role in shaping successful concepts from the ground up",
+            "He has served as Head Chef in five-star hotels in India where he refined his craft across diverse cuisines and cultures. His approach to food is driven by precision, creativity, and a deep respect for ingredients — blending global flavors with timeless technique.",
+            "At Johnny G’s, Dinesh brings his passion for food and hospitality to a neighbourhood setting, combining world-class culinary standards with warmth, soul, and accessibility. His vision is to create food that tells a story and a space that people return to not just for meals, but for moments"
+          ]
+        },
+        {
+          "name": "Vivek",
+          "role": "PARTNER",
+          "image": "https://kvirwlcodrpwnwzvfcqr.supabase.co/storage/v1/object/public/gallery/johnny-gs-brunch/gallery/1765347796375-0205C9D0-6629-4ED3-A688-965A49B8B1D4.JPG",
+          "description": [
+            "Vivek is the partner behind the creative direction and guest experience at Johnny G’s, bringing a deeply personal and hands-on vision to the space.",
+            "Inspired by the soul of New Orleans jazz culture, Vivek personally shaped the artistic identity of Johnny G’s  from the visual art and design details to the mood, lighting, and flow of the room. Every element was intentionally created to echo the warmth, rhythm, and intimacy of classic jazz bars, while still feeling rooted in the Cabbagetown community.",
+            "With a lifelong connection to music and a strong belief that art and hospitality are inseparable, Vivek curates the live jazz programming and overall atmosphere, working closely with musicians and guests to create nights that feel authentic and alive.",
+            "For Vivek, Johnny G’s is more than a restaurant. It is a cultural space  where food, music, art, and people meet, and where every visit carries a sense of story, soul, and connection."
+          ]
+        }
+      ]
+    }
   }
 }
 

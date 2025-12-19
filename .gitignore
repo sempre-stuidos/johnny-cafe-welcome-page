@@ -1,19 +1,47 @@
 # Dependencies
 node_modules
+.pnp
+.pnp.js
+pnpm-lock.yaml
+package-lock.json
 
 # Next.js
-.next
-out
+.next/
+out/
+build/
+dist/
 *.tsbuildinfo
 next-env.d.ts
 
-# Build outputs
-dist
-build
-
 # Environment variables
-.env*.local
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# CMS - Sanity
+.sanity/
+sanity/dist/
+
+# CMS - TinaCMS
+.tina/__generated__/
+
+# CMS - Payload
+media/
+.payload/
+
+# CMS - Strapi
+.strapi/
+.tmp/
+exports/
+*.cache/
+
+# CMS - Contentful
+.contentful.json
 
 # Logs
 *.log
@@ -21,12 +49,42 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# IDEs
-.idea
-.vscode
+# OS files
 .DS_Store
+*.pem
+Thumbs.db
 
-# Deployment
-.vercel
-.vite
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.local
+.cache/
+.turbo/
+.vite/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# PWA
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map

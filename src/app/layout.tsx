@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Gayathri } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LenisProvider } from "@/contexts/LenisContext";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
+import { generateRestaurantSchema } from "@/lib/structured-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,22 +19,46 @@ const geistMono = Geist_Mono({
 });
 
 const yellowtail = localFont({
-  src: "../../public/fonts/Yellowtail-Regular.ttf",
+  src: "./../../public/fonts/Yellowtail-Regular.ttf",
   variable: "--font-yellowtail",
   display: "swap",
 });
 
 const fjallaOne = localFont({
-  src: "../../public/fonts/FjallaOne-Regular.ttf",
+  src: "./../../public/fonts/FjallaOne-Regular.ttf",
   variable: "--font-fjalla-one",
   display: "swap",
 });
 
+const hornbillTrial = localFont({
+  src: "./../../public/fonts/Hornbill-Trial-Black.ttf",
+  variable: "--font-hornbill-trial",
+  display: "swap",
+});
+
+const amoretSans = localFont({
+  src: "./../../public/fonts/Amoret-Collection-Sans.ttf",
+  variable: "--font-amoret-sans",
+  display: "swap",
+});
+
+const pinyonScript = localFont({
+  src: "./../../public/fonts/PinyonScript-Regular.ttf",
+  variable: "--font-pinyon-script",
+  display: "swap",
+});
+
+const gayathri = Gayathri({
+  variable: "--font-gayathri",
+  subsets: ["latin"],
+  weight: ["100", "400", "700"],
+});
+
 export const metadata: Metadata = {
   title:
-    "Johnny G's Restaurant | Breakfast, Lunch & Dinner in Cabbagetown, Toronto",
+    "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown, Toronto",
   description:
-    "Johnny G's established in 1975 - A prominent breakfast and brunch place in Cabbagetown for over 4.5 decades. Now serving delicious Indian, Hakka, and Momo dishes for dinner. Visit us at 478 Parliament St, Toronto.",
+    "Johnny G's established in 1975 - A prominent breakfast and brunch place in Cabbagetown for over 4.5 decades. Now serving delicious Indian, Hakka, and Momo dishes for dinner with live jazz nights every Thursday-Saturday. Toronto's East End jazz venue at 478 Parliament St.",
   keywords: [
     "Johnny G's",
     "restaurant Toronto",
@@ -42,6 +71,11 @@ export const metadata: Metadata = {
     "Parliament Street restaurant",
     "breakfast restaurant",
     "dinner restaurant Toronto",
+    "toronto jazz night",
+    "east end jazz night",
+    "live jazz toronto",
+    "jazz restaurant toronto",
+    "cabbagetown jazz",
   ],
   authors: [{ name: "Johnny G's Restaurant" }],
   creator: "Johnny G's Restaurant",
@@ -51,9 +85,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Johnny G's Restaurant | Breakfast, Lunch & Dinner in Cabbagetown",
+    title: "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown",
     description:
-      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto. The Old Meets The New.",
+      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto. Live jazz nights every Thursday-Saturday in Toronto's East End.",
     url: "https://johnnygsrestaurant.ca",
     siteName: "Johnny G's Restaurant",
     locale: "en_CA",
@@ -61,9 +95,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Johnny G's Restaurant | Breakfast, Lunch & Dinner in Cabbagetown",
+    title: "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown",
     description:
-      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto.",
+      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto. Live jazz nights Thursday-Saturday.",
   },
   robots: {
     index: true,
@@ -84,7 +118,7 @@ export const metadata: Metadata = {
     "contact:region": "ON",
     "contact:postal_code": "M5A 2L3",
     "contact:country_name": "Canada",
-    "restaurant:hours": "Breakfast: 7:00am - 4:00pm | Dinner: 4:00pm - 10:00pm",
+    "restaurant:hours": "Brunch: 7:00 AM – 4:00 PM | Dinner: Tuesday–Sunday 4:30 PM – 9:00 PM | Live Jazz: Thursday–Saturday 9:00 PM – 12:00 AM",
   },
 };
 
@@ -93,12 +127,63 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Generate Restaurant structured data with jazz venue properties
+  const restaurantSchema = generateRestaurantSchema({
+    name: "Johnny G's",
+    description: "Established in 1975, Johnny G's is a beloved Cabbagetown restaurant serving breakfast, brunch, and dinner with live jazz nights every Thursday-Saturday. Toronto's premier East End jazz venue.",
+    address: {
+      streetAddress: "478 Parliament St",
+      addressLocality: "Toronto",
+      addressRegion: "ON",
+      postalCode: "M5A 2L3",
+      addressCountry: "CA",
+    },
+    geo: {
+      latitude: 43.6621,
+      longitude: -79.3652,
+    },
+    telephone: "+1-647-368-3877",
+    email: "johnnygs478@gmail.com",
+    url: "https://johnnygsrestaurant.ca",
+    priceRange: "$$",
+    servesCuisine: ["Breakfast", "Brunch", "Indian", "Hakka", "Momo", "Canadian"],
+    openingHours: [
+      {
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        opens: "07:00",
+        closes: "16:00",
+      },
+      {
+        dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        opens: "16:30",
+        closes: "21:00",
+      },
+      {
+        dayOfWeek: ["Thursday", "Friday", "Saturday"],
+        opens: "21:00",
+        closes: "00:00",
+      },
+    ],
+  });
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantSchema) }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} antialiased`}
       >
-        {children}
+        <LenisProvider>
+          <ThemeProvider>
+            <Nav />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </LenisProvider>
       </body>
     </html>
   );
