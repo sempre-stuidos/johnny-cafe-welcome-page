@@ -21,10 +21,10 @@ function extractCustomerNameFromEmail(email: string): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { partySize, date, time, email, phone } = body
+    const { partySize, mealType, date, time, email, phone } = body
 
     // Validate required fields
-    if (!partySize || !date || !time || !email || !phone) {
+    if (!partySize || !mealType || !date || !time || !email || !phone) {
       return NextResponse.json(
         { success: false, error: 'All fields are required' },
         { status: 400 }
@@ -63,6 +63,7 @@ export async function POST(request: NextRequest) {
     // Send email via Brevo
     const emailResult = await sendReservationEmail({
       partySize,
+      mealType,
       date,
       time,
       email,
@@ -111,6 +112,7 @@ export async function POST(request: NextRequest) {
           reservation_date: date,
           reservation_time: time,
           party_size: partySizeNum,
+          meal_type: mealType,
           status: 'pending',
         })
 

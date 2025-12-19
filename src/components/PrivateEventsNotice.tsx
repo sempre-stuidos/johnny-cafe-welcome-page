@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
+import { StarIcon } from "./icons";
 
 export default function PrivateEventsNotice() {
   const { theme } = useTheme();
@@ -92,25 +93,14 @@ export default function PrivateEventsNotice() {
                 INTIMATE GATHERINGS
               </h3>
               <p className="text-about">
-                Perfect for groups of 10-50 guests
+                Perfect for groups of 30-100 guests
               </p>
             </div>
 
             {/* Live Entertainment */}
             <div className="flex flex-col items-center gap-4">
               <div className="private-events-icon-circle">
-                <svg
-                  width="64"
-                  height="64"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="private-events-icon"
-                >
-                  <path d="M9 18V5l12-2v13" />
-                  <circle cx="6" cy="18" r="3" />
-                  <circle cx="18" cy="16" r="3" />
-                </svg>
+                <StarIcon className="w-12 h-12" />
               </div>
               <h3 className="private-events-feature-title">
                 LIVE ENTERTAINMENT

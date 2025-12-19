@@ -48,7 +48,7 @@ export default function EventsVibe() {
         )}
       />
 
-      <div className="relative z-20 w-full max-w-[1200px] mx-auto">
+      <div className="relative z-10 w-full max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2">
           <div className="flex flex-col gap-6 py-16 md:py-24 px-4 sm:px-6 lg:px-8">
             <h2 className="events-vibe-title">
