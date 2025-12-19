@@ -228,9 +228,10 @@ export default function HomeReservation() {
                       htmlFor="meal-type"
                       className="reservation-label"
                     >
-                      MEAL TYPE
+                      RESERVATION TYPE
                     </label>
                     <CustomSelect
+                      id="meal-type"
                       value={mealType}
                       onChange={(value) => {
                         setMealType(value as "brunch" | "dinner" | "jazz");

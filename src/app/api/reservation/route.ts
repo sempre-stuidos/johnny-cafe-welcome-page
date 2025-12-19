@@ -20,11 +20,19 @@ function extractCustomerNameFromEmail(email: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { partySize, date, time, email, phone } = body
+    const body = await request.json() as {
+      partySize: string
+      mealType: string
+      date: string
+      time: string
+      email: string
+      phone: string
+    }
+    
+    const { partySize, mealType, date, time, email, phone } = body
 
     // Validate required fields
-    if (!partySize || !date || !time || !email || !phone) {
+    if (!partySize || !mealType || !date || !time || !email || !phone) {
       return NextResponse.json(
         { success: false, error: 'All fields are required' },
         { status: 400 }
@@ -131,11 +139,12 @@ export async function POST(request: NextRequest) {
     Promise.all([
       // Send reservation request email to client (restaurant)
       sendReservationEmail({
-        partySize,
-        date,
-        time,
-        email,
-        phone,
+        partySize: partySize as string,
+        mealType: mealType as string,
+        date: date as string,
+        time: time as string,
+        email: email as string,
+        phone: phone as string,
       }, businessId || undefined).catch((error) => {
         console.error('Error sending reservation request email to client:', error)
       }),
@@ -146,6 +155,7 @@ export async function POST(request: NextRequest) {
         reservationDate: date,
         reservationTime: time,
         partySize: partySizeNum,
+        mealType: mealType,
       }).catch((error) => {
         console.error('Error sending confirmation email to customer:', error)
       })

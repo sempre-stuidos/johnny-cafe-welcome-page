@@ -112,7 +112,7 @@ function generateReservationEmailHTML(params: ReservationEmailParams): string {
     
     <div style="background-color: #f9f9f9; padding: 20px; border-radius: 6px; margin: 20px 0;">
       <p style="margin: 10px 0;"><strong>Party Size:</strong> ${partySize}</p>
-      <p style="margin: 10px 0;"><strong>Meal Type:</strong> ${formattedMealType}</p>
+      <p style="margin: 10px 0;"><strong>What for:</strong> ${formattedMealType}</p>
       <p style="margin: 10px 0;"><strong>Date:</strong> ${formattedDate}</p>
       <p style="margin: 10px 0;"><strong>Time:</strong> ${time}</p>
       <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #334D2D; text-decoration: none;">${email}</a></p>
@@ -151,7 +151,7 @@ New Reservation Request
 You have received a new reservation request:
 
 Party Size: ${partySize}
-Meal Type: ${formattedMealType}
+What for: ${formattedMealType}
 Date: ${formattedDate}
 Time: ${time}
 Email: ${email}
@@ -325,6 +325,7 @@ interface SendReservationConfirmationEmailParams {
   reservationDate: string
   reservationTime: string
   partySize: number
+  mealType: string
 }
 
 /**
@@ -346,7 +347,7 @@ function getReservationConfirmationTemplateId(): number | null {
  * Generate HTML email template for reservation confirmation
  */
 function generateReservationConfirmationEmailHTML(params: SendReservationConfirmationEmailParams): string {
-  const { customerName, reservationDate, reservationTime, partySize } = params
+  const { customerName, reservationDate, reservationTime, partySize, mealType } = params
   
   // Format date for display
   const formattedDate = reservationDate ? new Date(reservationDate).toLocaleDateString('en-US', {
@@ -355,6 +356,9 @@ function generateReservationConfirmationEmailHTML(params: SendReservationConfirm
     day: 'numeric',
     year: 'numeric'
   }) : reservationDate
+  
+  // Format meal type for display
+  const formattedMealType = mealType === 'brunch' ? 'Brunch' : mealType === 'dinner' ? 'Dinner' : 'Jazz'
   
   return `
 <!DOCTYPE html>
@@ -369,28 +373,28 @@ function generateReservationConfirmationEmailHTML(params: SendReservationConfirm
     <h1 style="color: #334D2D; margin: 0 0 20px 0;">Reservation Confirmed</h1>
     
     <p style="padding-top: 14px; border-top: 1px solid #eaeaea">
-      Dear ${customerName},
+      Thanks for booking with Johnny G's!
     </p>
     
     <p>
-      Your reservation has been confirmed! We look forward to serving you.
+      We've received your reservation and can't wait to host you.
     </p>
     
     <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
       <p style="margin: 0 0 10px 0;"><strong>Date:</strong> ${formattedDate}</p>
       <p style="margin: 0 0 10px 0;"><strong>Time:</strong> ${reservationTime}</p>
+      <p style="margin: 0 0 10px 0;"><strong>What for:</strong> ${formattedMealType}</p>
       <p style="margin: 0;"><strong>Party Size:</strong> ${partySize} ${partySize === 1 ? 'guest' : 'guests'}</p>
     </div>
     
     <p>
-      If you need to make any changes or have questions, please contact us.
+      If your booking is for a large group or during live jazz hours, someone from our team may contact you to confirm a few details.
     </p>
     
-    <p>We look forward to serving you!</p>
+    <p>See you soon for great food, cocktails, and live music 🎷</p>
     
     <p style="color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eaeaea">
-      Best regards,<br />
-      Johnny Cafe Team
+      — Johnny G's
     </p>
   </div>
 </body>
@@ -402,7 +406,7 @@ function generateReservationConfirmationEmailHTML(params: SendReservationConfirm
  * Generate plain text email template for reservation confirmation
  */
 function generateReservationConfirmationEmailText(params: SendReservationConfirmationEmailParams): string {
-  const { customerName, reservationDate, reservationTime, partySize } = params
+  const { customerName, reservationDate, reservationTime, partySize, mealType } = params
   
   // Format date for display
   const formattedDate = reservationDate ? new Date(reservationDate).toLocaleDateString('en-US', {
@@ -412,21 +416,24 @@ function generateReservationConfirmationEmailText(params: SendReservationConfirm
     year: 'numeric'
   }) : reservationDate
   
+  // Format meal type for display
+  const formattedMealType = mealType === 'brunch' ? 'Brunch' : mealType === 'dinner' ? 'Dinner' : 'Jazz'
+  
   return `
-Dear ${customerName},
+Thanks for booking with Johnny G's!
 
-Your reservation has been confirmed! We look forward to serving you.
+We've received your reservation and can't wait to host you.
 
 Date: ${formattedDate}
 Time: ${reservationTime}
+What for: ${formattedMealType}
 Party Size: ${partySize} ${partySize === 1 ? 'guest' : 'guests'}
 
-If you need to make any changes or have questions, please contact us.
+If your booking is for a large group or during live jazz hours, someone from our team may contact you to confirm a few details.
 
-We look forward to serving you!
+See you soon for great food, cocktails, and live music 🎷
 
-Best regards,
-Johnny Cafe Team
+— Johnny G's
   `.trim()
 }
 
@@ -435,7 +442,7 @@ Johnny Cafe Team
  */
 export async function sendReservationConfirmationEmail(params: SendReservationConfirmationEmailParams): Promise<{ success: boolean; error?: string }> {
   try {
-    const { customerEmail, customerName, reservationDate, reservationTime, partySize } = params
+    const { customerEmail, customerName, reservationDate, reservationTime, partySize, mealType } = params
     
     // Validate required parameters
     if (!customerEmail || typeof customerEmail !== 'string' || !customerEmail.includes('@')) {
@@ -488,6 +495,9 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
       year: 'numeric'
     }) : reservationDate
     
+    // Format meal type for template
+    const formattedMealType = mealType === 'brunch' ? 'Brunch' : mealType === 'dinner' ? 'Dinner' : 'Jazz'
+    
     // Create email object
     const sendSmtpEmail = new SendSmtpEmail()
     sendSmtpEmail.subject = 'Reservation Confirmed'
@@ -511,6 +521,7 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
         customerName: customerName,
         reservationDate: formattedDate,
         reservationTime: reservationTime,
+        mealType: formattedMealType,
         partySize: partySize.toString(),
         rawDate: reservationDate,
       }

@@ -9,6 +9,7 @@ interface CustomSelectProps {
   options: { value: string; label: string }[];
   placeholder?: string;
   className?: string;
+  id?: string;
 }
 
 export default function CustomSelect({
@@ -17,6 +18,7 @@ export default function CustomSelect({
   options,
   placeholder = "Select...",
   className = "",
+  id,
 }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -45,6 +47,7 @@ export default function CustomSelect({
       {/* Selected value display */}
       <button
         type="button"
+        id={id}
         onClick={() => setIsOpen(!isOpen)}
         className="reservation-input w-full text-left flex items-center justify-between"
       >
