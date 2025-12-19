@@ -95,14 +95,14 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               />
             </svg>
           </div>
-          <div className="flex justify-between gap-3 md:gap-24 w-full">
+          <div className="flex justify-start gap-3 md:gap-24 w-full">
             <p
               ref={brunchRef}
               className={cn(
                 "menu-tab-item cursor-pointer",
-                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night",
-                activeMenu === "brunch" ? "font-semibold" : "font-normal"
+                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night"
               )}
+              style={{ fontWeight: activeMenu === "brunch" ? 600 : 400 }}
               onClick={() => onMenuChange("brunch")}
             >
               Brunch
@@ -111,9 +111,9 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               ref={dinnerRef}
               className={cn(
                 "menu-tab-item cursor-pointer",
-                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night",
-                activeMenu === "dinner" ? "font-semibold" : "font-normal"
+                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night"
               )}
+              style={{ fontWeight: activeMenu === "dinner" ? 600 : 400 }}
               onClick={() => onMenuChange("dinner")}
             >
               Dinner
@@ -122,9 +122,9 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
               ref={lateNightRef}
               className={cn(
                 "menu-tab-item cursor-pointer",
-                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night",
-                activeMenu === "late-night" ? "font-semibold" : "font-normal"
+                theme === "day" ? "menu-tab-item-day" : "menu-tab-item-night"
               )}
+              style={{ fontWeight: activeMenu === "late-night" ? 600 : 400 }}
               onClick={() => onMenuChange("late-night")}
             >
               Late Night
