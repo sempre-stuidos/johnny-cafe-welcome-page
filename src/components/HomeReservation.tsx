@@ -7,11 +7,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
 import { useScrollReveal } from "@/lib/animations/hooks";
+import CustomSelect from "@/components/CustomSelect";
 
 export default function HomeReservation() {
   const { theme } = useTheme();
   const contentRef = useScrollReveal();
   const [partySize, setPartySize] = useState("");
+  const [mealType, setMealType] = useState<"brunch" | "dinner" | "jazz">("brunch");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
   const [email, setEmail] = useState("");
@@ -48,6 +50,7 @@ export default function HomeReservation() {
         },
         body: JSON.stringify({
           partySize,
+          mealType,
           date: formattedDate,
           time: formattedTime,
           email,
@@ -200,9 +203,9 @@ export default function HomeReservation() {
                   onSubmit={handleSubmit}
                   className="flex flex-col gap-3 md:gap-4 w-full absolute px-2 md:px-20 reservation-form-container"
                 >
-                {/* Row 1: Party Size + Star Vector */}
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex flex-col gap-2 relative">
+                {/* Row 1: Party Size and Meal Type */}
+                <div className="flex gap-3">
+                  <div className="flex flex-col gap-2 flex-1 relative">
                     <label
                       htmlFor="party-size"
                       className="reservation-label"
@@ -217,7 +220,28 @@ export default function HomeReservation() {
                       value={partySize}
                       onChange={(e) => setPartySize(e.target.value)}
                       required
-                      className="reservation-party-size-input"
+                      className="reservation-input"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 flex-1 relative">
+                    <label
+                      htmlFor="meal-type"
+                      className="reservation-label"
+                    >
+                      MEAL TYPE
+                    </label>
+                    <CustomSelect
+                      value={mealType}
+                      onChange={(value) => {
+                        setMealType(value as "brunch" | "dinner" | "jazz");
+                        setSelectedTime(null); // Reset time when meal type changes
+                      }}
+                      options={[
+                        { value: "brunch", label: "Brunch" },
+                        { value: "dinner", label: "Dinner" },
+                        { value: "jazz", label: "Jazz" },
+                      ]}
+                      placeholder="Select meal type"
                     />
                     <Image
                       src="/star-vector.svg"
@@ -226,9 +250,10 @@ export default function HomeReservation() {
                       height={200}
                       className={cn(
                         "absolute",
-                        "bottom-10 left-60",
+                        "bottom-10 right-[-80px]",
                         "w-auto h-[70px]",
-                        "hidden md:block"
+                        "hidden lg:block",
+                        "pointer-events-none"
                       )}
                     />
                   </div>
@@ -273,8 +298,20 @@ export default function HomeReservation() {
                       placeholderText="Select a time"
                       required
                       popperPlacement="bottom-start"
-                      minTime={new Date(new Date().setHours(19, 0, 0, 0))}
-                      maxTime={new Date(new Date().setHours(23, 30, 0, 0))}
+                      minTime={
+                        mealType === "brunch"
+                          ? new Date(new Date().setHours(7, 0, 0, 0))
+                          : mealType === "dinner"
+                          ? new Date(new Date().setHours(16, 0, 0, 0))
+                          : new Date(new Date().setHours(21, 0, 0, 0))
+                      }
+                      maxTime={
+                        mealType === "brunch"
+                          ? new Date(new Date().setHours(16, 0, 0, 0))
+                          : mealType === "dinner"
+                          ? new Date(new Date().setHours(20, 30, 0, 0))
+                          : new Date(new Date().setHours(23, 30, 0, 0))
+                      }
                       className="w-full transition-colors duration-300 focus:outline-none reservation-datepicker"
                       wrapperClassName="w-full"
                     />

@@ -1,4 +1,7 @@
+"use client";
+
 import { type SVGProps } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 // Decorative Line Component
 export const DecorativeLine = ({
@@ -88,22 +91,29 @@ export const StarDivider = ({ className, ...props }: SVGProps<SVGSVGElement>) =>
 );
 
 // Star Icon Component
-export const StarIcon = ({ className, fill, ...props }: SVGProps<SVGSVGElement> & { fill?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="38"
-    height="38"
-    viewBox="0 0 38 38"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
-      fill={fill || "#5C4127"}
-    />
-  </svg>
-);
+export const StarIcon = ({ className, fill, ...props }: SVGProps<SVGSVGElement> & { fill?: string }) => {
+  const { theme } = useTheme();
+  
+  // Use theme-aware color if no fill is provided
+  const starFill = fill || (theme === "night" ? "#B29738" : "#5C4127");
+  
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="38"
+      height="38"
+      viewBox="0 0 38 38"
+      fill="none"
+      className={className}
+      {...props}
+    >
+      <path
+        d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
+        fill={starFill}
+      />
+    </svg>
+  );
+};
 
 // Calendar Icon
 export const CalendarIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (

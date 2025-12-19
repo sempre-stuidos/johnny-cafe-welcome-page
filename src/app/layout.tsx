@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LenisProvider } from "@/contexts/LenisContext";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { generateRestaurantSchema } from "@/lib/structured-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,9 +56,9 @@ const gayathri = Gayathri({
 
 export const metadata: Metadata = {
   title:
-    "Johnny G's Restaurant | Breakfast, Lunch & Dinner in Cabbagetown, Toronto",
+    "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown, Toronto",
   description:
-    "Johnny G's established in 1975 - A prominent breakfast and brunch place in Cabbagetown for over 4.5 decades. Now serving delicious Indian, Hakka, and Momo dishes for dinner. Visit us at 478 Parliament St, Toronto.",
+    "Johnny G's established in 1975 - A prominent breakfast and brunch place in Cabbagetown for over 4.5 decades. Now serving delicious Indian, Hakka, and Momo dishes for dinner with live jazz nights every Thursday-Saturday. Toronto's East End jazz venue at 478 Parliament St.",
   keywords: [
     "Johnny G's",
     "restaurant Toronto",
@@ -70,6 +71,11 @@ export const metadata: Metadata = {
     "Parliament Street restaurant",
     "breakfast restaurant",
     "dinner restaurant Toronto",
+    "toronto jazz night",
+    "east end jazz night",
+    "live jazz toronto",
+    "jazz restaurant toronto",
+    "cabbagetown jazz",
   ],
   authors: [{ name: "Johnny G's Restaurant" }],
   creator: "Johnny G's Restaurant",
@@ -79,9 +85,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Johnny G's Restaurant | Breakfast, Lunch & Dinner in Cabbagetown",
+    title: "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown",
     description:
-      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto. The Old Meets The New.",
+      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto. Live jazz nights every Thursday-Saturday in Toronto's East End.",
     url: "https://johnnygsrestaurant.ca",
     siteName: "Johnny G's Restaurant",
     locale: "en_CA",
@@ -89,9 +95,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Johnny G's Restaurant | Breakfast, Lunch & Dinner in Cabbagetown",
+    title: "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown",
     description:
-      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto.",
+      "Established in 1975. Serving fresh, locally sourced breakfast, lunch, and dinner in Cabbagetown, Toronto. Live jazz nights Thursday-Saturday.",
   },
   robots: {
     index: true,
@@ -121,8 +127,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Generate Restaurant structured data with jazz venue properties
+  const restaurantSchema = generateRestaurantSchema({
+    name: "Johnny G's",
+    description: "Established in 1975, Johnny G's is a beloved Cabbagetown restaurant serving breakfast, brunch, and dinner with live jazz nights every Thursday-Saturday. Toronto's premier East End jazz venue.",
+    address: {
+      streetAddress: "478 Parliament St",
+      addressLocality: "Toronto",
+      addressRegion: "ON",
+      postalCode: "M5A 2L3",
+      addressCountry: "CA",
+    },
+    geo: {
+      latitude: 43.6621,
+      longitude: -79.3652,
+    },
+    telephone: "+1-647-368-3877",
+    email: "johnnygs478@gmail.com",
+    url: "https://johnnygsrestaurant.ca",
+    priceRange: "$$",
+    servesCuisine: ["Breakfast", "Brunch", "Indian", "Hakka", "Momo", "Canadian"],
+    openingHours: [
+      {
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        opens: "07:00",
+        closes: "16:00",
+      },
+      {
+        dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        opens: "16:30",
+        closes: "21:00",
+      },
+      {
+        dayOfWeek: ["Thursday", "Friday", "Saturday"],
+        opens: "21:00",
+        closes: "00:00",
+      },
+    ],
+  });
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantSchema) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} antialiased`}
       >
