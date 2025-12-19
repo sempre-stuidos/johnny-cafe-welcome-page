@@ -250,7 +250,7 @@ export default function HomeReservation() {
                       height={200}
                       className={cn(
                         "absolute",
-                        "bottom-10 right-[-80px]",
+                        "bottom-[-120px] left-1/2 -translate-x-1/2",
                         "w-auto h-[70px]",
                         "hidden lg:block",
                         "pointer-events-none"

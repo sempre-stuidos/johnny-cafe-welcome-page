@@ -76,10 +76,11 @@ export default function OwnerCard({ name, role, image, description }: OwnerCardP
             className={cn(
                 "relative",
                 "w-full md:w-[400px]",
-            "h-[400px] md:h-[500px]",
-            "flex-shrink-0",
-            "overflow-hidden",
-            "border-2 border-[#B29738]"
+                "aspect-square md:aspect-auto",
+                "md:h-[500px]",
+                "flex-shrink-0",
+                "overflow-hidden",
+                "border-2 border-[#B29738]"
           )}
         >
           <Image
@@ -103,8 +104,7 @@ export default function OwnerCard({ name, role, image, description }: OwnerCardP
         >
           <div className={cn(
             "flex flex-col",
-            "gap-4",
-            "h-full"
+            "gap-4"
           )}>
             {descriptionArray.map((paragraph, index) => (
               <p

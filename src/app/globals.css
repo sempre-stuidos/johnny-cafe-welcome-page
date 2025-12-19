@@ -2015,3 +2015,20 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   color: var(--theme-text-body);
   text-decoration: none;
 }
+
+/* Private Events Icons */
+.private-events-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.private-events-icon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}

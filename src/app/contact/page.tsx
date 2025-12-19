@@ -69,7 +69,7 @@ export default function ContactPage() {
                         BRUNCH
                       </span>
                       <span className="contact-meal-time">
-                        7:00 AM – 4:00 PM
+                        7 AM – 4 PM
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export default function ContactPage() {
                         DINNER
                       </span>
                       <span className="contact-meal-time">
-                        Tuesday – Sunday: 4:30 PM – 9:00 PM
+                        Tuesday – Sunday: 4:30 PM – 9 PM
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -85,7 +85,7 @@ export default function ContactPage() {
                         LIVE JAZZ
                       </span>
                       <span className="contact-meal-time">
-                        Thursday – Saturday: 9:00 PM – 12:00 AM
+                        Thursday – Saturday: 9 PM – 12 AM
                       </span>
                     </div>
                   </div>

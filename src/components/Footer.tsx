@@ -133,9 +133,9 @@ export default function Footer() {
                     <div className="flex flex-col xl:flex-row gap-1 xl:gap-4">
                       <p className="transition-colors duration-300 footer-meal-label">
                         Brunch{" "}
-                        <span className="footer-meal-time">
-                          7:00 AM – 4:00 PM
-                        </span>
+                      <span className="footer-meal-time">
+                          7 AM – 4 PM
+                      </span>
                       </p>
                     </div>
                   </div>
@@ -151,7 +151,7 @@ export default function Footer() {
                     <p className="transition-colors duration-300 footer-meal-label">
                       Dinner{" "}
                       <span className="footer-meal-time">
-                        4:30 PM – 9:00 PM
+                        4:30 PM – 9 PM
                       </span>
                     </p>
                   </div>

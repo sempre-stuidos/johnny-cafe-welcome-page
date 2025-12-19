@@ -15,7 +15,7 @@ export default function Banner() {
   useEffect(() => {
     setIsMounted(true);
     const checkScreenSize = () => {
-      setIsDesktop(window.innerWidth >= 768);
+      setIsDesktop(window.innerWidth >= 1024);
     };
 
     checkScreenSize();
@@ -47,7 +47,7 @@ export default function Banner() {
     >
       <div 
         ref={isDesktop ? containerRef : null}
-        className="hidden md:flex items-center justify-center gap-4 text-center"
+        className="hidden lg:flex items-center justify-center gap-4 text-center"
         data-animate="nav-banner"
       >
         <span className="flex items-baseline gap-2">
@@ -84,7 +84,7 @@ export default function Banner() {
 
       <div
         ref={!isDesktop ? containerRef : null}
-        className="md:hidden relative w-full text-center min-h-[28px]"
+        className="lg:hidden relative w-full text-center min-h-[28px]"
         data-animate="nav-banner"
       >
         <div

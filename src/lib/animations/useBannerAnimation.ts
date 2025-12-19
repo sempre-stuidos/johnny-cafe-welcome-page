@@ -9,6 +9,16 @@ export function useBannerAnimation(isDesktop: boolean) {
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const elementRef = useRef<HTMLDivElement | null>(null);
 
+  // Cleanup timeline on unmount or page navigation
+  useEffect(() => {
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+        timelineRef.current = null;
+      }
+    };
+  }, []);
+
   const runAnimation = useCallback((element: HTMLDivElement) => {
     // Desktop: simple fade in
     if (isDesktop) {
