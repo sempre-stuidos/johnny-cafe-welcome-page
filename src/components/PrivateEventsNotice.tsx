@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";
-import { StarIcon } from "./icons";
+import { StarIcon, UsersIcon, ClockIcon } from "./icons";
 
 export default function PrivateEventsNotice() {
   const { theme } = useTheme();
@@ -75,19 +75,7 @@ export default function PrivateEventsNotice() {
             {/* Intimate Gatherings */}
             <div className="flex flex-col items-center gap-4">
               <div className="private-events-icon-circle">
-                <svg
-                  width="64"
-                  height="64"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="private-events-icon"
-                >
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
+                <UsersIcon className="private-events-icon" />
               </div>
               <h3 className="private-events-feature-title">
                 INTIMATE GATHERINGS
@@ -113,17 +101,7 @@ export default function PrivateEventsNotice() {
             {/* Flexible Timing */}
             <div className="flex flex-col items-center gap-4">
               <div className="private-events-icon-circle">
-                <svg
-                  width="64"
-                  height="64"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="private-events-icon"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
+                <ClockIcon className="private-events-icon" />
               </div>
               <h3 className="private-events-feature-title">
                 FLEXIBLE TIMING

@@ -736,6 +736,13 @@ code, pre {
   fill: #B29738;
 }
 
+.footer-copyright {
+  font-family: var(--font-gayathri);
+  font-weight: 400;
+  font-size: 16px;
+  color: #FAF2DD;
+}
+
 /* Banner Styles */
 .banner-text {
   font-family: var(--font-gayathri);

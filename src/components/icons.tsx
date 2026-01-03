@@ -218,3 +218,77 @@ export const ArcedDecor = ({ className, ...props }: SVGProps<SVGSVGElement>) => 
   </svg>
 );
 
+// Users/People Icon (for Intimate Gatherings)
+export const UsersIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="64"
+    height="64"
+    viewBox="0 0 24 24"
+    fill="none"
+    className={className}
+    {...props}
+  >
+    <path 
+      d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" 
+      stroke="#B29738" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+    <circle 
+      cx="9" 
+      cy="7" 
+      r="4" 
+      stroke="#B29738" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+    <path 
+      d="M22 21v-2a4 4 0 0 0-3-3.87" 
+      stroke="#B29738" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+    <path 
+      d="M16 3.13a4 4 0 0 1 0 7.75" 
+      stroke="#B29738" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+  </svg>
+);
+
+// Clock Icon (for Flexible Timing)
+export const ClockIcon = ({ className, ...props }: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="64"
+    height="64"
+    viewBox="0 0 24 24"
+    fill="none"
+    className={className}
+    {...props}
+  >
+    <circle 
+      cx="12" 
+      cy="12" 
+      r="10" 
+      stroke="#B29738" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+    <polyline 
+      points="12 6 12 12 16 14" 
+      stroke="#B29738" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+  </svg>
+);
+

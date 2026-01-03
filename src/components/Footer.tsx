@@ -197,6 +197,27 @@ export default function Footer() {
               </div>
             </div>
           </div>
+
+          {/* Copyright Section */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 md:pt-8 border-t border-opacity-20"
+            style={{ borderColor: 'var(--theme-accent)' }}
+          >
+            <p className="footer-copyright">
+              © All rights reserved
+            </p>
+            <p className="footer-copyright">
+              Made by{" "}
+              <a
+                href="https://semprestudios.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors duration-300 hover:opacity-80"
+                style={{ color: 'var(--theme-accent)' }}
+              >
+                Sempre Studios
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
