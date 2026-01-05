@@ -591,6 +591,15 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     }
     
     // Send email via Brevo
+    console.log(`[EMAIL_TRACKING] About to send reservation_request email via Brevo API`, JSON.stringify({
+      emailType: 'reservation_request',
+      recipients: recipientEmails,
+      templateId,
+      hasHtmlContent: !!sendSmtpEmail.htmlContent,
+      hasTemplateId: !!sendSmtpEmail.templateId,
+      timestamp: new Date().toISOString(),
+    }))
+    
     try {
       const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
       const duration = Date.now() - startTime
@@ -1099,6 +1108,15 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     }
     
     // Send email via Brevo
+    console.log(`[EMAIL_TRACKING] About to send confirmation email via Brevo API`, JSON.stringify({
+      emailType: 'confirmation',
+      recipient: customerEmail,
+      templateId,
+      hasHtmlContent: !!sendSmtpEmail.htmlContent,
+      hasTemplateId: !!sendSmtpEmail.templateId,
+      timestamp: new Date().toISOString(),
+    }))
+    
     try {
       const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
       const duration = Date.now() - startTime
