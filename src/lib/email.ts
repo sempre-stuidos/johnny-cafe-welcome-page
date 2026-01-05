@@ -33,7 +33,7 @@ interface EmailLogData {
   configState?: {
     apiKeyPresent: boolean
     recipientsCount?: number
-    recipientsSource?: 'database' | 'env_var' | 'none' | 'customer'
+    recipientsSource?: 'database' | 'env_var' | 'none'
     templateId?: number | null
     senderEmail?: string
     senderName?: string
@@ -87,28 +87,63 @@ async function getRecipientEmails(businessId?: string): Promise<string[]> {
   // If businessId is provided, query reservation_settings table
   if (businessId) {
     try {
+      console.log(`[EMAIL_TRACKING] Fetching reservation settings for businessId: ${businessId}`)
       const { data, error } = await supabaseAdmin
         .from('reservation_settings')
         .select('email_recipients')
         .eq('business_id', businessId)
         .single()
 
-      if (!error && data && data.email_recipients && data.email_recipients.length > 0) {
+      if (error) {
+        console.warn(`[EMAIL_TRACKING] Error fetching reservation settings:`, JSON.stringify({
+          businessId,
+          error: error.message,
+          code: error.code,
+          details: error.details,
+        }))
+        // Fall through to env var fallback
+      } else if (data && data.email_recipients && data.email_recipients.length > 0) {
+        console.log(`[EMAIL_TRACKING] Found ${data.email_recipients.length} recipient(s) from reservation_settings:`, JSON.stringify({
+          businessId,
+          recipients: data.email_recipients,
+          source: 'database',
+        }))
         return data.email_recipients
+      } else {
+        console.warn(`[EMAIL_TRACKING] No recipients found in reservation_settings for businessId: ${businessId}`, JSON.stringify({
+          businessId,
+          dataExists: !!data,
+          recipientsCount: data?.email_recipients?.length || 0,
+        }))
+        // Fall through to env var fallback
       }
     } catch (error) {
-      console.error('Error fetching reservation settings:', error)
+      console.error(`[EMAIL_TRACKING] Exception fetching reservation settings:`, JSON.stringify({
+        businessId,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      }))
       // Fall through to env var fallback
     }
+  } else {
+    console.warn(`[EMAIL_TRACKING] No businessId provided, cannot query reservation_settings`)
   }
 
   // Fall back to RECIPIENT_EMAIL env var if provided (for backward compatibility)
   if (process.env.RECIPIENT_EMAIL) {
+    console.log(`[EMAIL_TRACKING] Using RECIPIENT_EMAIL env var fallback:`, JSON.stringify({
+      recipient: process.env.RECIPIENT_EMAIL,
+      source: 'env_var',
+    }))
     return [process.env.RECIPIENT_EMAIL]
   }
 
   // No recipients found - return empty array
   // Email won't be sent, but reservation will still be saved
+  console.warn(`[EMAIL_TRACKING] No recipients found from database or env var`, JSON.stringify({
+    businessId: businessId || 'none',
+    hasRecipientEmailEnv: !!process.env.RECIPIENT_EMAIL,
+  }))
   return []
 }
 

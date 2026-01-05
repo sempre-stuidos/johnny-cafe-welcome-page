@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendReservationEmail, sendReservationConfirmationEmail } from '@/lib/email'
 import { supabaseAdmin } from '@/lib/supabase'
+import { resolveBusinessSlug } from '@/lib/business-utils'
 
 /**
  * Extract customer name from email address
@@ -69,22 +70,34 @@ export async function POST(request: NextRequest) {
     }
 
     // Get business ID (needed for database save and email recipients)
+    // Use NEXT_PUBLIC_ORG_SLUG or fallback to 'johnny-gs-brunch'
+    const businessSlug = resolveBusinessSlug(
+      undefined,
+      process.env.NEXT_PUBLIC_ORG_SLUG,
+      'johnny-gs-brunch'
+    )
+    
     let businessId: string | null = null
     try {
       const { data: business, error: businessError } = await supabaseAdmin
         .from('businesses')
         .select('id')
-        .eq('slug', 'johnny-gs-brunch')
+        .eq('slug', businessSlug)
         .single()
 
       if (businessError || !business) {
-        console.error('Error finding business:', businessError)
+        console.error(`[RESERVATION_API] Error finding business with slug "${businessSlug}":`, businessError)
         // Log error but continue - will try to save anyway
       } else {
         businessId = business.id
+        console.log(`[RESERVATION_API] Business found:`, JSON.stringify({
+          slug: businessSlug,
+          businessId,
+          source: process.env.NEXT_PUBLIC_ORG_SLUG ? 'NEXT_PUBLIC_ORG_SLUG' : 'fallback',
+        }))
       }
     } catch (dbError) {
-      console.error('Error fetching business:', dbError)
+      console.error(`[RESERVATION_API] Error fetching business with slug "${businessSlug}":`, dbError)
       // Log error but continue - will try to save anyway
     }
 
@@ -100,11 +113,12 @@ export async function POST(request: NextRequest) {
         const { data: business, error: businessError } = await supabaseAdmin
           .from('businesses')
           .select('id')
-          .eq('slug', 'johnny-gs-brunch')
+          .eq('slug', businessSlug)
           .single()
 
         if (!businessError && business) {
           businessId = business.id
+          console.log(`[RESERVATION_API] Business ID retrieved on retry:`, businessId)
         }
       }
 
