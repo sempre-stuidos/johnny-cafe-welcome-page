@@ -557,7 +557,19 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     
     // Send email via Brevo
     try {
-      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
+      // Add timeout wrapper to prevent hanging
+      const sendEmailWithTimeout = async () => {
+        return await apiInstance.sendTransacEmail(sendSmtpEmail)
+      }
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Brevo API call timed out after 10 seconds')), 10000)
+      })
+      
+      const response = await Promise.race([
+        sendEmailWithTimeout(),
+        timeoutPromise
+      ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
       const duration = Date.now() - startTime
       
       // Extract message ID if available (from response body)
@@ -1065,7 +1077,19 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     
     // Send email via Brevo
     try {
-      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
+      // Add timeout wrapper to prevent hanging
+      const sendEmailWithTimeout = async () => {
+        return await apiInstance.sendTransacEmail(sendSmtpEmail)
+      }
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Brevo API call timed out after 10 seconds')), 10000)
+      })
+      
+      const response = await Promise.race([
+        sendEmailWithTimeout(),
+        timeoutPromise
+      ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
       const duration = Date.now() - startTime
       
       // Extract message ID if available (from response body)
