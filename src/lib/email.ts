@@ -613,19 +613,37 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     }))
     
     try {
+      console.log(`[EMAIL_TRACKING] Starting Brevo API call for reservation_request`, JSON.stringify({
+        recipients: recipientEmails,
+        templateId,
+        senderEmail,
+        senderName,
+        timestamp: new Date().toISOString(),
+      }))
+      
       // Add timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Brevo API call timed out after 30 seconds')), 30000)
       })
       
+      const apiCallStart = Date.now()
       const response = await Promise.race([
         apiInstance.sendTransacEmail(sendSmtpEmail),
         timeoutPromise
       ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
+      const apiCallDuration = Date.now() - apiCallStart
       const duration = Date.now() - startTime
       
+      console.log(`[EMAIL_TRACKING] Brevo API call completed for reservation_request`, JSON.stringify({
+        duration: apiCallDuration,
+        totalDuration: duration,
+        responseType: typeof response,
+        hasResponse: !!response,
+        timestamp: new Date().toISOString(),
+      }))
+      
       // Extract message ID if available (from response body)
-      const messageId = (response as any)?.body?.messageId || undefined
+      const messageId = (response as any)?.body?.messageId || (response as any)?.messageId || undefined
       
       logEmailEvent({
         eventType: 'email_success',
@@ -1138,19 +1156,37 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     }))
     
     try {
+      console.log(`[EMAIL_TRACKING] Starting Brevo API call for confirmation`, JSON.stringify({
+        recipient: customerEmail,
+        templateId,
+        senderEmail,
+        senderName,
+        timestamp: new Date().toISOString(),
+      }))
+      
       // Add timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error('Brevo API call timed out after 30 seconds')), 30000)
       })
       
+      const apiCallStart = Date.now()
       const response = await Promise.race([
         apiInstance.sendTransacEmail(sendSmtpEmail),
         timeoutPromise
       ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
+      const apiCallDuration = Date.now() - apiCallStart
       const duration = Date.now() - startTime
       
+      console.log(`[EMAIL_TRACKING] Brevo API call completed for confirmation`, JSON.stringify({
+        duration: apiCallDuration,
+        totalDuration: duration,
+        responseType: typeof response,
+        hasResponse: !!response,
+        timestamp: new Date().toISOString(),
+      }))
+      
       // Extract message ID if available (from response body)
-      const messageId = (response as any)?.body?.messageId || undefined
+      const messageId = (response as any)?.body?.messageId || (response as any)?.messageId || undefined
       
       logEmailEvent({
         eventType: 'email_success',
