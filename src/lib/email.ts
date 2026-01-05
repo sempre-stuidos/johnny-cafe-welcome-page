@@ -555,25 +555,56 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
       sendSmtpEmail.textContent = textContent
     }
     
-    // Send email via Brevo
+    // Send email via Brevo using direct HTTP (more reliable than SDK)
     try {
-      // Add timeout wrapper to prevent hanging
-      const sendEmailWithTimeout = async () => {
-        return await apiInstance.sendTransacEmail(sendSmtpEmail)
+      console.log(`[EMAIL_TRACKING] Attempting to send reservation_request email via Brevo HTTP API`)
+      
+      const formattedMealType = params.mealType === 'brunch' ? 'Brunch' : params.mealType === 'dinner' ? 'Dinner' : 'Jazz'
+      
+      const emailPayload: any = {
+        sender: {
+          name: senderName,
+          email: senderEmail,
+        },
+        to: recipientEmails.map(email => ({ email, name: 'Johnny Cafe' })),
+        subject: 'New Reservation Request - Johnny Cafe',
       }
       
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Brevo API call timed out after 10 seconds')), 10000)
+      if (templateId) {
+        emailPayload.templateId = templateId
+        emailPayload.params = {
+          partySize: partySize,
+          mealType: formattedMealType,
+          date: formattedDate,
+          time: time,
+          email: email,
+          phone: phone,
+          rawDate: date,
+        }
+      } else {
+        emailPayload.htmlContent = generateReservationEmailHTML(params)
+        emailPayload.textContent = generateReservationEmailText(params)
+      }
+      
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'api-key': apiKey!,
+        },
+        body: JSON.stringify(emailPayload),
       })
       
-      const response = await Promise.race([
-        sendEmailWithTimeout(),
-        timeoutPromise
-      ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
       const duration = Date.now() - startTime
       
-      // Extract message ID if available (from response body)
-      const messageId = (response as any)?.body?.messageId || undefined
+      if (!response.ok) {
+        const errorBody = await response.text()
+        throw new Error(`Brevo API error (${response.status}): ${errorBody}`)
+      }
+      
+      const responseData = await response.json()
+      const messageId = responseData.messageId
       
       logEmailEvent({
         eventType: 'email_success',
@@ -1075,25 +1106,53 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
       sendSmtpEmail.textContent = textContent
     }
     
-    // Send email via Brevo
+    // Send email via Brevo using direct HTTP (more reliable than SDK)
     try {
-      // Add timeout wrapper to prevent hanging
-      const sendEmailWithTimeout = async () => {
-        return await apiInstance.sendTransacEmail(sendSmtpEmail)
+      console.log(`[EMAIL_TRACKING] Attempting to send confirmation email via Brevo HTTP API`)
+      
+      const emailPayload: any = {
+        sender: {
+          name: senderName,
+          email: senderEmail,
+        },
+        to: [{ email: customerEmail, name: customerName }],
+        subject: 'Reservation Confirmed',
       }
       
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Brevo API call timed out after 10 seconds')), 10000)
+      if (templateId) {
+        emailPayload.templateId = templateId
+        emailPayload.params = {
+          customerName: customerName,
+          reservationDate: formattedDate,
+          reservationTime: reservationTime,
+          mealType: formattedMealType,
+          partySize: partySize.toString(),
+          rawDate: reservationDate,
+        }
+      } else {
+        emailPayload.htmlContent = generateReservationConfirmationEmailHTML(params)
+        emailPayload.textContent = generateReservationConfirmationEmailText(params)
+      }
+      
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'api-key': apiKey!,
+        },
+        body: JSON.stringify(emailPayload),
       })
       
-      const response = await Promise.race([
-        sendEmailWithTimeout(),
-        timeoutPromise
-      ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
       const duration = Date.now() - startTime
       
-      // Extract message ID if available (from response body)
-      const messageId = (response as any)?.body?.messageId || undefined
+      if (!response.ok) {
+        const errorBody = await response.text()
+        throw new Error(`Brevo API error (${response.status}): ${errorBody}`)
+      }
+      
+      const responseData = await response.json()
+      const messageId = responseData.messageId
       
       logEmailEvent({
         eventType: 'email_success',
