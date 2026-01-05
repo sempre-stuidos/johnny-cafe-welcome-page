@@ -33,7 +33,7 @@ interface EmailLogData {
   configState?: {
     apiKeyPresent: boolean
     recipientsCount?: number
-    recipientsSource?: 'database' | 'env_var' | 'none'
+    recipientsSource?: 'database' | 'env_var' | 'none' | 'customer'
     templateId?: number | null
     senderEmail?: string
     senderName?: string
