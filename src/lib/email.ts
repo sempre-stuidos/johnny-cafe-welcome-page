@@ -441,6 +441,13 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     // Get recipient emails from reservation_settings or fallback
     const recipientEmails = await getRecipientEmails(businessId)
     
+    console.log(`[EMAIL_TRACKING] Recipients retrieved for reservation_request:`, JSON.stringify({
+      businessId: businessId || 'none',
+      recipientCount: recipientEmails.length,
+      recipients: recipientEmails,
+      timestamp: new Date().toISOString(),
+    }))
+    
     // Determine recipient source for logging
     let recipientsSource: 'database' | 'env_var' | 'none' = 'none'
     if (businessId && recipientEmails.length > 0) {
@@ -452,6 +459,11 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     
     // Get the template ID
     const templateId = getReservationEmailTemplateId()
+    
+    console.log(`[EMAIL_TRACKING] Template ID for reservation_request:`, JSON.stringify({
+      templateId,
+      timestamp: new Date().toISOString(),
+    }))
     
     // Log configuration state
     logEmailEvent({
@@ -601,7 +613,15 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     }))
     
     try {
-      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Brevo API call timed out after 30 seconds')), 30000)
+      })
+      
+      const response = await Promise.race([
+        apiInstance.sendTransacEmail(sendSmtpEmail),
+        timeoutPromise
+      ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
       const duration = Date.now() - startTime
       
       // Extract message ID if available (from response body)
@@ -1118,7 +1138,15 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     }))
     
     try {
-      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Brevo API call timed out after 30 seconds')), 30000)
+      })
+      
+      const response = await Promise.race([
+        apiInstance.sendTransacEmail(sendSmtpEmail),
+        timeoutPromise
+      ]) as Awaited<ReturnType<typeof apiInstance.sendTransacEmail>>
       const duration = Date.now() - startTime
       
       // Extract message ID if available (from response body)
