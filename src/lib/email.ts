@@ -16,6 +16,56 @@ interface ReservationEmailParams {
 }
 
 /**
+ * Structured logging helper for email tracking
+ */
+interface EmailLogData {
+  eventType: 'email_attempt' | 'email_success' | 'email_error' | 'config_check'
+  emailType: 'reservation_request' | 'confirmation'
+  timestamp: string
+  environment: string
+  reservationContext?: {
+    customerEmail?: string
+    date?: string
+    time?: string
+    partySize?: string | number
+    mealType?: string
+  }
+  configState?: {
+    apiKeyPresent: boolean
+    recipientsCount?: number
+    recipientsSource?: 'database' | 'env_var' | 'none'
+    templateId?: number | null
+    senderEmail?: string
+    senderName?: string
+  }
+  error?: {
+    message: string
+    stack?: string
+    brevoResponse?: {
+      status?: number
+      body?: unknown
+    }
+  }
+  success?: {
+    messageId?: string
+  }
+  businessId?: string
+}
+
+function logEmailEvent(data: EmailLogData): void {
+  const logEntry = JSON.stringify(data)
+  
+  if (data.eventType === 'email_error') {
+    console.error(`[EMAIL_TRACKING] ${logEntry}`)
+  } else if (data.eventType === 'config_check' && data.configState && 
+             (!data.configState.apiKeyPresent || data.configState.recipientsCount === 0)) {
+    console.warn(`[EMAIL_TRACKING] ${logEntry}`)
+  } else {
+    console.log(`[EMAIL_TRACKING] ${logEntry}`)
+  }
+}
+
+/**
  * Get the sender email address
  */
 function getSenderEmail(): string {
@@ -165,37 +215,151 @@ This is an automated message from Johnny Cafe reservation system.
  * Send reservation email using Brevo
  */
 export async function sendReservationEmail(params: ReservationEmailParams, businessId?: string): Promise<{ success: boolean; error?: string }> {
+  const startTime = Date.now()
+  
   try {
     const { partySize, mealType, date, time, email, phone } = params
     
+    // Log email attempt
+    logEmailEvent({
+      eventType: 'email_attempt',
+      emailType: 'reservation_request',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      reservationContext: {
+        customerEmail: email,
+        date,
+        time,
+        partySize,
+        mealType,
+      },
+      businessId: businessId || undefined,
+    })
+    
     // Validate required parameters
     if (!partySize || !mealType || !date || !time || !email || !phone) {
+      const errorMsg = 'All reservation fields are required'
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'reservation_request',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail: email,
+          date,
+          time,
+          partySize,
+          mealType,
+        },
+        error: {
+          message: errorMsg,
+        },
+        businessId: businessId || undefined,
+      })
       return {
         success: false,
-        error: 'All reservation fields are required'
+        error: errorMsg
       }
     }
     
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
+      const errorMsg = 'Invalid email address provided'
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'reservation_request',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail: email,
+          date,
+          time,
+          partySize,
+          mealType,
+        },
+        error: {
+          message: errorMsg,
+        },
+        businessId: businessId || undefined,
+      })
       return {
         success: false,
-        error: 'Invalid email address provided'
+        error: errorMsg
       }
     }
     
     // Get Brevo API key from environment variables
     const apiKey = process.env.BREVO_API_KEY
     
+    // Log configuration check
+    logEmailEvent({
+      eventType: 'config_check',
+      emailType: 'reservation_request',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      configState: {
+        apiKeyPresent: !!apiKey,
+      },
+      reservationContext: {
+        customerEmail: email,
+        date,
+        time,
+        partySize,
+        mealType,
+      },
+      businessId: businessId || undefined,
+    })
+    
     // If Brevo is not configured, return success in development mode
     if (!apiKey) {
       if (process.env.NODE_ENV === 'development') {
+        logEmailEvent({
+          eventType: 'email_success',
+          emailType: 'reservation_request',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'unknown',
+          reservationContext: {
+            customerEmail: email,
+            date,
+            time,
+            partySize,
+            mealType,
+          },
+          configState: {
+            apiKeyPresent: false,
+          },
+          success: {
+            messageId: 'dev_mode_skip',
+          },
+          businessId: businessId || undefined,
+        })
         return { success: true } // Return success in dev mode even without Brevo
       } else {
+        const errorMsg = 'Email service not configured. Please set BREVO_API_KEY environment variable.'
+        logEmailEvent({
+          eventType: 'email_error',
+          emailType: 'reservation_request',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'unknown',
+          reservationContext: {
+            customerEmail: email,
+            date,
+            time,
+            partySize,
+            mealType,
+          },
+          configState: {
+            apiKeyPresent: false,
+          },
+          error: {
+            message: errorMsg,
+          },
+          businessId: businessId || undefined,
+        })
         return {
           success: false,
-          error: 'Email service not configured. Please set BREVO_API_KEY environment variable.'
+          error: errorMsg
         }
       }
     }
@@ -207,9 +371,31 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
       // Set API key using the authentications property
       ;(apiInstance as unknown as { authentications: { apiKey: { apiKey: string } } }).authentications.apiKey.apiKey = apiKey
     } catch (initError) {
+      const errorMsg = `Failed to initialize email service: ${initError instanceof Error ? initError.message : 'Unknown error'}`
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'reservation_request',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail: email,
+          date,
+          time,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+        },
+        error: {
+          message: errorMsg,
+          stack: initError instanceof Error ? initError.stack : undefined,
+        },
+        businessId: businessId || undefined,
+      })
       return {
         success: false,
-        error: `Failed to initialize email service: ${initError instanceof Error ? initError.message : 'Unknown error'}`
+        error: errorMsg
       }
     }
     
@@ -220,15 +406,73 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     // Get recipient emails from reservation_settings or fallback
     const recipientEmails = await getRecipientEmails(businessId)
     
-    // If no recipients found, log warning but don't fail
-    if (recipientEmails.length === 0) {
-      console.warn('No email recipients found for reservation. Email will not be sent, but reservation will be saved.')
-      // Return success since reservation will still be saved
-      return { success: true }
+    // Determine recipient source for logging
+    let recipientsSource: 'database' | 'env_var' | 'none' = 'none'
+    if (businessId && recipientEmails.length > 0) {
+      // Check if we got recipients from database (we can't know for sure, but if businessId exists and we have recipients, likely from DB)
+      recipientsSource = 'database'
+    } else if (process.env.RECIPIENT_EMAIL && recipientEmails.length > 0) {
+      recipientsSource = 'env_var'
     }
     
     // Get the template ID
     const templateId = getReservationEmailTemplateId()
+    
+    // Log configuration state
+    logEmailEvent({
+      eventType: 'config_check',
+      emailType: 'reservation_request',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      configState: {
+        apiKeyPresent: true,
+        recipientsCount: recipientEmails.length,
+        recipientsSource,
+        templateId,
+        senderEmail,
+        senderName,
+      },
+      reservationContext: {
+        customerEmail: email,
+        date,
+        time,
+        partySize,
+        mealType,
+      },
+      businessId: businessId || undefined,
+    })
+    
+    // If no recipients found, log warning but don't fail
+    if (recipientEmails.length === 0) {
+      console.warn('No email recipients found for reservation. Email will not be sent, but reservation will be saved.')
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'reservation_request',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail: email,
+          date,
+          time,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+          recipientsCount: 0,
+          recipientsSource: 'none',
+          templateId,
+          senderEmail,
+          senderName,
+        },
+        error: {
+          message: 'No email recipients found. Email will not be sent, but reservation will be saved.',
+        },
+        businessId: businessId || undefined,
+      })
+      // Return success since reservation will still be saved
+      return { success: true }
+    }
     
     // Format date for template
     const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
@@ -275,9 +519,36 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
         htmlContent = generateReservationEmailHTML(params)
         textContent = generateReservationEmailText(params)
       } catch (templateError) {
+        const errorMsg = `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
+        logEmailEvent({
+          eventType: 'email_error',
+          emailType: 'reservation_request',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'unknown',
+          reservationContext: {
+            customerEmail: email,
+            date,
+            time,
+            partySize,
+            mealType,
+          },
+          configState: {
+            apiKeyPresent: true,
+            recipientsCount: recipientEmails.length,
+            recipientsSource,
+            templateId: null,
+            senderEmail,
+            senderName,
+          },
+          error: {
+            message: errorMsg,
+            stack: templateError instanceof Error ? templateError.stack : undefined,
+          },
+          businessId: businessId || undefined,
+        })
         return {
           success: false,
-          error: `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
+          error: errorMsg
         }
       }
       sendSmtpEmail.htmlContent = htmlContent
@@ -286,19 +557,55 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     
     // Send email via Brevo
     try {
-      await apiInstance.sendTransacEmail(sendSmtpEmail)
+      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
+      const duration = Date.now() - startTime
+      
+      // Extract message ID if available
+      const messageId = response?.messageId || (response as any)?.body?.messageId || undefined
+      
+      logEmailEvent({
+        eventType: 'email_success',
+        emailType: 'reservation_request',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail: email,
+          date,
+          time,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+          recipientsCount: recipientEmails.length,
+          recipientsSource,
+          templateId,
+          senderEmail,
+          senderName,
+        },
+        success: {
+          messageId: messageId?.toString(),
+        },
+        businessId: businessId || undefined,
+      })
       
       return { success: true }
     } catch (brevoError: unknown) {
+      const duration = Date.now() - startTime
+      
       // Provide more specific error messages
       let errorMessage = 'Failed to send email'
+      let brevoStatus: number | undefined
+      let brevoBody: unknown | undefined
+      
       if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
         const error = brevoError as { response?: { status?: number; statusCode?: number; body?: { message?: string; error?: string }; data?: { message?: string; error?: string } }; message?: string }
         if (error.response?.status || error.response?.statusCode) {
-          const status = error.response.status || error.response.statusCode
-          const body = error.response.body || error.response.data || {}
+          brevoStatus = error.response.status || error.response.statusCode
+          brevoBody = error.response.body || error.response.data || {}
+          const body = brevoBody as { message?: string; error?: string }
           const bodyMessage = body.message || body.error || error.message
-          errorMessage = `Brevo error (status ${status}): ${bodyMessage || 'Unknown error'}`
+          errorMessage = `Brevo error (status ${brevoStatus}): ${bodyMessage || 'Unknown error'}`
         } else if (error.message) {
           errorMessage = `Brevo error: ${error.message}`
         }
@@ -306,15 +613,68 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
         errorMessage = `Brevo error: ${brevoError.message}`
       }
       
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'reservation_request',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail: email,
+          date,
+          time,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+          recipientsCount: recipientEmails.length,
+          recipientsSource,
+          templateId,
+          senderEmail,
+          senderName,
+        },
+        error: {
+          message: errorMessage,
+          stack: brevoError instanceof Error ? brevoError.stack : undefined,
+          brevoResponse: brevoStatus ? {
+            status: brevoStatus,
+            body: brevoBody,
+          } : undefined,
+        },
+        businessId: businessId || undefined,
+      })
+      
       return {
         success: false,
         error: errorMessage
       }
     }
   } catch (error) {
+    const duration = Date.now() - startTime
+    const errorMsg = error instanceof Error ? error.message : 'Failed to send email'
+    
+    logEmailEvent({
+      eventType: 'email_error',
+      emailType: 'reservation_request',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      reservationContext: {
+        customerEmail: params.email,
+        date: params.date,
+        time: params.time,
+        partySize: params.partySize,
+        mealType: params.mealType,
+      },
+      error: {
+        message: errorMsg,
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+      businessId: businessId || undefined,
+    })
+    
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to send email'
+      error: errorMsg
     }
   }
 }
@@ -441,28 +801,119 @@ See you soon for great food, cocktails, and live music 🎷
  * Send reservation confirmation email to customer using Brevo
  */
 export async function sendReservationConfirmationEmail(params: SendReservationConfirmationEmailParams): Promise<{ success: boolean; error?: string }> {
+  const startTime = Date.now()
+  
   try {
     const { customerEmail, customerName, reservationDate, reservationTime, partySize, mealType } = params
     
+    // Log email attempt
+    logEmailEvent({
+      eventType: 'email_attempt',
+      emailType: 'confirmation',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      reservationContext: {
+        customerEmail,
+        date: reservationDate,
+        time: reservationTime,
+        partySize,
+        mealType,
+      },
+    })
+    
     // Validate required parameters
     if (!customerEmail || typeof customerEmail !== 'string' || !customerEmail.includes('@')) {
+      const errorMsg = 'Invalid email address provided'
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'confirmation',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail,
+          date: reservationDate,
+          time: reservationTime,
+          partySize,
+          mealType,
+        },
+        error: {
+          message: errorMsg,
+        },
+      })
       return {
         success: false,
-        error: 'Invalid email address provided'
+        error: errorMsg
       }
     }
     
     // Get Brevo API key from environment variables
     const apiKey = process.env.BREVO_API_KEY
     
+    // Log configuration check
+    logEmailEvent({
+      eventType: 'config_check',
+      emailType: 'confirmation',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      configState: {
+        apiKeyPresent: !!apiKey,
+      },
+      reservationContext: {
+        customerEmail,
+        date: reservationDate,
+        time: reservationTime,
+        partySize,
+        mealType,
+      },
+    })
+    
     // If Brevo is not configured, return success in development mode
     if (!apiKey) {
       if (process.env.NODE_ENV === 'development') {
+        logEmailEvent({
+          eventType: 'email_success',
+          emailType: 'confirmation',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'unknown',
+          reservationContext: {
+            customerEmail,
+            date: reservationDate,
+            time: reservationTime,
+            partySize,
+            mealType,
+          },
+          configState: {
+            apiKeyPresent: false,
+          },
+          success: {
+            messageId: 'dev_mode_skip',
+          },
+        })
         return { success: true } // Return success in dev mode even without Brevo
       } else {
+        const errorMsg = 'Email service not configured. Please set BREVO_API_KEY environment variable.'
+        logEmailEvent({
+          eventType: 'email_error',
+          emailType: 'confirmation',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'unknown',
+          reservationContext: {
+            customerEmail,
+            date: reservationDate,
+            time: reservationTime,
+            partySize,
+            mealType,
+          },
+          configState: {
+            apiKeyPresent: false,
+          },
+          error: {
+            message: errorMsg,
+          },
+        })
         return {
           success: false,
-          error: 'Email service not configured. Please set BREVO_API_KEY environment variable.'
+          error: errorMsg
         }
       }
     }
@@ -474,9 +925,30 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
       // Set API key using the authentications property
       ;(apiInstance as unknown as { authentications: { apiKey: { apiKey: string } } }).authentications.apiKey.apiKey = apiKey
     } catch (initError) {
+      const errorMsg = `Failed to initialize email service: ${initError instanceof Error ? initError.message : 'Unknown error'}`
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'confirmation',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail,
+          date: reservationDate,
+          time: reservationTime,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+        },
+        error: {
+          message: errorMsg,
+          stack: initError instanceof Error ? initError.stack : undefined,
+        },
+      })
       return {
         success: false,
-        error: `Failed to initialize email service: ${initError instanceof Error ? initError.message : 'Unknown error'}`
+        error: errorMsg
       }
     }
     
@@ -486,6 +958,29 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     
     // Get the template ID
     const templateId = getReservationConfirmationTemplateId()
+    
+    // Log configuration state
+    logEmailEvent({
+      eventType: 'config_check',
+      emailType: 'confirmation',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      configState: {
+        apiKeyPresent: true,
+        recipientsCount: 1, // Always 1 for confirmation (customer)
+        recipientsSource: 'customer',
+        templateId,
+        senderEmail,
+        senderName,
+      },
+      reservationContext: {
+        customerEmail,
+        date: reservationDate,
+        time: reservationTime,
+        partySize,
+        mealType,
+      },
+    })
     
     // Format date for template
     const formattedDate = reservationDate ? new Date(reservationDate).toLocaleDateString('en-US', {
@@ -533,9 +1028,35 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
         htmlContent = generateReservationConfirmationEmailHTML(params)
         textContent = generateReservationConfirmationEmailText(params)
       } catch (templateError) {
+        const errorMsg = `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
+        logEmailEvent({
+          eventType: 'email_error',
+          emailType: 'confirmation',
+          timestamp: new Date().toISOString(),
+          environment: process.env.NODE_ENV || 'unknown',
+          reservationContext: {
+            customerEmail,
+            date: reservationDate,
+            time: reservationTime,
+            partySize,
+            mealType,
+          },
+          configState: {
+            apiKeyPresent: true,
+            recipientsCount: 1,
+            recipientsSource: 'customer',
+            templateId: null,
+            senderEmail,
+            senderName,
+          },
+          error: {
+            message: errorMsg,
+            stack: templateError instanceof Error ? templateError.stack : undefined,
+          },
+        })
         return {
           success: false,
-          error: `Failed to generate email template: ${templateError instanceof Error ? templateError.message : 'Unknown error'}`
+          error: errorMsg
         }
       }
       sendSmtpEmail.htmlContent = htmlContent
@@ -544,19 +1065,54 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     
     // Send email via Brevo
     try {
-      await apiInstance.sendTransacEmail(sendSmtpEmail)
+      const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
+      const duration = Date.now() - startTime
+      
+      // Extract message ID if available
+      const messageId = response?.messageId || (response as any)?.body?.messageId || undefined
+      
+      logEmailEvent({
+        eventType: 'email_success',
+        emailType: 'confirmation',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail,
+          date: reservationDate,
+          time: reservationTime,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+          recipientsCount: 1,
+          recipientsSource: 'customer',
+          templateId,
+          senderEmail,
+          senderName,
+        },
+        success: {
+          messageId: messageId?.toString(),
+        },
+      })
       
       return { success: true }
     } catch (brevoError: unknown) {
+      const duration = Date.now() - startTime
+      
       // Provide more specific error messages
       let errorMessage = 'Failed to send email'
+      let brevoStatus: number | undefined
+      let brevoBody: unknown | undefined
+      
       if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
         const error = brevoError as { response?: { status?: number; statusCode?: number; body?: { message?: string; error?: string }; data?: { message?: string; error?: string } }; message?: string }
         if (error.response?.status || error.response?.statusCode) {
-          const status = error.response.status || error.response.statusCode
-          const body = error.response.body || error.response.data || {}
+          brevoStatus = error.response.status || error.response.statusCode
+          brevoBody = error.response.body || error.response.data || {}
+          const body = brevoBody as { message?: string; error?: string }
           const bodyMessage = body.message || body.error || error.message
-          errorMessage = `Brevo error (status ${status}): ${bodyMessage || 'Unknown error'}`
+          errorMessage = `Brevo error (status ${brevoStatus}): ${bodyMessage || 'Unknown error'}`
         } else if (error.message) {
           errorMessage = `Brevo error: ${error.message}`
         }
@@ -564,15 +1120,66 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
         errorMessage = `Brevo error: ${brevoError.message}`
       }
       
+      logEmailEvent({
+        eventType: 'email_error',
+        emailType: 'confirmation',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        reservationContext: {
+          customerEmail,
+          date: reservationDate,
+          time: reservationTime,
+          partySize,
+          mealType,
+        },
+        configState: {
+          apiKeyPresent: true,
+          recipientsCount: 1,
+          recipientsSource: 'customer',
+          templateId,
+          senderEmail,
+          senderName,
+        },
+        error: {
+          message: errorMessage,
+          stack: brevoError instanceof Error ? brevoError.stack : undefined,
+          brevoResponse: brevoStatus ? {
+            status: brevoStatus,
+            body: brevoBody,
+          } : undefined,
+        },
+      })
+      
       return {
         success: false,
         error: errorMessage
       }
     }
   } catch (error) {
+    const duration = Date.now() - startTime
+    const errorMsg = error instanceof Error ? error.message : 'Failed to send email'
+    
+    logEmailEvent({
+      eventType: 'email_error',
+      emailType: 'confirmation',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'unknown',
+      reservationContext: {
+        customerEmail: params.customerEmail,
+        date: params.reservationDate,
+        time: params.reservationTime,
+        partySize: params.partySize,
+        mealType: params.mealType,
+      },
+      error: {
+        message: errorMsg,
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+    })
+    
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to send email'
+      error: errorMsg
     }
   }
 }
