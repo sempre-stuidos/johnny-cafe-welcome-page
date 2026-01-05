@@ -560,8 +560,8 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
       const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
       const duration = Date.now() - startTime
       
-      // Extract message ID if available
-      const messageId = response?.messageId || (response as any)?.body?.messageId || undefined
+      // Extract message ID if available (from response body)
+      const messageId = (response as any)?.body?.messageId || undefined
       
       logEmailEvent({
         eventType: 'email_success',
@@ -1068,8 +1068,8 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
       const response = await apiInstance.sendTransacEmail(sendSmtpEmail)
       const duration = Date.now() - startTime
       
-      // Extract message ID if available
-      const messageId = response?.messageId || (response as any)?.body?.messageId || undefined
+      // Extract message ID if available (from response body)
+      const messageId = (response as any)?.body?.messageId || undefined
       
       logEmailEvent({
         eventType: 'email_success',
