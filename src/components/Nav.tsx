@@ -248,7 +248,7 @@ export default function Nav() {
           {/* Navigation Links */}
           <div className="flex flex-col gap-6">
             {navLinks
-              .filter((link) => !["/gallery", "/contact"].includes(link.href))
+              .filter((link) => link.href !== "/gallery")
               .map((link) => (
                 <Link
                   key={link.href}

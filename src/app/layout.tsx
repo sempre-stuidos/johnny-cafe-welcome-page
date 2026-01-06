@@ -59,6 +59,14 @@ export const metadata: Metadata = {
     "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown, Toronto",
   description:
     "Johnny G's established in 1975 - A prominent breakfast and brunch place in Cabbagetown for over 4.5 decades. Now serving delicious Indian, Hakka, and Momo dishes for dinner with live jazz nights every Thursday-Saturday. Toronto's East End jazz venue at 478 Parliament St.",
+  icons: {
+    icon: [
+      { url: '/cafe-logo.png?v=2', sizes: '32x32', type: 'image/png' },
+      { url: '/cafe-logo.png?v=2', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: { url: '/cafe-logo.png?v=2', sizes: '180x180', type: 'image/png' },
+    shortcut: '/cafe-logo.png?v=2',
+  },
   keywords: [
     "Johnny G's",
     "restaurant Toronto",

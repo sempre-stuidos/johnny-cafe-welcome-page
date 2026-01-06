@@ -29,17 +29,33 @@ export default function EventItem({ event, onBandClick }: EventItemProps) {
         <div className="flex flex-col gap-3 md:gap-6 flex-1 max-w-[561px]">
 
             <div className="flex flex-col gap-2 md:gap-4">
-                {/* Date with Star Icon */}
-                <div className="flex flex-col items-start gap-2 md:gap-3">
+                <div className="flex items-start gap-2 md:gap-3">
                     <StarIcon
                         fill= "#B29738"
+                        className="flex-shrink-0 mt-1"
                     />
-                    <span className="text-event-date break-words">
-                      {event.date}
-                    </span>
+                    <div className="flex flex-col">
+                      {(() => {
+                        const dateTimeParts = event.date.split('·').map(s => s.trim());
+                        const datePart = dateTimeParts[0] || event.date;
+                        const timePart = dateTimeParts[1] || '';
+                        
+                        return (
+                          <>
+                            <span className="text-event-date break-words">
+                              {datePart}
+                            </span>
+                            {timePart && (
+                              <span className="text-event-date break-words">
+                                {timePart}
+                              </span>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
                 </div>
 
-                {/* Event Name */}
                 <h3 className="event-name">
                     {event.name}
                 </h3>

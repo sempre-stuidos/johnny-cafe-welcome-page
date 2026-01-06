@@ -218,38 +218,49 @@ export default function HomeEvents({ events: initialEvents }: HomeEventsProps) {
 
             {/* Event Posters */}
             {displayEvents.length > 0 && (
-              <div className="flex flex-row gap-4 md:gap-6 mt-4">
-                {displayEvents.slice(0, 2).map((event, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col gap-3"
-                  >
-                    {/* Event Image - 284x324px on desktop */}
-                    <div className="relative w-full md:w-[284px] aspect-[284/324] overflow-hidden rounded-lg border-2 border-[#B29738]">
-                      {event.image ? (
-                        <Image
-                          src={event.image}
-                          alt={`Toronto jazz night performance at Johnny G's Cabbagetown - ${event.date}`}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-muted flex items-center justify-center">
-                          <span className="text-muted-foreground text-sm">No image</span>
-                        </div>
-                      )}
-                    </div>
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-6 mt-4">
+                {displayEvents.slice(0, 2).map((event, index) => {
+                  const dateTimeParts = event.date.split('·').map(s => s.trim());
+                  const datePart = dateTimeParts[0] || event.date;
+                  const timePart = dateTimeParts[1] || '';
 
-                    {/* Date with Star */}
-                    <div className="flex items-center gap-3">
-                      <StarIcon />
-                      <span className="text-about">
-                        {event.date}
-                      </span>
+                  return (
+                    <div
+                      key={index}
+                      className="flex flex-col gap-3 flex-1"
+                    >
+                      <div className="relative w-full aspect-[284/324] overflow-hidden rounded-lg border-2 border-[#B29738]">
+                        {event.image ? (
+                          <Image
+                            src={event.image}
+                            alt={`Toronto jazz night performance at Johnny G's Cabbagetown - ${event.date}`}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <span className="text-muted-foreground text-sm">No image</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex items-start gap-3">
+                        <StarIcon className="flex-shrink-0 mt-1" />
+                        <div className="flex flex-col">
+                          <span className="text-about">
+                            {datePart}
+                          </span>
+                          {timePart && (
+                            <span className="text-about">
+                              {timePart}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 

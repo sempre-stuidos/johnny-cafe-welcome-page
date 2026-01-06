@@ -40,10 +40,10 @@ export default function ContactPage() {
         )}
       />
 
-      <div className="relative z-20 w-full max-w-[1200px] mx-auto px-4 md:px-8 py-12 md:py-20">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12">
-          {/* Left Side - Contact Information */}
-          <div className="w-full md:w-[50%] flex flex-col gap-8">
+      <div className="relative z-20 flex flex-col md:flex-row w-full">
+        {/* Left Side - Contact Information */}
+        <div className="w-full md:w-1/2 px-4 md:px-8 py-12 md:py-20">
+          <div className="max-w-[600px] mx-auto md:ml-auto md:mr-8 flex flex-col gap-8">
             {/* Header with Star Below */}
             <div className="flex flex-col gap-4">
               <h1 className="section-heading">
@@ -120,7 +120,7 @@ export default function ContactPage() {
             {/* Reservations Button */}
             <div className="mt-4">
               <a
-                href="tel:+16473683877"
+                href="/reservations"
                 className={cn(
                   "btn-reservation",
                   "inline-flex items-center gap-2"
@@ -137,20 +137,18 @@ export default function ContactPage() {
               </a>
             </div>
           </div>
+        </div>
 
-          {/* Right Side - Map Image */}
-          <div className="w-full md:w-[50%] min-h-[500px] md:min-h-0">
-            <div className="bg-theme-secondary  w-full h-full md:h-[calc(100vh-160px)] transition-colors duration-300 overflow-hidden relative">
-              <div className="w-full h-full relative">
-                <Image
-                  src="/map-vector.svg"
-                  alt="Restaurant location map"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
+        <div className="w-full md:w-1/2 h-[400px] md:h-screen md:sticky md:top-0">
+          <div className="w-full h-full overflow-hidden relative">
+            <Image
+              src="/map-vector.svg"
+              alt="Restaurant location map"
+              fill
+              className="object-contain"
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </div>
         </div>
       </div>
