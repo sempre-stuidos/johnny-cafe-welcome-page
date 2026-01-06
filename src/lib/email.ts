@@ -586,7 +586,31 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
         emailPayload.textContent = generateReservationEmailText(params)
       }
       
-      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      const fetchStart = Date.now()
+      console.log(`[EMAIL_TRACKING] Making HTTP request to Brevo API for reservation_request`)
+      
+      // Add timeout wrapper for fetch
+      const fetchWithTimeout = async (url: string, options: RequestInit, timeoutMs: number = 8000) => {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+        
+        try {
+          const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+          })
+          clearTimeout(timeoutId)
+          return response
+        } catch (error) {
+          clearTimeout(timeoutId)
+          if (error instanceof Error && error.name === 'AbortError') {
+            throw new Error(`Fetch timeout after ${timeoutMs}ms`)
+          }
+          throw error
+        }
+      }
+      
+      const response = await fetchWithTimeout('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -594,17 +618,36 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
           'api-key': apiKey!,
         },
         body: JSON.stringify(emailPayload),
-      })
+      }, 8000)
       
+      const fetchDuration = Date.now() - fetchStart
       const duration = Date.now() - startTime
+      
+      console.log(`[EMAIL_TRACKING] Brevo API response received for reservation_request:`, JSON.stringify({
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        fetchDuration,
+        totalDuration: duration,
+      }))
       
       if (!response.ok) {
         const errorBody = await response.text()
+        console.error(`[EMAIL_TRACKING] Brevo API error for reservation_request:`, JSON.stringify({
+          status: response.status,
+          statusText: response.statusText,
+          errorBody,
+        }))
         throw new Error(`Brevo API error (${response.status}): ${errorBody}`)
       }
       
       const responseData = await response.json()
       const messageId = responseData.messageId
+      
+      console.log(`[EMAIL_TRACKING] Brevo API success for reservation_request:`, JSON.stringify({
+        messageId,
+        responseData,
+      }))
       
       logEmailEvent({
         eventType: 'email_success',
@@ -636,12 +679,21 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
     } catch (brevoError: unknown) {
       const duration = Date.now() - startTime
       
+      console.error(`[EMAIL_TRACKING] Error caught in reservation_request email:`, brevoError)
+      
       // Provide more specific error messages
       let errorMessage = 'Failed to send email'
       let brevoStatus: number | undefined
       let brevoBody: unknown | undefined
       
-      if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
+      if (brevoError instanceof Error) {
+        errorMessage = brevoError.message
+        console.error(`[EMAIL_TRACKING] Error details:`, JSON.stringify({
+          message: errorMessage,
+          name: brevoError.name,
+          stack: brevoError.stack,
+        }))
+      } else if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
         const error = brevoError as { response?: { status?: number; statusCode?: number; body?: { message?: string; error?: string }; data?: { message?: string; error?: string } }; message?: string }
         if (error.response?.status || error.response?.statusCode) {
           brevoStatus = error.response.status || error.response.statusCode
@@ -652,8 +704,6 @@ export async function sendReservationEmail(params: ReservationEmailParams, busin
         } else if (error.message) {
           errorMessage = `Brevo error: ${error.message}`
         }
-      } else if (brevoError instanceof Error) {
-        errorMessage = `Brevo error: ${brevoError.message}`
       }
       
       logEmailEvent({
@@ -1134,7 +1184,31 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
         emailPayload.textContent = generateReservationConfirmationEmailText(params)
       }
       
-      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      const fetchStart = Date.now()
+      console.log(`[EMAIL_TRACKING] Making HTTP request to Brevo API for confirmation`)
+      
+      // Add timeout wrapper for fetch
+      const fetchWithTimeout = async (url: string, options: RequestInit, timeoutMs: number = 8000) => {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+        
+        try {
+          const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+          })
+          clearTimeout(timeoutId)
+          return response
+        } catch (error) {
+          clearTimeout(timeoutId)
+          if (error instanceof Error && error.name === 'AbortError') {
+            throw new Error(`Fetch timeout after ${timeoutMs}ms`)
+          }
+          throw error
+        }
+      }
+      
+      const response = await fetchWithTimeout('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -1142,17 +1216,36 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
           'api-key': apiKey!,
         },
         body: JSON.stringify(emailPayload),
-      })
+      }, 8000)
       
+      const fetchDuration = Date.now() - fetchStart
       const duration = Date.now() - startTime
+      
+      console.log(`[EMAIL_TRACKING] Brevo API response received for confirmation:`, JSON.stringify({
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        fetchDuration,
+        totalDuration: duration,
+      }))
       
       if (!response.ok) {
         const errorBody = await response.text()
+        console.error(`[EMAIL_TRACKING] Brevo API error for confirmation:`, JSON.stringify({
+          status: response.status,
+          statusText: response.statusText,
+          errorBody,
+        }))
         throw new Error(`Brevo API error (${response.status}): ${errorBody}`)
       }
       
       const responseData = await response.json()
       const messageId = responseData.messageId
+      
+      console.log(`[EMAIL_TRACKING] Brevo API success for confirmation:`, JSON.stringify({
+        messageId,
+        responseData,
+      }))
       
       logEmailEvent({
         eventType: 'email_success',
@@ -1183,12 +1276,21 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
     } catch (brevoError: unknown) {
       const duration = Date.now() - startTime
       
+      console.error(`[EMAIL_TRACKING] Error caught in confirmation email:`, brevoError)
+      
       // Provide more specific error messages
       let errorMessage = 'Failed to send email'
       let brevoStatus: number | undefined
       let brevoBody: unknown | undefined
       
-      if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
+      if (brevoError instanceof Error) {
+        errorMessage = brevoError.message
+        console.error(`[EMAIL_TRACKING] Error details:`, JSON.stringify({
+          message: errorMessage,
+          name: brevoError.name,
+          stack: brevoError.stack,
+        }))
+      } else if (brevoError && typeof brevoError === 'object' && 'response' in brevoError) {
         const error = brevoError as { response?: { status?: number; statusCode?: number; body?: { message?: string; error?: string }; data?: { message?: string; error?: string } }; message?: string }
         if (error.response?.status || error.response?.statusCode) {
           brevoStatus = error.response.status || error.response.statusCode
@@ -1199,8 +1301,6 @@ export async function sendReservationConfirmationEmail(params: SendReservationCo
         } else if (error.message) {
           errorMessage = `Brevo error: ${error.message}`
         }
-      } else if (brevoError instanceof Error) {
-        errorMessage = `Brevo error: ${brevoError.message}`
       }
       
       logEmailEvent({

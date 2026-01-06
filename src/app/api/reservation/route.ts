@@ -162,11 +162,12 @@ export async function POST(request: NextRequest) {
       // Continue anyway - emails will still be sent
     }
 
-    // Return success response immediately (don't wait for emails)
-    // Send emails asynchronously in the background
+    // Send emails - wait with timeout to ensure they complete
+    // In Vercel, background promises may be killed if function returns too early
     const emailStartTime = Date.now()
     
-    Promise.all([
+    // Wait for emails with a timeout (max 15 seconds)
+    const emailPromise = Promise.all([
       // Send reservation request email to client (restaurant)
       sendReservationEmail({
         partySize: partySize as string,
@@ -289,6 +290,16 @@ export async function POST(request: NextRequest) {
         timestamp: new Date().toISOString(),
       }))
     })
+    
+    // Wait for emails with timeout (don't block response for more than 12 seconds)
+    const emailTimeout = new Promise((resolve) => {
+      setTimeout(() => {
+        console.warn(`[RESERVATION_API] Email sending timeout - returning response. Emails may still be processing.`)
+        resolve({ timedOut: true })
+      }, 12000)
+    })
+    
+    await Promise.race([emailPromise, emailTimeout])
 
     return NextResponse.json({
       success: true,
