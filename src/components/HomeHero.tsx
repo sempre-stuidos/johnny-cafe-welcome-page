@@ -129,7 +129,7 @@ export default function HomeHero() {
                 "justify-center md:justify-start"
               )}
             >
-              <h4 className="max-w-[380px] mb-[33px] md:mb-[33px]">
+              <h4 className="max-w-[320px] md:max-w-[530px] mb-[33px] md:mb-[33px]">
                 {theme === "day"
                   ? "Have brunch at one of the oldest Restaurants in Cabbagetown"
                   : "Have dinner at one of the oldest Restaurants in Cabbagetown"}
@@ -174,7 +174,6 @@ export default function HomeHero() {
             className={cn(
               "flex items-end justify-center md:justify-end",
               "w-full md:w-[60%]",
-              "flex-1 md:flex-none",
               "order-2",
               "pb-0"
             )}
@@ -184,7 +183,7 @@ export default function HomeHero() {
                 "hero-frame",
                 "w-full",
                 "max-w-[597px]",
-                "aspect-[4/3]"
+                "h-[400px] md:h-[600px]"
               )}
             >
               <Image

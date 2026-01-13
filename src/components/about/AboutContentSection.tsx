@@ -95,9 +95,9 @@ export default function AboutContentSection() {
                         "leading-relaxed"
                     )}
                     style={{
-                      fontFamily: "var(--font-hornbill-trial)",
+                      fontFamily: "Arial, Helvetica, sans-serif",
                       fontSize: 32,
-                      fontWeight: "lighter",
+                      fontWeight: "400",
                       color: theme === "day" ? "var(--about-title)" : "var(--about-title)",
                 }}
                 >

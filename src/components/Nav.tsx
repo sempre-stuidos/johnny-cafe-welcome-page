@@ -56,7 +56,11 @@ export default function Nav() {
 
       if (!activeLink) {
         // Hide star if no active link
-        gsap.set(starRef.current, { opacity: 0, immediateRender: true });
+        gsap.to(starRef.current, { 
+          opacity: 0, 
+          duration: 0.3,
+          ease: "power2.out"
+        });
         return;
       }
 
@@ -70,16 +74,16 @@ export default function Nav() {
       
       if (!containerRect) return;
 
-      // Calculate position relative to the parent container
-      const leftPosition = linkRect.left - containerRect.left + linkRect.width / 2 - 10;
+      // Calculate position to center the star perfectly (star width is 20px)
+      const leftPosition = linkRect.left - containerRect.left + (linkRect.width / 2) - 10;
 
-      // Animate smoothly like MenuHeader - just animate directly without setting initial state
+      // Smooth animation with elastic ease for more polished feel
       gsap.to(starRef.current, {
         left: leftPosition,
         opacity: 1,
-        duration: 0.6,
-        ease: "power2.inOut",
-        rotate: 90,
+        duration: 0.8,
+        ease: "power3.out",
+        rotate: 0,
         overwrite: "auto"
       });
     };
@@ -255,10 +259,11 @@ export default function Nav() {
                   href={link.href}
                   onClick={closeMenu}
                   className={cn(
-                    "text-[#FAF2DD] text-2xl font-heading tracking-wide",
+                    "text-[#FAF2DD] text-xl tracking-wide uppercase",
                     "hover:text-[#B29738] transition-colors duration-200",
                     "border-b border-white/10 pb-4"
                   )}
+                  style={{ fontFamily: 'var(--font-good-times)' }}
                 >
                   {link.label}
                 </Link>

@@ -54,6 +54,7 @@
   --font-pinyon-script: var(--font-pinyon-script);
   --font-amoret-sans: var(--font-amoret-sans);
   --font-gayathri: var(--font-gayathri), system-ui, -apple-system, sans-serif;
+  --font-good-times: var(--font-good-times), Arial, Helvetica, sans-serif;
 
   /* Typography Scale */
   --font-size-xs: 0.75rem;      /* 12px */
@@ -92,114 +93,73 @@ html {
 body {
   background: var(--theme-bg-primary);
   color: var(--theme-text-body);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Typography Styles - Default */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-fjalla-one), sans-serif;
-  font-weight: 400;
-  line-height: var(--line-height-tight);
-}
-
-h1 {
-  font-size: var(--font-size-5xl);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-h2 {
-  font-size: var(--font-size-4xl);
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-h3 {
-  font-size: var(--font-size-3xl);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-h4 {
-  font-size: var(--font-size-2xl);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-h5 {
-  font-size: var(--font-size-xl);
-  letter-spacing: var(--letter-spacing-normal);
-}
-
-h6 {
-  font-size: var(--font-size-lg);
-  letter-spacing: var(--letter-spacing-wide);
 }
 
 /* Typography System Specific Styles */
 h1 {
-  font-family: var(--font-hornbill-trial);
-  font-weight: 900;
-  font-style: italic;
-  font-size: 48px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  color: var(--theme-text-light-cream);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
-}
-
-h2 {
-  font-family: var(--font-pinyon-script);
+  font-family: var(--font-good-times);
   font-weight: 400;
   font-style: normal;
   font-size: 48px;
   line-height: 100%;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
+}
+
+h2 {
+  font-family: var(--font-good-times);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 48px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: var(--theme-text-light-cream);
 }
 
 h3 {
-  font-family: var(--font-gayathri);
-  font-weight: 700;
+  font-family: var(--font-good-times);
+  font-weight: 400;
   font-style: normal;
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
   text-transform: uppercase;
   color: var(--theme-text-light-cream);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 h4 {
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
   font-weight: 400;
   font-style: normal;
-  font-size: 28px;
-  line-height: 110%;
+  font-size: 22px;
+  line-height: 130%;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
+}
+
+@media (min-width: 768px) {
+  h4 {
+    font-size: 28px;
+    line-height: 140%;
+  }
 }
 
 h5 {
-  font-family: var(--font-amoret-sans);
+  font-family: var(--font-good-times);
   font-weight: 400;
   font-style: normal;
   font-size: 14px;
   letter-spacing: 0%;
   color: var(--theme-text-light-cream);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 h6 {
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
+  font-weight: 400;
   font-size: var(--font-size-lg);
   letter-spacing: var(--letter-spacing-normal);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Desktop typography sizes */
@@ -225,9 +185,10 @@ h6 {
   }
 }
 
+/* Body Text */
 p {
-  font-family: var(--font-gayathri);
-  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
   font-style: normal;
   font-size: 16px;
   line-height: 150%;
@@ -235,8 +196,13 @@ p {
   color: var(--theme-text-dark-green);
 }
 
+li {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: var(--line-height-relaxed);
+}
+
 span {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 16px;
@@ -249,14 +215,9 @@ span {
   font-family: var(--font-yellowtail), cursive;
 }
 
-/* Body Text */
-p, li, span {
-  line-height: var(--line-height-relaxed);
-}
-
 /* Code/Mono */
 code, pre {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: monospace;
 }
 
 /* Utility Classes for Theme Colors */
@@ -375,7 +336,7 @@ code, pre {
 .hero-brunch-title {
   position: relative;
   z-index: 10;
-  font-family: var(--font-pinyon-script);
+  font-family: var(--font-good-times);
   font-weight: 400;
   font-style: normal;
   font-size: 50px;
@@ -385,7 +346,7 @@ code, pre {
 }
 
 .est-1975-text {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 18.9px;
@@ -421,7 +382,7 @@ code, pre {
   border-style: solid;
   border-color: #B29738;
   background-color: #FAF2DD;
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 16px;
@@ -499,8 +460,8 @@ code, pre {
 
 /* Navigation Links */
 .nav-link {
-  font-family: var(--font-gayathri);
-  font-weight: 700;
+  font-family: var(--font-good-times);
+  font-weight: 400;
   font-style: normal;
   font-size: 14px;
   line-height: 100%;
@@ -581,7 +542,7 @@ code, pre {
   border-style: solid;
   border-color: #334D2D;
   background-color: #FAF2DD;
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 16px;
@@ -646,23 +607,30 @@ code, pre {
 }
 
 .footer-days {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 18px;
   line-height: 100%;
-  color: #FAF2DD;
+  color: var(--theme-text-body);
+  text-transform: uppercase;
 }
 
 .footer-meal-label {
-  font-family: var(--font-pinyon-script);
+  font-family: var(--font-good-times);
   font-weight: 400;
-  font-size: 40px;
+  font-size: 20px;
   line-height: 100%;
   color: #FAF2DD;
 }
 
+@media (min-width: 768px) {
+  .footer-meal-label {
+    font-size: 40px;
+  }
+}
+
 .hero-jazz-text {
-  font-family: var(--font-pinyon-script);
+  font-family: var(--font-good-times);
   font-weight: 400;
   font-size: 60px;
   line-height: 100%;
@@ -670,7 +638,7 @@ code, pre {
 }
 
 .hero-now-playing {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 20px;
   line-height: 100%;
@@ -678,16 +646,18 @@ code, pre {
 }
 
 .footer-meal-time {
-  font-family: var(--font-amoret-sans);
-  font-size: 14px;
-  color: #FAF2DD;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 100;
+  font-size: 18px;
+  color: var(--theme-text-body);
 }
 
 /* Desktop Navigation Links - footer-meal-time styles with white text */
 .nav-desktop-link {
-  font-family: var(--font-amoret-sans);
+  font-family: var(--font-good-times);
   font-size: 14px;
   color: #FFFFFF;
+  text-transform: uppercase;
   position: relative;
   transition: color 0.2s ease;
 }
@@ -721,11 +691,11 @@ code, pre {
 }
 
 .footer-contact {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 18px;
   line-height: 100%;
-  color: #FAF2DD;
+  color: var(--theme-text-body);
 }
 
 .footer-social-icon {
@@ -737,23 +707,33 @@ code, pre {
 }
 
 .footer-copyright {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #FAF2DD;
 }
 
+/* Footer-specific overrides - Keep cream text in footer */
+footer .footer-days,
+footer .footer-contact,
+footer .footer-meal-time {
+  color: #FAF2DD;
+}
+
+/* Banner-specific overrides - Keep white text in banner */
+[data-animate="nav-banner"] .footer-meal-time {
+  color: #FFFFFF;
+}
+
 /* Banner Styles */
 .banner-text {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0.02em;
   color: var(--theme-text-light-cream);
   transition: color 0.3s ease;
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .banner-separator {
@@ -764,38 +744,32 @@ code, pre {
 
 /* Section Heading - Used for large section titles */
 .section-heading {
-  font-family: var(--font-hornbill-trial);
-  font-weight: 700;
+  font-family: var(--font-good-times);
+  font-weight: 400;
   font-size: 48px;
   line-height: 110%;
   letter-spacing: 0%;
   color: var(--about-title);
   transition: color 0.3s ease;
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Section Subheading - Smaller section titles */
 .section-subheading {
-  font-family: var(--font-hornbill-trial);
-  font-weight: 700;
+  font-family: var(--font-good-times);
+  font-weight: 400;
   font-size: 32px;
   line-height: 110%;
   letter-spacing: 0%;
   color: var(--about-title);
   transition: color 0.3s ease;
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Menu Item Name */
 .menu-item-name {
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
   font-size: var(--font-size-lg);
   font-weight: 400;
   line-height: var(--line-height-tight);
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .menu-item-name-day {
@@ -808,16 +782,14 @@ code, pre {
 
 /* Event Name */
 .event-name {
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
   font-size: 32px;
   color: var(--theme-text-light-cream);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 110%;
   letter-spacing: 0%;
   text-transform: uppercase;
   transition: color 0.3s ease;
-  font-feature-settings: "lnum", "tnum";
-  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* About Section Text */
@@ -867,7 +839,7 @@ code, pre {
 }
 
 .text-event-date {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
   color: var(--theme-accent);
   font-weight: 700;
@@ -877,7 +849,7 @@ code, pre {
 }
 
 .text-event-description {
-  font-family: var(--font-geist-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: var(--theme-text-light-cream);
   font-weight: 400;
@@ -885,7 +857,7 @@ code, pre {
 }
 
 .text-menu-price {
-  font-family: var(--font-geist-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-lg);
   font-weight: 700;
   line-height: var(--line-height-tight);
@@ -900,7 +872,7 @@ code, pre {
 }
 
 .text-menu-description {
-  font-family: var(--font-geist-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-sm);
   font-weight: 400;
   line-height: var(--line-height-relaxed);
@@ -950,7 +922,7 @@ code, pre {
 }
 
 .event-placeholder-text {
-  font-family: var(--font-geist-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-sm);
   color: rgba(0, 0, 0, 0.3);
 }
@@ -987,7 +959,7 @@ code, pre {
 }
 
 .react-datepicker-popper .react-datepicker {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   background-color: #FAF2DD;
   border: 2px solid #B29738;
   border-radius: 8px;
@@ -1003,7 +975,7 @@ code, pre {
 }
 
 .react-datepicker-popper .react-datepicker__current-month {
-  font-family: var(--font-pinyon-script);
+  font-family: var(--font-good-times);
   font-size: 28px;
   color: #FAF2DD;
   font-weight: 400;
@@ -1015,7 +987,7 @@ code, pre {
 }
 
 .react-datepicker-popper .react-datepicker__day-name {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: #FAF2DD;
@@ -1029,7 +1001,7 @@ code, pre {
 }
 
 .react-datepicker-popper .react-datepicker__day {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 500;
   width: 2.5rem;
   line-height: 2.5rem;
@@ -1102,7 +1074,7 @@ code, pre {
 }
 
 .react-datepicker-popper .react-datepicker-time__header {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: #FAF2DD;
@@ -1137,7 +1109,7 @@ code, pre {
 }
 
 .react-datepicker-popper .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box .react-datepicker__time-list .react-datepicker__time-list-item {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   color: #334D2D;
   padding: 8px 16px;
@@ -1174,7 +1146,7 @@ code, pre {
   border: 1px solid #B29738;
   background-color: transparent;
   padding: 0 12px;
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
   cursor: pointer;
 }
@@ -1188,13 +1160,13 @@ code, pre {
   border: 1px solid #B29738;
   background-color: transparent;
   padding: 0 12px;
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
 }
 
 /* Reservation Form Styles */
 .reservation-label {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 17.31px;
   line-height: 100%;
@@ -1217,7 +1189,7 @@ code, pre {
   border: 1px solid #B29738;
   background-color: transparent;
   padding: 0 12px;
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
   transition: all 0.3s ease;
 }
@@ -1235,9 +1207,9 @@ code, pre {
 }
 
 .reservation-heading {
-  font-family: var(--font-fjalla-one);
+  font-family: var(--font-good-times);
   font-size: clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl));
-  font-weight: 700;
+  font-weight: 400;
   line-height: var(--line-height-tight);
   text-transform: capitalize;
   transition: color 0.3s ease;
@@ -1252,7 +1224,7 @@ code, pre {
 }
 
 .reservation-description {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
   line-height: 1.6;
   transition: color 0.3s ease;
@@ -1267,7 +1239,7 @@ code, pre {
 }
 
 .reservation-error {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-sm);
   color: #dc2626;
   padding: 8px 0;
@@ -1275,7 +1247,7 @@ code, pre {
 }
 
 .reservation-confirmation {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
   line-height: 150%;
   text-align: center;
@@ -1291,7 +1263,7 @@ code, pre {
 }
 
 .reservation-confirmation-title {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 24px;
   line-height: 120%;
@@ -1311,7 +1283,7 @@ code, pre {
 }
 
 .private-events-feature-title {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 20px;
   text-transform: uppercase;
@@ -1320,7 +1292,7 @@ code, pre {
 }
 
 .private-events-feature-description {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-sm);
   transition: color 0.3s ease;
 }
@@ -1358,7 +1330,7 @@ code, pre {
   border: 1px solid #B29738;
   background-color: transparent;
   padding: 0 12px;
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
   transition: all 0.3s ease;
 }
@@ -1621,9 +1593,9 @@ input:-webkit-autofill:active {
 /* Reserve or Order Section Styles */
 .reserve-primary-btn {
   background-color: transparent;
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 0%;
   transition: all 0.3s ease;
 }
@@ -1664,7 +1636,7 @@ input:-webkit-autofill:active {
 }
 
 .reserve-divider-text {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -1681,7 +1653,7 @@ input:-webkit-autofill:active {
 }
 
 .reserve-subtitle {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-weight: 400;
 }
@@ -1696,7 +1668,7 @@ input:-webkit-autofill:active {
 
 .reserve-delivery-btn {
   background-color: transparent;
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
   font-size: 20px;
   font-weight: 400;
   transition: all 0.3s ease;
@@ -1764,7 +1736,7 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 }
 
 .events-vibe-title {
-  font-family: var(--font-hornbill-trial);
+  font-family: var(--font-good-times);
   font-size: clamp(36px, 5vw, 48px);
   line-height: 110%;
   color: var(--about-title);
@@ -1784,7 +1756,7 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 }
 
 .events-vibe-policy-text {
-  font-family: var(--font-amoret-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -1887,7 +1859,7 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 }
 
 .artist-name {
-  font-family: var(--font-gayathri);
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: #B29738;
@@ -1896,8 +1868,8 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 }
 
 .artist-bio {
-  font-family: var(--font-gayathri);
-  font-weight: 100;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
   font-size: 16px;
   line-height: 150%;
   letter-spacing: 0.02em;
@@ -1911,13 +1883,14 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 
 /* Events Tab Navigation */
 .events-tab {
-  font-family: var(--font-pinyon-script);
-  font-size: clamp(var(--font-size-xl), 6vw, var(--font-size-3xl));
+  font-family: var(--font-good-times);
+  font-size: clamp(12px, 3vw, var(--font-size-xl));
   color: var(--theme-text-primary);
   line-height: var(--line-height-normal);
   font-weight: 400;
   font-style: normal;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .events-tab-active {
@@ -1945,8 +1918,9 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 
 /* Menu Header Styles */
 .menu-page-heading {
+  font-family: var(--font-good-times);
   font-size: clamp(var(--font-size-3xl), 7vw, var(--font-size-6xl));
-  font-weight: 700;
+  font-weight: 400;
   line-height: var(--line-height-tight);
   text-transform: uppercase;
 }
@@ -1960,11 +1934,12 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 }
 
 .menu-tab-item {
-  font-family: var(--font-pinyon-script);
-  font-size: clamp(var(--font-size-2xl), 8vw, var(--font-size-5xl));
+  font-family: var(--font-good-times);
+  font-size: clamp(12px, 4vw, var(--font-size-2xl));
   line-height: var(--line-height-normal);
   font-style: normal;
   transition: font-weight 0.3s ease;
+  white-space: nowrap;
 }
 
 .menu-tab-item-day {
@@ -1981,7 +1956,7 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 
 .menu-category-heading {
   color: var(--theme-accent);
-  font-family: var(--font-geist-sans);
+  font-family: Arial, Helvetica, sans-serif;
   font-size: var(--font-size-xl);
   text-transform: uppercase;
   font-weight: 500;
@@ -1989,38 +1964,7 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 }
 
 .menu-item-number {
-  font-family: var(--font-geist-sans);
-}
-
-/* Contact Page Font Classes */
-.contact-days-heading {
-  font-family: var(--font-gayathri);
-  font-weight: 700;
-  font-size: 24px;
-  color: var(--theme-text-body);
-  text-transform: uppercase;
-}
-
-.contact-meal-label {
-  font-family: var(--font-gayathri);
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 100%;
-  color: var(--theme-text-body);
-}
-
-.contact-meal-time {
-  font-family: var(--font-gayathri);
-  font-weight: 100;
-  font-size: 18px;
-  color: var(--theme-text-body);
-}
-
-.contact-info-link {
-  font-family: var(--font-geist-sans);
-  font-size: var(--font-size-lg);
-  color: var(--theme-text-body);
-  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Private Events Icons */
@@ -2038,4 +1982,14 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
   width: 40px;
   height: 40px;
   transition: transform 0.3s ease;
+}
+
+/* Scrollbar Hide Utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

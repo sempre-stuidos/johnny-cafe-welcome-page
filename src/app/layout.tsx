@@ -54,6 +54,12 @@ const gayathri = Gayathri({
   weight: ["100", "400", "700"],
 });
 
+const goodTimes = localFont({
+  src: "./../../public/fonts/GoodTimesRg.otf",
+  variable: "--font-good-times",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title:
     "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown, Toronto",
@@ -183,7 +189,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} ${goodTimes.variable} antialiased`}
       >
         <LenisProvider>
           <ThemeProvider>
