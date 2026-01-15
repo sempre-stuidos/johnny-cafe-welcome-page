@@ -325,31 +325,6 @@ code, pre {
   opacity: 0;
 }
 
-/* Fade out down animation for collapsing events */
-@keyframes fade-out-down {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 1000px;
-    margin-bottom: 0;
-  }
-  50% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(10px);
-    max-height: 0;
-    margin-bottom: -24px;
-    overflow: hidden;
-  }
-}
-
-.animate-fade-out-down {
-  animation: fade-out-down 0.5s ease-out forwards;
-}
-
 /* Reusable Utility Classes */
 .text-stroke-dark-green {
   -webkit-text-stroke: 2px #334D2D;

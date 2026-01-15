@@ -49,15 +49,11 @@ function EventsList({
   // Track the previous visible count to determine which events are newly loaded
   const [previousVisibleCount, setPreviousVisibleCount] = useState(PAST_EVENTS_PAGE_SIZE);
   
-  // State for collapse animation
-  const [isCollapsing, setIsCollapsing] = useState(false);
-  
   // Reset visible count when switching tabs or when events change
   useEffect(() => {
     if (activeTab === 'past') {
       setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
       setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
-      setIsCollapsing(false);
     }
   }, [activeTab, events.length]);
   
@@ -78,41 +74,24 @@ function EventsList({
     setVisiblePastEventsCount(prev => Math.min(prev + PAST_EVENTS_PAGE_SIZE, events.length));
   };
   
-  // Handle "See Less" click - reset to initial 3 and scroll to top
+  // Handle "See Less" click - reset to initial 3 and scroll to top of page
   const handleSeeLess = () => {
-    // Start collapse animation
-    setIsCollapsing(true);
+    // Collapse events first
+    setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
+    setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
     
-    // First scroll to top
-    if (eventsContainerRef.current) {
-      // Get the position of the container
-      const containerTop = eventsContainerRef.current.getBoundingClientRect().top + window.scrollY;
-      // Account for any fixed header (adjust offset as needed)
-      const offset = 100;
-      
-      // Smooth scroll to the top of the events section
+    // Scroll to top of the page (where the events section starts)
+    setTimeout(() => {
       window.scrollTo({
-        top: containerTop - offset,
+        top: 0,
         behavior: 'smooth'
       });
-    }
-    
-    // Wait for fade-out animation to complete, then collapse
-    setTimeout(() => {
-      setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
-      setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
-      setIsCollapsing(false);
-    }, 500); // Match the CSS animation duration
+    }, 50);
   };
   
   // Check if an event at a given index is newly loaded (for animation)
   const isNewlyLoaded = (index: number) => {
-    return activeTab === 'past' && index >= previousVisibleCount && !isCollapsing;
-  };
-  
-  // Check if an event should fade out during collapse
-  const isFadingOut = (index: number) => {
-    return activeTab === 'past' && isCollapsing && index >= PAST_EVENTS_PAGE_SIZE;
+    return activeTab === 'past' && index >= previousVisibleCount;
   };
   return (
     <div
@@ -223,19 +202,14 @@ function EventsList({
                   key={index} 
                   className={cn(
                     "flex flex-col gap-6 md:gap-12 max-w-[1200px] w-full",
-                    "transition-all duration-500 ease-out",
                     // Add fade-in animation for newly loaded events
-                    isNewlyLoaded(index) && "animate-fade-in-up",
-                    // Add fade-out animation for collapsing events
-                    isFadingOut(index) && "animate-fade-out-down"
+                    isNewlyLoaded(index) && "animate-fade-in-up"
                   )}
                   style={{
                     // Stagger the animation delay for each newly loaded event
                     animationDelay: isNewlyLoaded(index) 
                       ? `${(index - previousVisibleCount) * 150}ms` 
-                      : isFadingOut(index)
-                        ? `${(index - PAST_EVENTS_PAGE_SIZE) * 100}ms`
-                        : undefined
+                      : undefined
                   }}
                 >
                   <EventItem event={event} onBandClick={onBandClick} />
@@ -248,7 +222,7 @@ function EventsList({
               ))}
               
               {/* See More / See Less buttons for past events */}
-              {activeTab === 'past' && events.length > PAST_EVENTS_PAGE_SIZE && !isCollapsing && (
+              {activeTab === 'past' && events.length > PAST_EVENTS_PAGE_SIZE && (
                 <div className="flex justify-center pt-4">
                   {hasMorePastEvents ? (
                     <button
