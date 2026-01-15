@@ -54,11 +54,25 @@ const gayathri = Gayathri({
   weight: ["100", "400", "700"],
 });
 
+const goodTimes = localFont({
+  src: "./../../public/fonts/GoodTimesRg.otf",
+  variable: "--font-good-times",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title:
     "Johnny G's Restaurant | Breakfast, Lunch, Dinner & Live Jazz in Cabbagetown, Toronto",
   description:
     "Johnny G's established in 1975 - A prominent breakfast and brunch place in Cabbagetown for over 4.5 decades. Now serving delicious Indian, Hakka, and Momo dishes for dinner with live jazz nights every Thursday-Saturday. Toronto's East End jazz venue at 478 Parliament St.",
+  icons: {
+    icon: [
+      { url: '/cafe-logo.png?v=2', sizes: '32x32', type: 'image/png' },
+      { url: '/cafe-logo.png?v=2', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: { url: '/cafe-logo.png?v=2', sizes: '180x180', type: 'image/png' },
+    shortcut: '/cafe-logo.png?v=2',
+  },
   keywords: [
     "Johnny G's",
     "restaurant Toronto",
@@ -175,7 +189,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${yellowtail.variable} ${fjallaOne.variable} ${hornbillTrial.variable} ${amoretSans.variable} ${pinyonScript.variable} ${gayathri.variable} ${goodTimes.variable} antialiased`}
       >
         <LenisProvider>
           <ThemeProvider>

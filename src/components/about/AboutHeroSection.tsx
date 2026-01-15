@@ -80,7 +80,6 @@ export default function AboutHeroSection() {
                   className={cn(
                       "hidden md:flex items-end justify-center md:justify-end",
                       "w-full md:w-[55%]",
-                      "flex-1 md:flex-none",
                       "order-2",
                       "pb-0"
                   )}
@@ -89,8 +88,8 @@ export default function AboutHeroSection() {
                       className={cn(
                           "hero-frame",
                           "w-full",
-                          "min-h-[300px] max-w-[597px]",
-                          "h-[calc(100%-50px)]"
+                          "max-w-[597px]",
+                          "h-[400px] md:h-[600px]"
                       )}
                   >
                       <Image
@@ -132,12 +131,11 @@ export default function AboutHeroSection() {
                       key={index}
                       className={cn(
                           "text-base md:text-lg",
-                          "font-gayathri",
                           "font-normal",
                           "leading-relaxed"
                       )}
                       style={{
-                        fontFamily: "var(--font-gayathri)",
+                        fontFamily: "Arial, Helvetica, sans-serif",
                         color: "var(--theme-text-light-cream)",
                       }}
                   >

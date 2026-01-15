@@ -49,40 +49,36 @@ function EventsList({
       {/* Header Section */}
       <div className="flex flex-col gap-3 md:gap-6">
         {/* Tabs */}
-        <div className="flex justify-center">
-          <div className="max-w-[1200px] w-full flex items-center justify-between px-4 md:px-8">
-            <div className="flex items-center gap-8 md:gap-24">
-              <p
-                onClick={() => onTabChange('weekly')}
-                className={cn(
-                  "events-tab cursor-pointer",
-                  activeTab === 'weekly' && "events-tab-active"
-                )}
-              >
-                Weekly Events
-              </p>
-              <p
-                onClick={() => onTabChange('past')}
-                className={cn(
-                  "events-tab cursor-pointer",
-                  activeTab === 'past' && "events-tab-active"
-                )}
-              >
-                Past Events
-              </p>
-            </div>
-            <div>
-              <p
-                onClick={() => onTabChange('gallery')}
-                className={cn(
-                  "events-tab cursor-pointer",
-                  activeTab === 'gallery' && "events-tab-active"
-                )}
-              >
-                Gallery
-              </p>
-            </div>
+        <div className="flex justify-between items-center">
+          <div className="flex gap-8 md:gap-24">
+            <p
+              onClick={() => onTabChange('weekly')}
+              className={cn(
+                "events-tab cursor-pointer",
+                activeTab === 'weekly' && "events-tab-active"
+              )}
+            >
+              Weekly Events
+            </p>
+            <p
+              onClick={() => onTabChange('past')}
+              className={cn(
+                "events-tab cursor-pointer",
+                activeTab === 'past' && "events-tab-active"
+              )}
+            >
+              Past Events
+            </p>
           </div>
+          <p
+            onClick={() => onTabChange('gallery')}
+            className={cn(
+              "events-tab cursor-pointer pl-4 md:pl-0",
+              activeTab === 'gallery' && "events-tab-active"
+            )}
+          >
+            Gallery
+          </p>
         </div>
 
         {/* Divider */}

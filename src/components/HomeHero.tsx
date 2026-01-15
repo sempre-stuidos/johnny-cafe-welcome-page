@@ -23,7 +23,7 @@ export default function HomeHero() {
     <section
       className={cn(
         "relative",
-        "w-full min-h-[538px] md:min-h-[638px]",
+        "w-full",
         "overflow-hidden",
         "z-10",
         theme === "day" ? "bg-[#334D2D]" : "bg-[#011A0C]"
@@ -63,7 +63,7 @@ export default function HomeHero() {
       {/* Content */}
       <div
         className={cn(
-          "absolute inset-0 z-20",
+          "relative z-20",
           "w-full",
           "px-4 md:px-8"
         )}
@@ -72,7 +72,7 @@ export default function HomeHero() {
         <div
           className={cn(
             "flex flex-col md:flex-row",
-            "h-full w-full max-w-[1200px]",
+            "w-full max-w-[1200px]",
             "mx-auto gap-4 md:gap-8"
           )}
         >
@@ -82,7 +82,6 @@ export default function HomeHero() {
               "flex flex-col relative",
               "gap-4 md:gap-0 md:justify-between",
               "w-full md:w-[60%]",
-              "h-full md:h-auto",
               "justify-between md:justify-start",
               "py-8 md:py-6",
               "order-1"
@@ -130,7 +129,7 @@ export default function HomeHero() {
                 "justify-center md:justify-start"
               )}
             >
-              <h4 className="max-w-[380px] mb-[33px] md:mb-[33px]">
+              <h4 className="max-w-[320px] md:max-w-[530px] mb-[33px] md:mb-[33px]">
                 {theme === "day"
                   ? "Have brunch at one of the oldest Restaurants in Cabbagetown"
                   : "Have dinner at one of the oldest Restaurants in Cabbagetown"}
@@ -173,9 +172,8 @@ export default function HomeHero() {
           {/* Image - Bottom on mobile, Right on desktop */}
           <div
             className={cn(
-              "hidden md:flex items-end justify-center md:justify-end",
+              "flex items-end justify-center md:justify-end",
               "w-full md:w-[60%]",
-              "flex-1 md:flex-none",
               "order-2",
               "pb-0"
             )}
@@ -184,8 +182,8 @@ export default function HomeHero() {
               className={cn(
                 "hero-frame",
                 "w-full",
-                "min-h-[300px] max-w-[597px]",
-                "h-[calc(100%-50px)]"
+                "max-w-[597px]",
+                "h-[400px] md:h-[600px]"
               )}
             >
               <Image

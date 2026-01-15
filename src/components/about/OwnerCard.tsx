@@ -31,7 +31,7 @@ export default function OwnerCard({ name, role, image, description }: OwnerCardP
         <div className="flex items-center gap-2">
           <p
               style={{
-                fontFamily: "var(--font-pinyon-script)",
+                fontFamily: "var(--font-good-times)",
                 fontSize: "clamp(var(--font-size-3xl), 8vw, var(--font-size-6xl))",
                 color: theme === "day" ? "var(--theme-text-dark-green)" : "var(--theme-text-light-cream)",
                 lineHeight: "var(--line-height-normal)",
@@ -55,7 +55,7 @@ export default function OwnerCard({ name, role, image, description }: OwnerCardP
                 "tracking-wider"
             )}
             style={{
-              fontFamily: "var(--font-gayathri)",
+              fontFamily: "Arial, Helvetica, sans-serif",
               color: theme === "day" ? "var(--about-text)" : "var(--theme-text-light-cream)",
             }}
         >
@@ -111,13 +111,12 @@ export default function OwnerCard({ name, role, image, description }: OwnerCardP
                 key={index}
                 className={cn(
                   "text-base md:text-lg",
-                  "font-gayathri",
                   "font-normal",
                   "leading-relaxed",
                   "text-left"
                 )}
                 style={{
-                  fontFamily: "var(--font-gayathri)",
+                  fontFamily: "Arial, Helvetica, sans-serif",
                   color: theme === "day" ? "var(--theme-text-body)" : "var(--theme-text-body)",
                 }}
               >

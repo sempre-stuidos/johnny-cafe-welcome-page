@@ -130,14 +130,12 @@ export default function Footer() {
                     <p className="transition-colors duration-300 footer-days">
                       MON-SUN
                     </p>
-                    <div className="flex flex-col xl:flex-row gap-1 xl:gap-4">
-                      <p className="transition-colors duration-300 footer-meal-label">
-                        Brunch{" "}
+                    <p className="transition-colors duration-300 footer-meal-label">
+                      Brunch{" "}
                       <span className="footer-meal-time">
-                          7 AM – 4 PM
+                        7 AM – 4 PM
                       </span>
-                      </p>
-                    </div>
+                    </p>
                   </div>
                 </div>
 

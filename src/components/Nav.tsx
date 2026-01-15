@@ -12,6 +12,7 @@ import { usePageLoadAnimation } from "@/lib/animations/hooks";
 import Banner from "@/components/Banner";
 import MenuToggle from "@/components/MenuToggle";
 import gsap from "gsap";
+import { StarIcon } from "@/components/icons";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
@@ -56,7 +57,11 @@ export default function Nav() {
 
       if (!activeLink) {
         // Hide star if no active link
-        gsap.set(starRef.current, { opacity: 0, immediateRender: true });
+        gsap.to(starRef.current, { 
+          opacity: 0, 
+          duration: 0.3,
+          ease: "power2.out"
+        });
         return;
       }
 
@@ -70,16 +75,16 @@ export default function Nav() {
       
       if (!containerRect) return;
 
-      // Calculate position relative to the parent container
-      const leftPosition = linkRect.left - containerRect.left + linkRect.width / 2 - 10;
+      // Calculate position to center the star perfectly (star width is 20px)
+      const leftPosition = linkRect.left - containerRect.left + (linkRect.width / 2) - 10;
 
-      // Animate smoothly like MenuHeader - just animate directly without setting initial state
+      // Smooth animation with elastic ease for more polished feel
       gsap.to(starRef.current, {
         left: leftPosition,
         opacity: 1,
-        duration: 0.6,
-        ease: "power2.inOut",
-        rotate: 90,
+        duration: 0.8,
+        ease: "power3.out",
+        rotate: 0,
         overwrite: "auto"
       });
     };
@@ -139,24 +144,11 @@ export default function Nav() {
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-8 md:space-x-10 lg:space-x-12 pt-2 relative" data-animate="nav-links">
-              {/* Star Icon - animated with GSAP */}
               <div
                 ref={starRef}
-                className="absolute -top-[16px] md:-top-1 z-10 left-[70px] pointer-events-none"
-                style={{ bottom: '100px' }}
+                className="absolute -top-[10px] md:-top-1 z-10 left-[70px] pointer-events-none"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 38 38"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
-                    fill="#B29738"
-                  />
-                </svg>
+                <StarIcon width="20" height="20" fill="#B29738" />
               </div>
               {navLinks
                 .filter((link) => link.href !== "/gallery")
@@ -248,17 +240,18 @@ export default function Nav() {
           {/* Navigation Links */}
           <div className="flex flex-col gap-6">
             {navLinks
-              .filter((link) => !["/gallery", "/contact"].includes(link.href))
+              .filter((link) => link.href !== "/gallery")
               .map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={closeMenu}
                   className={cn(
-                    "text-[#FAF2DD] text-2xl font-heading tracking-wide",
+                    "text-[#FAF2DD] text-xl tracking-wide uppercase",
                     "hover:text-[#B29738] transition-colors duration-200",
                     "border-b border-white/10 pb-4"
                   )}
+                  style={{ fontFamily: 'var(--font-good-times)' }}
                 >
                   {link.label}
                 </Link>
