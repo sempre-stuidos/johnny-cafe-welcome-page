@@ -49,11 +49,15 @@ function EventsList({
   // Track the previous visible count to determine which events are newly loaded
   const [previousVisibleCount, setPreviousVisibleCount] = useState(PAST_EVENTS_PAGE_SIZE);
   
+  // State for collapse animation
+  const [isCollapsing, setIsCollapsing] = useState(false);
+  
   // Reset visible count when switching tabs or when events change
   useEffect(() => {
     if (activeTab === 'past') {
       setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
       setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
+      setIsCollapsing(false);
     }
   }, [activeTab, events.length]);
   
@@ -76,21 +80,39 @@ function EventsList({
   
   // Handle "See Less" click - reset to initial 3 and scroll to top
   const handleSeeLess = () => {
-    setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
-    setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
+    // Start collapse animation
+    setIsCollapsing(true);
     
-    // Smooth scroll to the top of the events section
+    // First scroll to top
     if (eventsContainerRef.current) {
-      eventsContainerRef.current.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
+      // Get the position of the container
+      const containerTop = eventsContainerRef.current.getBoundingClientRect().top + window.scrollY;
+      // Account for any fixed header (adjust offset as needed)
+      const offset = 100;
+      
+      // Smooth scroll to the top of the events section
+      window.scrollTo({
+        top: containerTop - offset,
+        behavior: 'smooth'
       });
     }
+    
+    // Wait for fade-out animation to complete, then collapse
+    setTimeout(() => {
+      setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
+      setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
+      setIsCollapsing(false);
+    }, 500); // Match the CSS animation duration
   };
   
   // Check if an event at a given index is newly loaded (for animation)
   const isNewlyLoaded = (index: number) => {
-    return activeTab === 'past' && index >= previousVisibleCount;
+    return activeTab === 'past' && index >= previousVisibleCount && !isCollapsing;
+  };
+  
+  // Check if an event should fade out during collapse
+  const isFadingOut = (index: number) => {
+    return activeTab === 'past' && isCollapsing && index >= PAST_EVENTS_PAGE_SIZE;
   };
   return (
     <div
@@ -201,14 +223,19 @@ function EventsList({
                   key={index} 
                   className={cn(
                     "flex flex-col gap-6 md:gap-12 max-w-[1200px] w-full",
+                    "transition-all duration-500 ease-out",
                     // Add fade-in animation for newly loaded events
-                    isNewlyLoaded(index) && "animate-fade-in-up"
+                    isNewlyLoaded(index) && "animate-fade-in-up",
+                    // Add fade-out animation for collapsing events
+                    isFadingOut(index) && "animate-fade-out-down"
                   )}
                   style={{
                     // Stagger the animation delay for each newly loaded event
                     animationDelay: isNewlyLoaded(index) 
                       ? `${(index - previousVisibleCount) * 150}ms` 
-                      : undefined
+                      : isFadingOut(index)
+                        ? `${(index - PAST_EVENTS_PAGE_SIZE) * 100}ms`
+                        : undefined
                   }}
                 >
                   <EventItem event={event} onBandClick={onBandClick} />
@@ -221,7 +248,7 @@ function EventsList({
               ))}
               
               {/* See More / See Less buttons for past events */}
-              {activeTab === 'past' && events.length > PAST_EVENTS_PAGE_SIZE && (
+              {activeTab === 'past' && events.length > PAST_EVENTS_PAGE_SIZE && !isCollapsing && (
                 <div className="flex justify-center pt-4">
                   {hasMorePastEvents ? (
                     <button
