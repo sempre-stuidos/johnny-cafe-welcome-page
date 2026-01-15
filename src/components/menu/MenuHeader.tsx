@@ -75,12 +75,10 @@ export default function MenuHeader({ activeMenu, onMenuChange }: MenuHeaderProps
       </h4>
 
       <div className="flex flex-col gap-1 md:gap-2 w-full">
-        {/* Brunch and Dinner with Star */}
-        <div className="flex gap-2 md:gap-8 relative w-full">
-          {/* Star Icon - animated with GSAP */}
+        <div className="flex gap-4 md:gap-8 relative w-full">
           <div
             ref={starRef}
-            className="absolute -top-[26px] md:-top-[14px] z-10 left-[70px]"
+            className="absolute -top-[14px] z-10 md:left-[70px]"
           >
             <svg
               width="20"

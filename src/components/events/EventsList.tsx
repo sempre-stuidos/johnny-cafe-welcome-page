@@ -73,7 +73,7 @@ function EventsList({
           <p
             onClick={() => onTabChange('gallery')}
             className={cn(
-              "events-tab cursor-pointer",
+              "events-tab cursor-pointer pl-4 md:pl-0",
               activeTab === 'gallery' && "events-tab-active"
             )}
           >

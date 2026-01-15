@@ -12,6 +12,7 @@ import { usePageLoadAnimation } from "@/lib/animations/hooks";
 import Banner from "@/components/Banner";
 import MenuToggle from "@/components/MenuToggle";
 import gsap from "gsap";
+import { StarIcon } from "@/components/icons";
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme();
@@ -143,24 +144,11 @@ export default function Nav() {
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center space-x-8 md:space-x-10 lg:space-x-12 pt-2 relative" data-animate="nav-links">
-              {/* Star Icon - animated with GSAP */}
               <div
                 ref={starRef}
-                className="absolute -top-[16px] md:-top-1 z-10 left-[70px] pointer-events-none"
-                style={{ bottom: '100px' }}
+                className="absolute -top-[10px] md:-top-1 z-10 left-[70px] pointer-events-none"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 38 38"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M38 19C20.7639 19.9744 19.9744 20.7658 19 38C18.0256 20.7639 17.2342 19.9744 0 19C17.2361 18.0256 18.0256 17.2342 19 0C19.9744 17.2361 20.7658 18.0256 38 19Z"
-                    fill="#B29738"
-                  />
-                </svg>
+                <StarIcon width="20" height="20" fill="#B29738" />
               </div>
               {navLinks
                 .filter((link) => link.href !== "/gallery")

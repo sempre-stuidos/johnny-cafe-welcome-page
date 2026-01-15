@@ -625,7 +625,7 @@ code, pre {
 
 @media (min-width: 768px) {
   .footer-meal-label {
-    font-size: 40px;
+    font-size: 28px;
   }
 }
 
@@ -1594,7 +1594,7 @@ input:-webkit-autofill:active {
 .reserve-primary-btn {
   background-color: transparent;
   font-family: var(--font-good-times);
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 400;
   letter-spacing: 0%;
   transition: all 0.3s ease;
@@ -1884,7 +1884,7 @@ a.reserve-delivery-btn.reserve-delivery-btn-night:hover svg {
 /* Events Tab Navigation */
 .events-tab {
   font-family: var(--font-good-times);
-  font-size: clamp(12px, 3vw, var(--font-size-xl));
+  font-size: clamp(10px, 3vw, var(--font-size-xl));
   color: var(--theme-text-primary);
   line-height: var(--line-height-normal);
   font-weight: 400;
