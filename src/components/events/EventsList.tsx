@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
 import EventItem, { EventItemData } from "./EventItem";
@@ -12,6 +13,9 @@ export type GalleryImage = {
   url: string;
   name?: string;
 };
+
+// Number of past events to show initially and load per "See More" click
+const PAST_EVENTS_PAGE_SIZE = 3;
 
 interface EventsListProps {
   activeTab: EventTab;
@@ -35,8 +39,62 @@ function EventsList({
   onBandClick,
 }: EventsListProps) {
   const { theme } = useTheme();
+  
+  // Ref for scrolling to the top of events section
+  const eventsContainerRef = useRef<HTMLDivElement>(null);
+  
+  // State for lazy loading past events
+  const [visiblePastEventsCount, setVisiblePastEventsCount] = useState(PAST_EVENTS_PAGE_SIZE);
+  
+  // Track the previous visible count to determine which events are newly loaded
+  const [previousVisibleCount, setPreviousVisibleCount] = useState(PAST_EVENTS_PAGE_SIZE);
+  
+  // Reset visible count when switching tabs or when events change
+  useEffect(() => {
+    if (activeTab === 'past') {
+      setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
+      setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
+    }
+  }, [activeTab, events.length]);
+  
+  // Calculate visible events based on tab
+  const visibleEvents = activeTab === 'past' 
+    ? events.slice(0, visiblePastEventsCount)
+    : events;
+  
+  // Check if there are more events to load
+  const hasMorePastEvents = activeTab === 'past' && visiblePastEventsCount < events.length;
+  
+  // Check if we're showing more than the initial batch
+  const showSeeLess = activeTab === 'past' && visiblePastEventsCount >= events.length && events.length > PAST_EVENTS_PAGE_SIZE;
+  
+  // Handle "See More" click
+  const handleSeeMore = () => {
+    setPreviousVisibleCount(visiblePastEventsCount);
+    setVisiblePastEventsCount(prev => Math.min(prev + PAST_EVENTS_PAGE_SIZE, events.length));
+  };
+  
+  // Handle "See Less" click - reset to initial 3 and scroll to top
+  const handleSeeLess = () => {
+    setVisiblePastEventsCount(PAST_EVENTS_PAGE_SIZE);
+    setPreviousVisibleCount(PAST_EVENTS_PAGE_SIZE);
+    
+    // Smooth scroll to the top of the events section
+    if (eventsContainerRef.current) {
+      eventsContainerRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+  
+  // Check if an event at a given index is newly loaded (for animation)
+  const isNewlyLoaded = (index: number) => {
+    return activeTab === 'past' && index >= previousVisibleCount;
+  };
   return (
     <div
+      ref={eventsContainerRef}
       className={cn(
         "relative z-20",
         "flex flex-col",
@@ -137,16 +195,66 @@ function EventsList({
               </p>
             </div>
           ) : (
-            events.map((event, index) => (
-              <div key={index} className="flex flex-col gap-6 md:gap-12 max-w-[1200px] w-full">
-                <EventItem event={event} onBandClick={onBandClick} />
+            <>
+              {visibleEvents.map((event, index) => (
+                <div 
+                  key={index} 
+                  className={cn(
+                    "flex flex-col gap-6 md:gap-12 max-w-[1200px] w-full",
+                    // Add fade-in animation for newly loaded events
+                    isNewlyLoaded(index) && "animate-fade-in-up"
+                  )}
+                  style={{
+                    // Stagger the animation delay for each newly loaded event
+                    animationDelay: isNewlyLoaded(index) 
+                      ? `${(index - previousVisibleCount) * 150}ms` 
+                      : undefined
+                  }}
+                >
+                  <EventItem event={event} onBandClick={onBandClick} />
 
-                {/* Divider between events and after last event */}
-                <div className="flex justify-center">
-                  <div className="max-w-7xl w-full h-[1px] bg-theme-accent" />
+                  {/* Divider between events and after last event */}
+                  <div className="flex justify-center">
+                    <div className="max-w-7xl w-full h-[1px] bg-theme-accent" />
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+              
+              {/* See More / See Less buttons for past events */}
+              {activeTab === 'past' && events.length > PAST_EVENTS_PAGE_SIZE && (
+                <div className="flex justify-center pt-4">
+                  {hasMorePastEvents ? (
+                    <button
+                      onClick={handleSeeMore}
+                      className={cn(
+                        "px-8 py-3",
+                        "text-sm md:text-base font-medium uppercase tracking-wider",
+                        "border-2 border-[#B29738]",
+                        "transition-all duration-300",
+                        "hover:bg-[#B29738]/20",
+                        "text-theme-primary"
+                      )}
+                    >
+                      See More
+                    </button>
+                  ) : showSeeLess ? (
+                    <button
+                      onClick={handleSeeLess}
+                      className={cn(
+                        "px-8 py-3",
+                        "text-sm md:text-base font-medium uppercase tracking-wider",
+                        "border-2 border-[#B29738]",
+                        "transition-all duration-300",
+                        "hover:bg-[#B29738]/20",
+                        "text-theme-primary"
+                      )}
+                    >
+                      See Less
+                    </button>
+                  ) : null}
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

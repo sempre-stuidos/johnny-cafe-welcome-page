@@ -28,6 +28,18 @@ export interface Event {
   bands?: Band[] // Bands associated with this event
 }
 
+export interface EventInstanceWithDetails {
+  instanceId: string
+  eventId: string
+  instanceDate: string  // YYYY-MM-DD format
+  title: string         // from parent event
+  description: string   // custom or parent event fallback
+  imageUrl?: string     // custom or parent event fallback
+  startsAt?: string     // from parent event (for time display)
+  endsAt?: string       // from parent event (for time display)
+  bands: Band[]         // instance bands or event bands fallback
+}
+
 /**
  * Compute event status based on current time and publish dates
  * Note: If status is explicitly set to 'draft', it will be preserved
@@ -260,6 +272,187 @@ export async function getPastEventsForBusiness(businessSlug: string): Promise<Ev
   } catch (error) {
     console.error('Error in getPastEventsForBusiness:', error)
     return []
+  }
+}
+
+/**
+ * Get past event instances for a business by slug
+ * Returns all saved instances from event_instances table where instance_date < today
+ * Each instance includes merged data from parent event with instance-specific overrides
+ */
+export async function getPastEventInstancesForBusiness(businessSlug: string): Promise<EventInstanceWithDetails[]> {
+  try {
+    // Use admin client to bypass RLS for public landing pages
+    const supabase = supabaseAdmin
+    
+    // First get business by slug
+    const { data: businesses, error: businessError } = await supabase
+      .from('businesses')
+      .select('id, name, slug')
+      .eq('slug', businessSlug)
+      .limit(1)
+
+    if (businessError || !businesses || businesses.length === 0) {
+      console.error('Error fetching business:', businessError)
+      return []
+    }
+
+    const business = businesses[0]
+
+    // Get today's date in YYYY-MM-DD format (Toronto timezone)
+    const torontoNow = getTorontoNowComponents()
+    const todayStr = `${torontoNow.year}-${String(torontoNow.month).padStart(2, '0')}-${String(torontoNow.day).padStart(2, '0')}`
+
+    // Fetch all past instances with their parent events
+    // Join with events table to get event details
+    const { data: instances, error: instancesError } = await supabase
+      .from('event_instances')
+      .select(`
+        id,
+        event_id,
+        instance_date,
+        custom_description,
+        custom_image_url,
+        status,
+        event:events!inner(
+          id,
+          org_id,
+          title,
+          short_description,
+          description,
+          image_url,
+          starts_at,
+          ends_at,
+          is_weekly,
+          day_of_week
+        )
+      `)
+      .lt('instance_date', todayStr)
+      .order('instance_date', { ascending: false })
+
+    if (instancesError) {
+      console.error('Error fetching event instances:', instancesError)
+      return []
+    }
+
+    if (!instances || instances.length === 0) {
+      return []
+    }
+
+    // Filter instances to only include those belonging to this business
+    const businessInstances = instances.filter(instance => {
+      const event = instance.event as unknown as { org_id: string }
+      return event && event.org_id === business.id
+    })
+
+    if (businessInstances.length === 0) {
+      return []
+    }
+
+    // Get unique event IDs for fetching event bands
+    const eventIds = [...new Set(businessInstances.map(i => i.event_id))]
+    const bandsByEventId = await fetchBandsForEvents(eventIds)
+
+    // Get all instance IDs for fetching instance bands
+    const instanceIds = businessInstances.map(i => i.id)
+    const bandsByInstanceId = await fetchBandsForInstances(instanceIds)
+
+    // Transform instances to EventInstanceWithDetails
+    const result: EventInstanceWithDetails[] = businessInstances.map(instance => {
+      const event = instance.event as unknown as {
+        id: string
+        title: string
+        short_description?: string
+        description?: string
+        image_url?: string
+        starts_at?: string
+        ends_at?: string
+      }
+
+      // Use instance-specific data with fallbacks to event defaults
+      const description = instance.custom_description || event.description || event.short_description || ''
+      const imageUrl = instance.custom_image_url || event.image_url
+
+      // Use instance bands if available, otherwise use event bands
+      const instanceBands = bandsByInstanceId[instance.id] || []
+      const bands = instanceBands.length > 0 ? instanceBands : (bandsByEventId[instance.event_id] || [])
+
+      return {
+        instanceId: instance.id,
+        eventId: instance.event_id,
+        instanceDate: instance.instance_date,
+        title: event.title,
+        description,
+        imageUrl,
+        startsAt: event.starts_at,
+        endsAt: event.ends_at,
+        bands,
+      }
+    })
+
+    return result
+  } catch (error) {
+    console.error('Error in getPastEventInstancesForBusiness:', error)
+    return []
+  }
+}
+
+/**
+ * Fetch bands for multiple event instances
+ */
+async function fetchBandsForInstances(instanceIds: string[]): Promise<Record<string, Band[]>> {
+  if (instanceIds.length === 0) {
+    return {}
+  }
+
+  try {
+    const supabase = supabaseAdmin
+    
+    const { data: instanceBands, error } = await supabase
+      .from('event_instance_bands')
+      .select(`
+        instance_id,
+        order,
+        band:bands(id, name, description, image_url)
+      `)
+      .in('instance_id', instanceIds)
+      .order('order', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching instance bands:', error)
+      return {}
+    }
+
+    if (!instanceBands) {
+      return {}
+    }
+
+    // Group bands by instance_id
+    const bandsByInstanceId: Record<string, Band[]> = {}
+    
+    for (const instanceBand of instanceBands) {
+      const instanceId = instanceBand.instance_id as string
+      const bandData = (instanceBand as unknown as { band: Band | null }).band
+      
+      if (bandData && typeof bandData === 'object' && 'id' in bandData && 'name' in bandData) {
+        const band: Band = {
+          id: bandData.id,
+          name: bandData.name,
+          description: bandData.description,
+          image_url: bandData.image_url,
+        }
+        
+        if (!bandsByInstanceId[instanceId]) {
+          bandsByInstanceId[instanceId] = []
+        }
+        bandsByInstanceId[instanceId].push(band)
+      }
+    }
+
+    return bandsByInstanceId
+  } catch (error) {
+    console.error('Error in fetchBandsForInstances:', error)
+    return {}
   }
 }
 
@@ -670,6 +863,58 @@ export function formatWeeklyEventDatePast(dayOfWeek: number, startsAt?: string, 
     return `${dateStr} · ${startTime}`
   }
 
+  return `${dateStr} · ${startTime} - ${endTime}`
+}
+
+/**
+ * Format event instance date for display
+ * Takes an instance_date (YYYY-MM-DD) and optional start/end times from the parent event
+ * Returns a formatted string like "Thursday Jan 9 · 9:00 PM - 12:00 AM"
+ * All times are displayed in Toronto timezone
+ */
+export function formatInstanceDate(instanceDate: string, startsAt?: string, endsAt?: string): string {
+  // Parse instance date (format: YYYY-MM-DD)
+  const [year, month, day] = instanceDate.split('-').map(Number)
+  
+  if (!year || !month || !day) {
+    return 'Invalid date'
+  }
+  
+  // Get day of week for the instance date
+  // Create a date at noon to avoid timezone issues
+  const date = new Date(year, month - 1, day, 12, 0, 0)
+  const dayOfWeek = date.getDay()
+  
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  
+  const dayName = dayNames[dayOfWeek]
+  const monthName = monthNames[month - 1]
+  const dateStr = `${dayName} ${monthName} ${day}`
+  
+  if (!startsAt) {
+    return dateStr
+  }
+  
+  // Extract time in Toronto timezone from the event's starts_at
+  const startTime = extractTimeFromISO(startsAt)
+  if (!startTime) {
+    return dateStr
+  }
+  
+  if (!endsAt) {
+    return `${dateStr} · ${startTime}`
+  }
+  
+  const endTime = extractTimeFromISO(endsAt)
+  if (!endTime) {
+    return `${dateStr} · ${startTime}`
+  }
+  
+  if (startTime === endTime) {
+    return `${dateStr} · ${startTime}`
+  }
+  
   return `${dateStr} · ${startTime} - ${endTime}`
 }
 

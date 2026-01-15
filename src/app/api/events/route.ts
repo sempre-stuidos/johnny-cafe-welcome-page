@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { 
   getLiveEventsForBusiness, 
-  getPastEventsForBusiness, 
+  getPastEventInstancesForBusiness, 
   getWeeklyEventsForBusiness,
-  formatEventDateUppercase,
   formatEventDateWithTime,
   formatWeeklyEventDate,
-  formatWeeklyEventDatePast,
   formatWeeklyEventDateUppercase,
+  formatInstanceDate,
   getEventGalleryImagesForBusiness
 } from '@/lib/events'
 import { resolveBusinessSlug } from '@/lib/business-utils'
@@ -35,12 +34,34 @@ export async function GET(request: NextRequest) {
       return response
     }
     
-    // Fetch events from database based on type
+    // Handle past events - fetch all past instances
+    if (type === 'past') {
+      const pastInstances = await getPastEventInstancesForBusiness(businessSlug)
+      
+      // Map instances to EventItemData format
+      const events = pastInstances.map(instance => {
+        const dateStr = formatInstanceDate(instance.instanceDate, instance.startsAt, instance.endsAt)
+        
+        return {
+          date: dateStr,
+          name: instance.title,
+          description: instance.description,
+          image: instance.imageUrl,
+          bands: instance.bands?.map(band => ({ id: band.id, name: band.name })),
+        }
+      })
+      
+      const response = NextResponse.json({ events })
+      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+      return response
+    }
+    
+    // Fetch events from database based on type (weekly or live)
     let dbEvents
     if (type === 'weekly') {
       dbEvents = await getWeeklyEventsForBusiness(businessSlug)
-    } else if (type === 'past') {
-      dbEvents = await getPastEventsForBusiness(businessSlug)
     } else {
       // 'live' - upcoming one-time events
       dbEvents = await getLiveEventsForBusiness(businessSlug)
@@ -51,10 +72,8 @@ export async function GET(request: NextRequest) {
       let dateStr: string
       
       if (event.is_weekly && event.day_of_week !== undefined) {
-        // Weekly events: use appropriate format based on type and format parameter
-        if (type === 'past') {
-          dateStr = formatWeeklyEventDatePast(event.day_of_week, event.starts_at, event.ends_at)
-        } else if (format === 'uppercase') {
+        // Weekly events: use appropriate format based on format parameter
+        if (format === 'uppercase') {
           dateStr = formatWeeklyEventDateUppercase(event.day_of_week, event.starts_at, event.ends_at)
         } else {
           dateStr = formatWeeklyEventDate(event.day_of_week, event.starts_at, event.ends_at)
